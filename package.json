@@ -10,7 +10,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "swagger": "ts-node src/configs/swagger.config.ts",
     "populate-db": "NODE_ENV=production && node mongodb/populateDb.js all",
-    "populate-db-dev": "node  mongodb/populateDb.js all",
+    "populate-db-dev": "node  mongodb/populateDb.js all"
   },
   "keywords": [],
   "author": {
