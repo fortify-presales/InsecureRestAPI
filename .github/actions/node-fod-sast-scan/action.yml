@@ -87,14 +87,12 @@ runs:
         FOD_APP_NAME: ${{ inputs.fod_app_name }}
         FOD_RELEASE_NAME: ${{ inputs.fod_release_name }}
         FOD_PARENT_RELEASE_NAME: ${{ inputs.fod_parent_release_name }}
-    # Since this is a Javascript project we can simply Zip up source rather than use "scancentral package" command
-    - name: Package Code + Dependencies
-      uses: TheDoctor0/zip-release@0.7.1
-      with:
-        directory: ${{ inputs.working_directory }}
-        type: 'zip'
-        filename: 'package.zip'
-        exclusions: '*.git* config logs node_modules'
+    # Create FoD upload package using ScanCentral "package" action
+    - name: Package Code
+      uses: fortify/github-action/package@v1
+      env:
+        EXTRA_PACKAGE_OPTS: -bt none
+        PACKAGE_FILE: "package"
     # Start Fortify on Demand SAST scan and wait until results complete.
     - name: Perform FoD SAST scan
       id: fod-sast-scan
