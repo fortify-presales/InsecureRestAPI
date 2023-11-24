@@ -63,7 +63,7 @@ runs:
         bugtracker-utility: skip
     # Login to Fortify on Demand fcli session
     - name: Login fcli
-      working-directory: ${{ env.BASE_DIR }}
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         fcli --version
@@ -74,7 +74,7 @@ runs:
         SCSAST_CLIENT_AUTH_TOKEN: ${{ inputs.scsast_client_auth_token }}
     # Create a new Fortify SSC Application Version for GitHub branch
     #- name: Create SSC Application Version
-    #  working-directory: ${{ env.BASE_DIR }}
+    #  working-directory: ${{ inputs.working_directory }}
     #  shell: bash
     #  run: |
     #    fcli ssc av list -q "application.name='$SSC_APP_NAME'" --session github-actions
@@ -94,11 +94,11 @@ runs:
         directory: ${{ env.BASE_DIR }}
         type: 'zip'
         filename: 'package.zip'
-        exclusions: '*.git* config logs'
+        exclusions: '*.git* config logs node_modules'
     # Start ScanCentral SAST scan and wait until results complete.
     - name: Perform ScanCentral SAST scan
       id: scancentral-sast-scan
-      working-directory: ${{ env.BASE_DIR }}
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         fcli sc-sast scan start --sensor-version ${SSC_SENSOR_VER} --publish-to "${SSC_APPVER_NAME}" -p $PACKAGE_FILE --store curScan --session github-actions

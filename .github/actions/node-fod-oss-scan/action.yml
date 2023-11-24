@@ -63,7 +63,7 @@ runs:
         bugtracker-utility: skip
     # Login to Fortify on Demand fcli session
     - name: Login fcli
-      working-directory: ${{ env.BASE_DIR }}
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         fcli --version
@@ -75,7 +75,7 @@ runs:
     # Create a new Fortify on Demand release for GitHub branch
     - name: Create FoD release
       id: create-release
-      working-directory: ${{ env.BASE_DIR }}
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         fcli fod release list --app "$FOD_APP_NAME" --session github-actions
@@ -97,7 +97,7 @@ runs:
     # Start Fortify on Demand OSS scan and wait until results complete.
     - name: Perform FoD OSS scan
       id: fod-oss-scan
-      working-directory: ${{ env.BASE_DIR }}
+      working-directory: ${{ inputs.working_directory }}
       shell: bash
       run: |
         fcli fod oss-scan start --release "${FOD_RELEASE_NAME}" -f $PACKAGE_FILE --store curScan --session github-actions
