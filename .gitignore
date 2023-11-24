@@ -132,3 +132,7 @@ dist
 # IntelliJ
 .idea
 *.iml
+
+# misc project
+.env
+logs
