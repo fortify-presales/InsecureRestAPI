@@ -49,7 +49,7 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "IWA-ExpressAPI"
+  DEFAULT_APP_NAME: "IWA-API"
 
 jobs:
 
