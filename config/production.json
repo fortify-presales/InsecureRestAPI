@@ -8,8 +8,8 @@
       "database": "iwa"
     },
     "apiConfig": {
-      "url": "https://iwaexpress.mfdemouk.com",
-      "version": "v3",
+      "url": "https://iwaapi.onfortify.com",
+      "version": "v1",
       "description": "Production server"
     },
     "jwtSecret": "changeme",

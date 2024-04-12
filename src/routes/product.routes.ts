@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -17,6 +17,7 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import config from "config";
 import {Request, Response, Router} from 'express';
 
 import {ProductController} from '../controllers/product.controller';
@@ -27,7 +28,7 @@ const product_controller: ProductController = new ProductController();
 
 export const productRoutes = Router();
 
-productRoutes.get('/api/products', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Find products by keyword(s)"
@@ -63,7 +64,7 @@ productRoutes.get('/api/products', [AuthorizationHandler.permitAll], (req: Reque
     product_controller.get_products(req, res);
 });
 
-productRoutes.get('/api/products/:id', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get a product"
@@ -91,7 +92,7 @@ productRoutes.get('/api/products/:id', [AuthorizationHandler.permitAll], (req: R
     product_controller.get_product(req, res);
 });
 
-productRoutes.get('/api/products/:id/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by Id"
@@ -119,7 +120,7 @@ productRoutes.get('/api/products/:id/image', [AuthorizationHandler.permitAll], (
     product_controller.get_product_image_by_id(req, res);
 });
 
-productRoutes.get('/api/products/:name/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by name"
@@ -148,7 +149,7 @@ productRoutes.get('/api/products/:name/image', [AuthorizationHandler.permitAll],
 });
 
 
-productRoutes.post('/api/products', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
@@ -180,7 +181,7 @@ productRoutes.post('/api/products', [AuthenticationHandler.verifyJWT, Authorizat
     product_controller.create_product(req, res);
 });
 
-productRoutes.put('/api/products/:id', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
@@ -208,7 +209,7 @@ productRoutes.put('/api/products/:id', [AuthenticationHandler.verifyJWT, Authori
     product_controller.update_product(req, res);
 });
 
-productRoutes.delete('/api/products/:id', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+productRoutes.delete('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"

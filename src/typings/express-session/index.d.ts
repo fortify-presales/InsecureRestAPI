@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 [![Fortify Security Scan](https://github.com/fortify-presales/IWA-ExpressAPI/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/IWA-ExpressAPI/actions/workflows/fod.yml)
 
-# IWA-ExpressAPI
+# IWA-API
 
 #### Table of Contents
 
@@ -11,9 +11,8 @@
 
 ## Overview
 
-_IWA-Express_ is an insecure [NodeJS](https://nodejs.org/)/[ExpressJS](https://expressjs.com/) REST API with a
-[MongoDB](https://www.mongodb.com/) database backend.
-It includes some examples of bad  and insecure code - which can be found using static and mobile security testing tools such
+_IWA-API_ is an insecure [NodeJS](https://nodejs.org/)/[ExpressJS](https://expressjs.com/) REST API for use in Fortify demonstrations.
+It includes some examples of bad  and insecure code - which can be found using static and dynamic application security testing tools such
 as those provided by [Fortify by OpenText](https://www.microfocus.com/en-us/cyberres/application-security).
 
 The application is intended to provide the backend functionality of a typical "online pharmacy", including purchasing Products (medication)
@@ -57,7 +56,7 @@ npm run populate-db-dev
 npm run dev
 ```
 
-The Express API should then be accessible at [http://localhost:3000](http://localhost:3000)
+The API should then be accessible at [http://localhost:3000](http://localhost:3000)
 
 **Extra: Exposing Express API to the Internet**
 

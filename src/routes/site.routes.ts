@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -26,7 +26,7 @@ const site_controller: SiteController = new SiteController();
 
 export const siteRoutes = Router();
 
-siteRoutes.get('/api/site/status', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Get the site status"
@@ -49,7 +49,7 @@ siteRoutes.get('/api/site/status', [AuthorizationHandler.permitAll], (req: Reque
 });
 
 
-siteRoutes.get('/api/site/email-already-exists/:email', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.get('/api/v1/site/email-already-exists/:email', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Check if email is taken"
@@ -77,7 +77,7 @@ siteRoutes.get('/api/site/email-already-exists/:email', [AuthorizationHandler.pe
 });
 
 
-siteRoutes.post('/api/site/register-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/register-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Register a new user"
@@ -113,7 +113,7 @@ siteRoutes.post('/api/site/register-user', [AuthorizationHandler.permitAll], (re
     res.status(200).json({message: "Post request successfull"});
 });
 
-siteRoutes.post('/api/site/subscribe-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Subscribe a new user"
@@ -149,7 +149,7 @@ siteRoutes.post('/api/site/subscribe-user', [AuthorizationHandler.permitAll], (r
     site_controller.subscribe_user(req, res);
 });
 
-siteRoutes.post('/api/site/sign-in', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/sign-in', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Sign-in"
@@ -187,7 +187,7 @@ siteRoutes.post('/api/site/sign-in', [AuthorizationHandler.permitAll], (req: Req
 
 });
 
-siteRoutes.post('/api/site/sign-out', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/sign-out', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
 
     /*
        #swagger.tags = ['Site']
@@ -220,7 +220,7 @@ siteRoutes.post('/api/site/sign-out', [AuthorizationHandler.permitAll], (req: Re
     res.status(200).json({message: "Post request successfull"});
 });
 
-siteRoutes.post('/api/site/refresh-token', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/refresh-token', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
 
     /*
        #swagger.tags = ['Site']
@@ -257,7 +257,7 @@ siteRoutes.post('/api/site/refresh-token', [AuthorizationHandler.permitAll], (re
     res.status(200).json({message: "Post request successfull"});
 });
 
-siteRoutes.post('/api/site/backup-newsletter-db', [AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
 
     /*
       #swagger.tags = ['Site']

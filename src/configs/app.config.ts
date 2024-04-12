@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import bodyParser from "body-parser";
 import mongoose from 'mongoose';
 import swaggerUi from "swagger-ui-express";
 import helmet from "helmet";
+import OktaJwtVerifier from "@okta/jwt-verifier";
 
 import Logger from "../middleware/logger";
 import morganConfig from './morgan.config'
@@ -43,7 +44,10 @@ class AppConfig {
     private dbHost: string = config.get('App.dbConfig.host') || 'localhost';
     private dbPort: number = config.get('App.dbConfig.port') || 27017;
     private dbName: string = config.get('App.dbConfig.database') || 'iwa';
+    private oktaDomain: string = "dev-67973733.okta.com";
+    private oktaAuthServer: string = "default";
     public mongoUrl: string = `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`;
+    public oktaJwtVerifier;
 
     constructor() {
         this.app = express();
@@ -95,6 +99,10 @@ class AppConfig {
         );
         // configure swagger API
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
+
+        this.app.oktaJwtVerifier = new OktaJwtVerifier({
+          issuer: `https://${this.oktaDomain}/oauth2/${this.oktaAuthServer}`
+        });
     }
 }
 

@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "IWA-Express - Express JS API API",
-    "version": "1.0.0",
-    "description": "This is the API for IWAExpress (Insecure Web App) Pharmacy Direct an insecure NodeJS/Express web application documented with Swagger",
+    "title": "IWA-API",
+    "version": "1.0",
+    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations. For this sample, you can use the api key demo-access-token to test the authorization filters.",
     "license": {
       "name": "GPLv3",
       "url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
@@ -20,7 +20,7 @@
     }
   ],
   "paths": {
-    "/api/site/status": {
+    "/api/v1/site/status": {
       "get": {
         "tags": [
           "Site"
@@ -76,7 +76,7 @@
         }
       }
     },
-    "/api/site/email-already-exists/{email}": {
+    "/api/v1/site/email-already-exists/{email}": {
       "get": {
         "tags": [
           "Site"
@@ -143,7 +143,7 @@
         }
       }
     },
-    "/api/site/register-user": {
+    "/api/v1/site/register-user": {
       "post": {
         "tags": [
           "Site"
@@ -224,7 +224,7 @@
         }
       }
     },
-    "/api/site/subscribe-user": {
+    "/api/v1/site/subscribe-user": {
       "post": {
         "tags": [
           "Site"
@@ -305,7 +305,7 @@
         }
       }
     },
-    "/api/site/sign-in": {
+    "/api/v1/site/sign-in": {
       "post": {
         "tags": [
           "Site"
@@ -386,7 +386,7 @@
         }
       }
     },
-    "/api/site/sign-out": {
+    "/api/v1/site/sign-out": {
       "post": {
         "tags": [
           "Site"
@@ -452,7 +452,7 @@
         }
       }
     },
-    "/api/site/refresh-token": {
+    "/api/v1/site/refresh-token": {
       "post": {
         "tags": [
           "Site"
@@ -533,7 +533,7 @@
         }
       }
     },
-    "/api/site/backup-newsletter-db": {
+    "/api/v1/site/backup-newsletter-db": {
       "post": {
         "tags": [
           "Site"
@@ -599,7 +599,7 @@
         }
       }
     },
-    "/api/users": {
+    "/api/v1/users": {
       "get": {
         "tags": [
           "Users"
@@ -761,7 +761,7 @@
         }
       }
     },
-    "/api/users/{id}": {
+    "/api/v1/users/{id}": {
       "get": {
         "tags": [
           "Users"
@@ -1017,7 +1017,7 @@
         }
       }
     },
-    "/api/user/": {
+    "/api/v1/user": {
       "get": {
         "tags": [
           "Users"
@@ -1098,7 +1098,7 @@
         }
       }
     },
-    "/api/products": {
+    "/api/v1/products": {
       "get": {
         "tags": [
           "Products"
@@ -1106,6 +1106,13 @@
         "summary": "Find products by keyword(s)",
         "description": "Gets all existing products searching by %keyword% format",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "keywords",
             "in": "query",
@@ -1187,7 +1194,7 @@
         "description": "Creates a new product",
         "parameters": [
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -1253,7 +1260,7 @@
         }
       }
     },
-    "/api/products/{id}": {
+    "/api/v1/products/{id}": {
       "get": {
         "tags": [
           "Products"
@@ -1269,6 +1276,13 @@
               "type": "string"
             },
             "description": "Id of the product to be retrieved. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1351,7 +1365,7 @@
             "description": "Id of the product to be updated. Cannot be empty."
           },
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -1438,7 +1452,7 @@
             "description": "Id of the product to be deleted. Cannot be empty."
           },
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -1509,7 +1523,7 @@
         }
       }
     },
-    "/api/products/{id}/image": {
+    "/api/v1/products/{id}/image": {
       "get": {
         "tags": [
           "Products"
@@ -1521,6 +1535,13 @@
             "name": "id",
             "in": "path",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
             "schema": {
               "type": "string"
             }
@@ -1598,7 +1619,7 @@
         }
       }
     },
-    "/api/products/{name}/image": {
+    "/api/v1/products/{name}/image": {
       "get": {
         "tags": [
           "Products"
@@ -1614,6 +1635,13 @@
               "type": "string"
             },
             "description": "Name of the product image to be retrieved. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -2066,21 +2094,15 @@
       }
     },
     "securitySchemes": {
-      "basicAuth": {
-        "type": "http",
-        "scheme": "basic",
-        "description": "Basic Authorization header."
-      },
       "bearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "JWT Authorization header."
+        "description": "Access Token"
       }
     }
   },
   "security": [
     {
-      "basicAuth": [],
       "bearerAuth": []
     }
   ]

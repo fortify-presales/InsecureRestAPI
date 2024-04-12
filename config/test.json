@@ -9,7 +9,7 @@
     },
     "apiConfig": {
       "url": "https://localhost:3000",
-      "version": "v3",
+      "version": "v1",
       "description": "Test Server"
     },
     "jwtSecret": "changeme",

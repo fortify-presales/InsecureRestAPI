@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -20,16 +20,17 @@
 import swaggerAutogen from 'swagger-autogen';
 import config from 'config';
 
-const appName: string = config.get('App.name') || "IWA-Express";
+const appName: string = config.get('App.name') || "IWA-API";
+const appVersion: string = config.get('App.version') || "1.0.0";
+const appDescription: string = config.get('App.description') || "";
 const apiUrl: string = config.get('App.apiConfig.url') || "http://localhost:3000/api-docs/";
 const apiDesc: string = config.get('App.apiConfig.description') || "Development server"
 
 const doc = {
     info: {
-        title: `${appName} API`,
-        version: '1.0.0',
-        description:
-            "This is the API for IWAExpress (Insecure Web App) Pharmacy Direct an insecure NodeJS/Express web application documented with Swagger",
+        title: `${appName}`,
+        version: `${appVersion}`,
+        description: `${appDescription}`,
         license: {
             name: "GPLv3",
             url: "https://www.gnu.org/licenses/gpl-3.0.en.html",
@@ -120,21 +121,15 @@ const doc = {
             }
         },
         securitySchemes: {
-            basicAuth: {
-                type: 'http',
-                scheme: 'basic',
-                description: 'Basic Authorization header.',
-            },
             bearerAuth: {
                 type: 'http',
                 scheme: 'bearer',
-                description: 'JWT Authorization header.'
+                description: 'Access Token'
             }
         },
     },
     security: [
         {
-            basicAuth: [],
             bearerAuth: [],
         },
     ],

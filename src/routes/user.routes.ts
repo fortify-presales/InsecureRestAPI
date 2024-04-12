@@ -1,7 +1,7 @@
 /*
-        IWA-Express - Insecure Express JS REST API
+        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
 
-        Copyright 2023 Open Text or one of its affiliates.
+        Copyright 2024 Open Text or one of its affiliates.
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -38,7 +38,7 @@ userRoutes.param('id', function (req, res, next, id, name) {
     next();
 });
 
-userRoutes.get('/api/users', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitSelf], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Find users by keyword(s)"
@@ -75,7 +75,7 @@ userRoutes.get('/api/users', [AuthenticationHandler.verifyJWT, AuthorizationHand
     user_controller.get_users(req, res);
 });
 
-userRoutes.get('/api/users/:id', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitSelf], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Users']
        #swagger.summary = "Get a user"
@@ -103,7 +103,7 @@ userRoutes.get('/api/users/:id', [AuthenticationHandler.verifyJWT, Authorization
     user_controller.get_user(req, res);
 });
 
-userRoutes.get('/api/user/', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/user', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Users']
        #swagger.summary = "Get a user using query"
@@ -140,7 +140,7 @@ userRoutes.get('/api/user/', [AuthorizationHandler.permitAll], (req: Request, re
     });
 });
 
-userRoutes.post('/api/users', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+userRoutes.post('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
           #swagger.tags = ['Users']
           #swagger.summary = "Create new user"
@@ -171,7 +171,7 @@ userRoutes.post('/api/users', [AuthenticationHandler.verifyJWT, AuthorizationHan
     user_controller.create_user(req, res);
 });
 
-userRoutes.put('/api/users/:id', [AuthenticationHandler.verifyJWT, AuthorizationHandler.permitSelf], (req: Request, res: Response) => {
+userRoutes.put('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Update a user"
@@ -199,7 +199,7 @@ userRoutes.put('/api/users/:id', [AuthenticationHandler.verifyJWT, Authorization
     user_controller.update_user(req, res);
 });
 
-userRoutes.delete('/api/users/:id', [AuthorizationHandler.permitAdmin], (req: Request, res: Response) => {
+userRoutes.delete('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Delete a user"
