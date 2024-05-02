@@ -23,11 +23,14 @@ import config from 'config';
 import bodyParser from "body-parser";
 import mongoose from 'mongoose';
 import swaggerUi from "swagger-ui-express";
+import cors from "cors";
 import helmet from "helmet";
-import OktaJwtVerifier from "@okta/jwt-verifier";
+import "express-async-errors";
 
 import Logger from "../middleware/logger";
 import morganConfig from './morgan.config'
+import errorHandler from "../middleware/error.handler";
+
 // @ts-ignore
 import swaggerOutput from './swagger_output.json';
 
@@ -35,6 +38,8 @@ import {siteRoutes} from "../routes/site.routes";
 import {userRoutes} from "../routes/user.routes";
 import {productRoutes} from "../routes/product.routes";
 import {commonRoutes} from "../routes/common.routes";
+
+import {AuthorizationHandler} from "../middleware/authorization.handler";
 
 class AppConfig {
     public app: express.Application;
@@ -44,10 +49,7 @@ class AppConfig {
     private dbHost: string = config.get('App.dbConfig.host') || 'localhost';
     private dbPort: number = config.get('App.dbConfig.port') || 27017;
     private dbName: string = config.get('App.dbConfig.database') || 'iwa';
-    private oktaDomain: string = "dev-67973733.okta.com";
-    private oktaAuthServer: string = "default";
     public mongoUrl: string = `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`;
-    public oktaJwtVerifier;
 
     constructor() {
         this.app = express();
@@ -88,6 +90,8 @@ class AppConfig {
             saveUninitialized: true,
             cookie: {secure: false}
         }))
+        // enabled CORS for all domains!
+        this.app.use(cors());
         // configure helmet
         this.app.use(helmet({
             ieNoOpen: false
@@ -99,10 +103,10 @@ class AppConfig {
         );
         // configure swagger API
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
-
-        this.app.oktaJwtVerifier = new OktaJwtVerifier({
-          issuer: `https://${this.oktaDomain}/oauth2/${this.oktaAuthServer}`
-        });
+        // configure default error handler
+        this.app.use(errorHandler);
+        // configure global authorization handler
+        //this.app.use(AuthorizationHandler.checkJwt);
     }
 }
 

@@ -18,6 +18,7 @@
 */
 
 import {Request, Response, Router} from 'express';
+import { requiredScopes } from 'express-oauth2-jwt-bearer';
 
 import {SiteController} from "../controllers/site.controller";
 import {AuthorizationHandler} from "../middleware/authorization.handler";
@@ -257,7 +258,7 @@ siteRoutes.post('/api/v1/site/refresh-token', [AuthorizationHandler.permitAll], 
     res.status(200).json({message: "Post request successfull"});
 });
 
-siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
 
     /*
       #swagger.tags = ['Site']

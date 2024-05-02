@@ -23,12 +23,13 @@ import {Request, Response, Router} from 'express';
 import {ProductController} from '../controllers/product.controller';
 import {AuthenticationHandler} from "../middleware/authentication.handler";
 import {AuthorizationHandler} from "../middleware/authorization.handler";
+import {ProductPermission} from "../modules/products/permissions"
 
 const product_controller: ProductController = new ProductController();
 
 export const productRoutes = Router();
 
-productRoutes.get('/api/v1/products', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Find products by keyword(s)"
@@ -64,7 +65,7 @@ productRoutes.get('/api/v1/products', [AuthorizationHandler.requireAccessToken],
     product_controller.get_products(req, res);
 });
 
-productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get a product"
@@ -92,7 +93,7 @@ productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.requireAccessTok
     product_controller.get_product(req, res);
 });
 
-productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by Id"
@@ -120,7 +121,7 @@ productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.requireAcc
     product_controller.get_product_image_by_id(req, res);
 });
 
-productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by name"
@@ -149,7 +150,7 @@ productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.requireA
 });
 
 
-productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Create)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
@@ -181,7 +182,7 @@ productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken]
     product_controller.create_product(req, res);
 });
 
-productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Update)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
@@ -209,7 +210,7 @@ productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessTok
     product_controller.update_product(req, res);
 });
 
-productRoutes.delete('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+productRoutes.delete('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Delete)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"

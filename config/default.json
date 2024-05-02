@@ -2,7 +2,7 @@
   "App": {
     "name": "IWA-API",
     "version": "1.0",
-    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations. For this sample, you can use the api key 'demo-access-token' to test the authorization filters.",
+    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.",
     "port":  3000,
     "dbConfig": {
       "host": "127.0.0.1",
@@ -11,10 +11,9 @@
       "password": "iwa-dev",
       "database": "iwa-dev"
     },
-    "oktaConfig": {
-      "domain": "dev-67973733.okta.com",
-      "authServer": "default",
-      "audience": "api://default"
+    "auth0": {
+      "domain": "dev-ahui5f878pgtbrpr.us.auth0.com",
+      "audience": "https://iwa-api.onfortify.com"
     },
     "apiConfig": {
       "url": "http://localhost:3000",

@@ -21,12 +21,15 @@ import Logger from "./logger";
 import {IUser} from "../modules/users/model";
 import jwt from "jsonwebtoken";
 import config from "config";
-import {JwtJson} from "../common/types";
 import {NextFunction, Request, Response} from "express";
+
 import {forbidden, unauthorised} from "../modules/common/service";
+import {JwtJson} from "../common/types";
 
 const jwtSecret: string = config.get('App.jwtSecret') || "changeme";
 const jwtExpiration: number = config.get('App.jwtExpiration') || 36000;
+
+// NOTE: no longer used as delegated to Auth0
 
 export class AuthenticationHandler {
 

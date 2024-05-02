@@ -26,6 +26,7 @@ import Logger from "../middleware/logger";
 import {IUser} from "../modules/users/model";
 import {mongoError, successResponse} from "../modules/common/service";
 import {EncryptUtils} from "../utils/encrypt.utils";
+import {UserPermission} from "../modules/users/permissions"
 
 import users from '../modules/users/schema';
 
@@ -38,7 +39,7 @@ userRoutes.param('id', function (req, res, next, id, name) {
     next();
 });
 
-userRoutes.get('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Read)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Find users by keyword(s)"
@@ -75,7 +76,7 @@ userRoutes.get('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req:
     user_controller.get_users(req, res);
 });
 
-userRoutes.get('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Read)], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Users']
        #swagger.summary = "Get a user"
@@ -103,7 +104,7 @@ userRoutes.get('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (
     user_controller.get_user(req, res);
 });
 
-userRoutes.get('/api/v1/user', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.get('/api/v1/user', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Read)], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Users']
        #swagger.summary = "Get a user using query"
@@ -140,7 +141,7 @@ userRoutes.get('/api/v1/user', [AuthorizationHandler.requireAccessToken], (req: 
     });
 });
 
-userRoutes.post('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.post('/api/v1/users', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Create)], (req: Request, res: Response) => {
     /*
           #swagger.tags = ['Users']
           #swagger.summary = "Create new user"
@@ -171,7 +172,7 @@ userRoutes.post('/api/v1/users', [AuthorizationHandler.requireAccessToken], (req
     user_controller.create_user(req, res);
 });
 
-userRoutes.put('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.put('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Update)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Update a user"
@@ -199,7 +200,7 @@ userRoutes.put('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (
     user_controller.update_user(req, res);
 });
 
-userRoutes.delete('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken], (req: Request, res: Response) => {
+userRoutes.delete('/api/v1/users/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(UserPermission.Read)], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Delete a user"

@@ -8,7 +8,7 @@
       "database": "iwa"
     },
     "apiConfig": {
-      "url": "https://iwaapi.onfortify.com",
+      "url": "https://iwa-api.onfortify.com",
       "version": "v1",
       "description": "Production server"
     },

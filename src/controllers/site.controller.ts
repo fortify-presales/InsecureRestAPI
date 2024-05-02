@@ -46,7 +46,7 @@ export class SiteController {
 
     public login_user(req: Request, res: Response) {
         Logger.debug(`Logging in user with with request body: ${JSON.stringify(req.body)}`);
-        // this check whether all the fields were sent through the request or not
+        // this checks whether all the fields were sent through the request or not
         if (req.body.email && req.body.password) {
             const hashPassword = EncryptUtils.cryptPassword(req.body.password);
             const user_filter = {email: req.body.email, password: hashPassword};

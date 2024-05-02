@@ -62,7 +62,7 @@ export class UserController {
 
     public create_user(req: Request, res: Response) {
         Logger.debug(`Creating user with request body: ${JSON.stringify(req.body)}`);
-        // this check whether all the fields were sent through with the request or not
+        // this checks whether all the fields were sent through with the request or not
         if (req.body.name && req.body.name.first_name && req.body.name.last_name &&
             req.body.email &&
             req.body.phone_number &&

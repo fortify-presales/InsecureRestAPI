@@ -21,19 +21,57 @@ import Logger from "./logger";
 import config from "config";
 import {NextFunction, Request, Response} from "express";
 import {forbidden, unauthorised} from "../modules/common/service";
-import OktaJwtVerifier from "@okta/jwt-verifier";
+
+const { expressjwt: jwt } = require("express-jwt");
+const jwtAuthz = require("express-jwt-authz");
+
+import jwksRsa from "jwks-rsa";
 
 const staticAccessToken: string = config.get('App.staticAccessToken') || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-const oktaDomain: string = config.get('App.oktaConfig.domain');
-const oktaAuthServer: string = config.get('App.oktaConfig.authServer') || "default";
-const oktaAudience: string = config.get('App.oktaConfig.audience') || "api://default";
-const oktaJwtVerifier: OktaJwtVerifier = new OktaJwtVerifier({
-    issuer: `https://${oktaDomain}/oauth2/${oktaAuthServer}`
-});
+const auth0Domain: string = config.get('App.auth0.domain');
+const auth0Audience: string = config.get('App.auth0.audience');
 
 export class AuthorizationHandler {
 
-    public static requireAccessToken = async (req: Request, res: Response, next: NextFunction) => {
+    // routes open to all
+    private static unprotected = [
+        /\//,
+        /\/api-docs/,
+        /\/api-docs\/*/,
+        /favicon.ico/,
+        /\/site\/*/,
+    ];
+
+    /*public static checkJwt = jwt({
+        secret: jwksRsa.expressJwtSecret({
+            cache: true,
+            rateLimit: true,
+            jwksRequestsPerMinute: 5,
+            jwksUri: `https://${auth0Domain}/.well-known/jwks.json`
+        }),
+
+        // Validate the audience and the issuer.
+        audience: `${auth0Audience}`,
+        issuer: `https://${auth0Domain}/`,
+        algorithms: ["RS256"]
+    }).unless({path: this.unprotected})
+    */
+   
+    public static requirePermission(permissions: string | string[]) {
+        try {
+            const jwtAuth = jwtAuthz([permissions], {
+                customScopeKey: "permissions",
+                customUserKey: "auth",
+                checkAllScopes: true,
+                failWithError: false // should be true and catch with custom error handler
+            });
+            return jwtAuth;
+        } catch (error: any) {
+            unauthorised(error.message, res);
+        }
+    };
+
+    public static requireAccessToken(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::requireAccessToken`);
         let accessToken: string | undefined;
 
@@ -44,18 +82,20 @@ export class AuthorizationHandler {
             } else {
 
                 console.log(`accessToken = ${accessToken}`);
-                if (accessToken == staticAccessToken) {
-                    Logger.debug("Using staticAccessToken; skipping verification")
-                } else {
-                    oktaJwtVerifier.verifyAccessToken(accessToken, oktaAudience)
-                    .then(jwt => {
-                      // the token is valid (per definition of 'valid' above)
-                      console.log(jwt.claims);
-                    })
-                    .catch(err => {
-                      // a validation failed, inspect the error
-                    });
-                }
+                const jwtAccess = jwt({
+                 secret: jwksRsa.expressJwtSecret({
+                   cache: true,
+                   rateLimit: true,
+                   jwksRequestsPerMinute: 5,
+                   jwksUri: `https://${auth0Domain}/.well-known/jwks.json`
+                 }),
+
+                 // Validate the audience and the issuer.
+                 audience: 'https://iwa-api.onfortify.com',
+                 issuer: `https://${auth0Domain}/`,
+                 algorithms: ["RS256"]
+               }).unless({path: this.unprotected});
+
             }
 
             next();
@@ -69,6 +109,7 @@ export class AuthorizationHandler {
         next();
     }
 
+    // TODO: update for Auth0
     public static permitSelf(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitSelf`);
         Logger.debug(`Verifying if user has authorization to self endpoint: '${req.url}`);
@@ -84,6 +125,7 @@ export class AuthorizationHandler {
         }
     }
 
+    // NOTE: no longer required - delegated to Auth0 permissions
     public static permitAdmin(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitAdmin`);
         Logger.debug(`Verifying if user has authorization to admin endpoint: '${req.url}`);

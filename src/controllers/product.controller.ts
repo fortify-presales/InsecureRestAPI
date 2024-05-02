@@ -108,7 +108,7 @@ export class ProductController {
 
     public create_product(req: Request, res: Response) {
         Logger.debug(`Creating product with request body: ${JSON.stringify(req.body)}`);
-        // this check whether all the fields were sent through the request or not
+        // this checks whether all the fields were sent through the request or not
         if (req.body.code && req.body.name && req.body.summary) {
 
             const product_params: IProduct = {
