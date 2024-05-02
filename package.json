@@ -1,7 +1,7 @@
 {
-  "name": "express-api",
+  "name": "iwa-api",
   "version": "1.0.0",
-  "description": "IWA-ExpressAPI is An insecure Node/Express REST API for use in Fortify demonstrations",
+  "description": "IWA-API is an insecure Node/Express REST API for use in Fortify demonstrations",
   "main": "index.ys",
   "scripts": {
     "build": "NODE_ENV=production && npx tsc",

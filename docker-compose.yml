@@ -1,0 +1,49 @@
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    restart: unless-stopped
+    env_file: .env
+      MONGO_INITDB_ROOT_USERNAME: $MONGO_USERNAME
+      MONGO_INITDB_ROOT_PASSWORD: $MONGO_PASSWORD
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: iwa
+      MONGO_INITDB_ROOT_PASSWORD: iwa
+    volumes:
+      - db:/data/db
+    networks:
+      - iwa-api_net
+
+  nodejs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: nodejs
+    container_name: nodejs
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      - MONGO_USERNAME=$MONGO_USERNAME
+      - MONGO_PASSWORD=$MONGO_PASSWORD
+      - MONGO_HOSTNAME=mongodb
+      - MONGO_PORT=$MONGO_PORT
+      - MONGO_DB=$MONGO_DB
+    ports:
+      - "3000:3000"
+    volumes:
+      - dist:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    networks:
+      - iwa-api_net
+    command: ./wait-for.sh db:27017 -- NODE_ENV=production && cd /home/node/app/ && node dist/index.js
+
+networks:
+  iwa-api_net:
+    driver: bridge
+
+volumes:
+  db:
+  dist:
+  node_modules:

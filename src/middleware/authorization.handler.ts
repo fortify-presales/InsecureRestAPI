@@ -58,7 +58,6 @@ export class AuthorizationHandler {
     */
    
     public static requirePermission(permissions: string | string[]) {
-        try {
             const jwtAuth = jwtAuthz([permissions], {
                 customScopeKey: "permissions",
                 customUserKey: "auth",
@@ -66,9 +65,6 @@ export class AuthorizationHandler {
                 failWithError: false // should be true and catch with custom error handler
             });
             return jwtAuth;
-        } catch (error: any) {
-            unauthorised(error.message, res);
-        }
     };
 
     public static requireAccessToken(req: Request, res: Response, next: NextFunction) {
@@ -99,7 +95,7 @@ export class AuthorizationHandler {
             }
 
             next();
-        } catch (error) {
+        } catch (error: any) {
             unauthorised(error.message, res);
         }
     };

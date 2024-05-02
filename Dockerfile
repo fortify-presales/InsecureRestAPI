@@ -20,11 +20,11 @@ RUN npm install
 # RUN npm ci --only=production
 
 # Bundle app source
-ADD src ./
+ADD dist ./
 COPY config ./config/
 
-# Make port 8080 available to the world outside this container
-EXPOSE 8080
+# Make port 3000 available to the world outside this container
+EXPOSE 3000
 
 CMD [ "node", "index.js" ]
 
