@@ -1,7 +1,7 @@
 {
   "App": {
     "dbConfig": {
-      "host": "db",
+      "host": "mongodb",
       "port": 27017,
       "user": "iwa",
       "password": "iwa",

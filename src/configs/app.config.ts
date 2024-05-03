@@ -49,7 +49,7 @@ class AppConfig {
     private dbHost: string = config.get('App.dbConfig.host') || 'localhost';
     private dbPort: number = config.get('App.dbConfig.port') || 27017;
     private dbName: string = config.get('App.dbConfig.database') || 'iwa';
-    public mongoUrl: string = `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`;
+    public mongoUrl: string = `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}?authSource=admin`;
 
     constructor() {
         this.app = express();

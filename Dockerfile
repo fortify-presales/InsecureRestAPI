@@ -1,14 +1,14 @@
-FROM node:15.14.0
+FROM node:lts-bullseye
 
-LABEL maintainer="kevin.lee@microfocus.com"
+LABEL maintainer="klee2@opentext.com"
 
 # Add docker-compose-wait tool -------------------
-ENV WAIT_VERSION 2.7.2
+ENV WAIT_VERSION 2.12.1
 ADD https://github.com/ufoscout/docker-compose-wait/releases/download/$WAIT_VERSION/wait /wait
 RUN chmod +x /wait
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /home/node/app
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -22,6 +22,7 @@ RUN npm install
 # Bundle app source
 ADD dist ./
 COPY config ./config/
+COPY mongodb ./mongodb/
 
 # Make port 3000 available to the world outside this container
 EXPOSE 3000

@@ -3,7 +3,7 @@
   "info": {
     "title": "IWA-API",
     "version": "1.0",
-    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations. For this sample, you can use the api key demo-access-token to test the authorization filters.",
+    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.",
     "license": {
       "name": "GPLv3",
       "url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
@@ -608,7 +608,7 @@
         "description": "Gets all existing users searching by %keyword% format",
         "parameters": [
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -695,7 +695,7 @@
         "description": "Creates a new user",
         "parameters": [
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -779,7 +779,7 @@
             "description": "Id of the user to be retrieved. Cannot be empty."
           },
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -866,7 +866,7 @@
             "description": "Id of the user to be updated. Cannot be empty."
           },
           {
-            "name": "authorization",
+            "name": "Authorization",
             "in": "header",
             "schema": {
               "type": "string"
@@ -951,6 +951,13 @@
               "type": "string"
             },
             "description": "Id of the user to be deleted. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -1025,6 +1032,13 @@
         "summary": "Get a user using query",
         "description": "Gets an existing user using a MongoDb Query",
         "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "q",
             "description": "MongoDb query",
@@ -1106,13 +1120,6 @@
         "summary": "Find products by keyword(s)",
         "description": "Gets all existing products searching by %keyword% format",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "keywords",
             "in": "query",
@@ -1276,13 +1283,6 @@
               "type": "string"
             },
             "description": "Id of the product to be retrieved. Cannot be empty."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {
@@ -1540,13 +1540,6 @@
             }
           },
           {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "name",
             "description": "Id of the product image to be retrieved. Cannot be empty.",
             "in": "query",
@@ -1635,13 +1628,6 @@
               "type": "string"
             },
             "description": "Name of the product image to be retrieved. Cannot be empty."
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "responses": {

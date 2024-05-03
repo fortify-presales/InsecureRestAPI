@@ -7,7 +7,9 @@ const config = require('config');
 const dbHost = config.get('App.dbConfig.host') || 'localhost';
 const dbPort = config.get('App.dbConfig.port') || 27017;
 const dbName = config.get('App.dbConfig.database') || 'iwa';
-const mongoDB = `mongodb://${dbHost}:${dbPort}/${dbName}`;
+const dbUser = config.get('App.dbConfig.user') || 'iwa';
+const dbPassword = config.get('App.dbConfig.password') || 'iwa';
+const mongoDB = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
 
 const Product = require("./models/product");
 const User = require("./models/user");
