@@ -47,7 +47,7 @@ export class UserController {
     public get_user(req: Request, res: Response) {
         Logger.debug(`Retrieving user with params: ${JSON.stringify(req.params)}`);
         if (req.params.id) {
-            const user_filter = {_id: req.params.id};
+            const user_filter = {user_id: req.params.id};
             this.user_service.filterUser(user_filter, (err: any, user_data: IUser) => {
                 if (err) {
                     mongoError(err, res);
@@ -63,12 +63,13 @@ export class UserController {
     public create_user(req: Request, res: Response) {
         Logger.debug(`Creating user with request body: ${JSON.stringify(req.body)}`);
         // this checks whether all the fields were sent through with the request or not
-        if (req.body.name && req.body.name.first_name && req.body.name.last_name &&
+        if (req.body.user_id &&
+            req.body.name && req.body.name.first_name && req.body.name.last_name &&
             req.body.email &&
-            req.body.phone_number &&
-            req.body.password) {
+            req.body.phone_number) {
 
             const user_params: IUser = {
+                user_id: req.body.user_id,
                 name: {
                     first_name: req.body.name.first_name,
                     middle_name: req.body.name.middle_name ? req.body.name.middle_name : "",
@@ -76,7 +77,6 @@ export class UserController {
                 },
                 email: req.body.email,
                 phone_number: req.body.phone_number,
-                password: EncryptUtils.cryptPassword(req.body.password),
                 address: {
                     street: req.body.address.street ? req.body.address.street : "",
                     city: req.body.address.city ? req.body.address.city : "",
@@ -84,10 +84,7 @@ export class UserController {
                     zip: req.body.address.zip ? req.body.address.zip : "",
                     country: req.body.address.country ? req.body.address.country : "",
                 },
-                verify_code: req.body.verify_code ? req.body.verify_code : "",
                 is_enabled: req.body.is_enabled ? req.body.is_enabled : false,
-                password_reset: false,
-                mfa_enabled: req.body.mfa_enabled ? req.body.mfa_enabled : false,
                 is_admin: req.body.is_admin ? req.body.is_admin : false,
                 modification_notes: [{
                     modified_on: new Date(Date.now()),
@@ -111,7 +108,7 @@ export class UserController {
     public update_user(req: Request, res: Response) {
         Logger.debug(`Updating user with params: ${JSON.stringify(req.params)}`);
         if (req.params.id) {
-            const user_filter = {_id: req.params.id};
+            const user_filter = {user_id: req.params.id};
             this.user_service.filterUser(user_filter, (err: any, user_data: IUser) => {
                 if (err) {
                     mongoError(err, res);
@@ -122,14 +119,13 @@ export class UserController {
                         modification_note: 'User data updated'
                     });
                     const user_params: IUser = {
-                        _id: req.params.id,
+                        user_id: req.params.id,
                         name: req.body.name ? {
                             first_name: req.body.name.first_name ? req.body.name.first_name : user_data.name.first_name,
                             middle_name: req.body.name.first_name ? req.body.name.middle_name : user_data.name.middle_name,
                             last_name: req.body.name.first_name ? req.body.name.last_name : user_data.name.last_name
                         } : user_data.name,
                         email: req.body.email ? req.body.email : user_data.email,
-                        password: req.body.password ? EncryptUtils.cryptPassword(req.body.password) : user_data.password,
                         phone_number: req.body.phone_number ? req.body.phone_number : user_data.phone_number,
                         address: req.body.address ? {
                             street: req.body.address.street ? req.body.address.street : user_data.address.street,
@@ -138,10 +134,7 @@ export class UserController {
                             zip: req.body.address.zip ? req.body.address.zip : user_data.address.zip,
                             country: req.body.address.country ? req.body.address.country : user_data.address.country,
                         } : user_data.address,
-                        verify_code: user_data.verify_code,
                         is_enabled: req.body.is_enabled ? req.body.is_enabled : user_data.is_enabled,
-                        password_reset: req.body.password_reset ? req.body.password_reset : user_data.password_reset,
-                        mfa_enabled: req.body.mfa_enabled ? req.body.mfa_enabled : user_data.mfa_enabled,
                         is_admin: req.body.is_admin ? req.body.is_admin : user_data.is_admin,
                         is_deleted: req.body.is_deleted ? req.body.is_deleted : user_data.is_deleted,
                         modification_notes: user_data.modification_notes

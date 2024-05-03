@@ -17,32 +17,32 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {IUser} from './model';
-import users from './schema';
+import {IMessage} from './model';
+import messages from './schema';
 
-export default class UserService {
+export default class MessageService {
 
-    public filterUsers(query: any, offset: number = 0, limit: number = 50, callback: any) {
-        users.find(query, callback).skip(offset).limit(limit);
+    public filterMessages(query: any, offset: number = 0, limit: number = 50, callback: any) {
+        messages.find(query, callback).skip(offset).limit(limit);
     }
 
-    public filterUser(query: any, callback: any) {
-        users.findOne(query, callback);
+    public filterMessage(query: any, callback: any) {
+        messages.findOne(query, callback);
     }
 
-    public createUser(user_params: IUser, callback: any) {
-        const _session = new users(user_params);
+    public createMessage(message_params: IMessage, callback: any) {
+        const _session = new messages(message_params);
         _session.save(callback);
     }
 
-    public updateUser(user_params: IUser, callback: any) {
-        const query = {user_id: user_params.user_id};
-        users.findOneAndUpdate(query, user_params, callback);
+    public updateMessage(message_params: IMessage, callback: any) {
+        const query = {_id: message_params._id};
+        messages.findOneAndUpdate(query, message_params, callback);
     }
 
-    public deleteUser(user_id: String, callback: any) {
-        const query = {user_id: user_id};
-        users.deleteOne(query, callback);
+    public deleteMessage(_id: String, callback: any) {
+        const query = {_id: _id};
+        messages.deleteOne(query, callback);
     }
 
 }

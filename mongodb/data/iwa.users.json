@@ -1,5 +1,6 @@
 [
   {
+    "user_id": "auth0|6634fd934e983e7a58732728",
     "name": {
       "first_name": "Admin",
       "middle_name": "",
@@ -7,7 +8,6 @@
     },
     "email": "admin@localhost.com",
     "phone_number": "1234567890",
-    "password": "9d9cba1e29b334cc",
     "address": {
       "street": "",
       "city": "",
@@ -16,11 +16,10 @@
       "country": ""
     },
     "is_enabled": true,
-    "password_reset": false,
-    "mfa_enabled": false,
     "is_admin": true
   },
   {
+    "user_id": "auth0|6634fe351045dd069fb881af",
     "name": {
       "first_name": "Sam",
       "middle_name": "A",
@@ -28,7 +27,6 @@
     },
     "email": "user1@localhost.com",
     "phone_number": "0044770123456",
-    "password": "9d9cba1e29b334cc",
     "address": {
       "street": "1 Somewhere Street",
       "city": "London",
@@ -37,11 +35,10 @@
       "country": "United Kingdom"
     },
     "is_enabled": true,
-    "password_reset": false,
-    "mfa_enabled": false,
     "is_admin": false
   },
   {
+    "user_id": "auth0|6634fe661045dd069fb881f8",
     "name": {
       "first_name": "Sarah",
       "middle_name": "A",
@@ -49,7 +46,6 @@
     },
     "email": "user2@localhost.com",
     "phone_number": "0044780123456",
-    "password": "9d9cba1e29b334cc",
     "address": {
       "street": "1 Somewhere Street",
       "city": "London",
@@ -58,8 +54,6 @@
       "country": "United Kingdom"
     },
     "is_enabled": true,
-    "password_reset": false,
-    "mfa_enabled": false,
     "is_admin": false
   }
 ]

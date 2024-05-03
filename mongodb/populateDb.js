@@ -9,13 +9,20 @@ const dbPort = config.get('App.dbConfig.port') || 27017;
 const dbName = config.get('App.dbConfig.database') || 'iwa';
 const dbUser = config.get('App.dbConfig.user') || 'iwa';
 const dbPassword = config.get('App.dbConfig.password') || 'iwa';
-const mongoDB = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
+console.log(`[INFO]:: Running in environment: ${config.util.getEnv()}`);
+if (config.util.getEnv() == "production") {
+    mongoDB = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
+} else {
+    mongoDB = `mongodb://${dbHost}:${dbPort}/${dbName}`;
+}
 
 const Product = require("./models/product");
 const User = require("./models/user");
+const Message = require("./models/message");
 
 const users = [];
 const products = [];
+const messages = [];
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
@@ -32,15 +39,17 @@ async function main() {
     console.log(`[INFO]:: Dropping existing collections`);
     await mongoose.connection.db.dropCollection('products');
     await mongoose.connection.db.dropCollection('users');
+    await mongoose.connection.db.dropCollection('messages');
     console.log(`[INFO]:: Creating collections`);
     await createUsers();
     await createProducts();
+    await createMessages();
     console.log("[INFO]:: Closing connection");
     await mongoose.connection.close();
     console.log("[INFO]:: Done")
 }
 
-async function userCreate(index, first_name, middle_name, last_name, email, phone_number, is_admin) {
+async function userCreate(index, user_id, first_name, middle_name, last_name, email, phone_number, is_admin) {
     const username = {
         name: {
             first_name: first_name,
@@ -50,6 +59,7 @@ async function userCreate(index, first_name, middle_name, last_name, email, phon
     }
     const userdetail =
         {
+            user_id: user_id,
             name: {
                 first_name: first_name,
                 middle_name: middle_name,
@@ -57,7 +67,6 @@ async function userCreate(index, first_name, middle_name, last_name, email, phon
             },
             email: email,
             phone_number: phone_number,
-            password: "9d9cba1e29b334cc", // defaults encoding of "password"
             address: {
                 street: "1 Somewhere Street",
                 city: "London",
@@ -66,8 +75,6 @@ async function userCreate(index, first_name, middle_name, last_name, email, phon
                 country: "United Kingdom"
             },
             is_enabled: true,
-            password_reset: false,
-            mfa_enabled: false,
             is_admin: is_admin
         };
 
@@ -99,12 +106,29 @@ async function productCreate(index, code, name, image, price, on_sale, sale_pric
     console.log(`Added product: ${code}`);
 }
 
+async function messageCreate(index, user_id, text) {
+    const messagedetail =
+        {
+            user_id: user_id,
+            text: text,
+            sent_date: new Date(Date.now()),
+            is_read: false,
+            is_deleted: false
+        };
+
+    const message = new Message(messagedetail);
+
+    await message.save();
+    messages[index] = message;
+    console.log(`Added message: ${user_id}  - ${text}`);
+}
+
 async function createUsers() {
     console.log("Adding users");
     await Promise.all([
-        userCreate(0, "Admin", "", "User", "admin@localhost.com", "0123456789", true),
-        userCreate(1, "Sam", "A", "Shopper", "user1@localhost.com", "0123456789", false),
-        userCreate(2, "Sam", "A", "Shopper", "user2@localhost.com", "0123456789", false),
+        userCreate(0, "auth0|6634fd934e983e7a58732728", "Admin", "", "User", "admin@localhost.com", "0123456789", true),
+        userCreate(1, "auth0|6634fe351045dd069fb881af", "Sam", "A", "Shopper", "user1@localhost.com", "0123456789", false),
+        userCreate(2, "auth0|6634fe661045dd069fb881f8", "Sarah", "A", "Shopper", "user2@localhost.com", "0123456789", false),
     ]);
 }
 
@@ -141,5 +165,15 @@ async function createProducts() {
         productCreate(9, "SWA723-A375-00412", "Kanlab Blue", "generic-product-9.jpg",
             9.95, false, 0, true, 7,5, true
         ),
+    ]);
+}
+
+async function createMessages() {
+    console.log("Adding messages");
+    await Promise.all([
+        messageCreate(0, "auth0|6634fe351045dd069fb881af", "Welcome to IWA-API. This is an example message that you can read"),
+        messageCreate(1, "auth0|6634fe351045dd069fb881af", "Test message - please ignore!"),
+        messageCreate(2, "auth0|6634fe661045dd069fb881f8", "Welcome to IWA-API. This is an example message that you can read"),
+        messageCreate(3, "auth0|6634fe661045dd069fb881f8", "Test message - please ignore!"),
     ]);
 }

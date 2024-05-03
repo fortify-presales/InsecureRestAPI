@@ -4,6 +4,7 @@ const {ModificationNote} = require("./common");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
+    user_id: String,
     name: {
         type: {
             first_name: String,
@@ -12,7 +13,6 @@ const UserSchema = new Schema({
         }
     },
     email: String,
-    password: String,
     phone_number: String,
     address: {
         type: {
@@ -23,16 +23,7 @@ const UserSchema = new Schema({
             country: String
         }
     },
-    verify_code: String,
     is_enabled: {
-        type: Boolean,
-        default: false
-    },
-    password_reset: {
-        type: Boolean,
-        default: false
-    },
-    mfa_enabled: {
         type: Boolean,
         default: false
     },

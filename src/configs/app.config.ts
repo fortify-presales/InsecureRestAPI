@@ -37,6 +37,7 @@ import swaggerOutput from './swagger_output.json';
 import {siteRoutes} from "../routes/site.routes";
 import {userRoutes} from "../routes/user.routes";
 import {productRoutes} from "../routes/product.routes";
+import {messageRoutes} from "../routes/message.routes";
 import {commonRoutes} from "../routes/common.routes";
 
 import {AuthorizationHandler} from "../middleware/authorization.handler";
@@ -51,7 +52,10 @@ class AppConfig {
     private dbName: string = config.get('App.dbConfig.database') || 'iwa';
     private dbUser: string = config.get('App.dbConfig.user') || 'iwa';
     private dbPassword: string = config.get('App.dbConfig.password') || 'iwa';
-    public mongoUrl: string = `mongodb://${this.dbUser}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/${this.dbName}?authSource=admin`;
+    public mongoUrl: string = (config.util.getEnv() == "production" 
+        ? `mongodb://${this.dbUser}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/${this.dbName}?authSource=admin`
+        : `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`
+    );
 
     constructor() {
         this.app = express();
@@ -61,6 +65,7 @@ class AppConfig {
         this.app.use(siteRoutes);
         this.app.use(userRoutes);
         this.app.use(productRoutes);
+        this.app.use(messageRoutes);
         this.app.use(commonRoutes); // always needs to be last
     }
 

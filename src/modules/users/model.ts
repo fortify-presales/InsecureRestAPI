@@ -21,6 +21,7 @@ import {ModificationNote} from "../common/model";
 
 export interface IUser {
     _id?: String;
+    user_id: String;
     name: {
         first_name: String;
         middle_name: String;

@@ -43,6 +43,7 @@ const doc = {
     components: {
         schemas: {
             user: {
+                $user_id: "auth0|6634fe351045dd069fb881af",
                 $name: {
                     $first_name: "User",
                     $middle_name: "",
@@ -50,7 +51,6 @@ const doc = {
                 },
                 $email: "user1@localhost.com",
                 $phone_number: "1234567890",
-                $password: "string",
                 $address: {
                     $street: "string",
                     $city: "string",
@@ -59,16 +59,14 @@ const doc = {
                     $country: "string",
                 },
                 $is_enabled: true,
-                $password_reset: false,
-                $mfa_enabled: false,
                 $is_admin: false,
             },
             registerUser: {
+                $user_id: "auth0|6634fe351045dd069fb881af",
                 $first_name: "User",
                 $last_name: "One",
                 $email: "user1@localhost.com",
                 $phone_number: "1234567890",
-                $password: "string",
             },
             subscribeUser: {
                 $first_name: "User",
@@ -99,6 +97,14 @@ const doc = {
                 $rating: 1,
                 $available: true
             },
+            message: {
+                $user_id: "auth0|6634fe351045dd069fb881af",
+                $text: "This is an example message",
+                $sent_date: "YYYY-MM-DDTHH:mm:ssZ",
+                $read_date: "YYYY-MM-DDTHH:mm:ssZ",
+                $is_read: true,
+                $is_deleted: false
+            },
             success: {
                 $status: "success",
                 $message: "string",
@@ -110,14 +116,6 @@ const doc = {
                 $message: "string",
                 $timestamp: "YYYY-MM-DDTHH:mm:ssZ",
                 $data: {}
-            },
-            jwtJson: {
-                $id: "string",
-                $email: "string",
-                $accessToken: "string",
-                $refreshToken: "string",
-                $tokenExpiration: 1000000,
-                $tokenType: "Bearer"
             }
         },
         securitySchemes: {
@@ -146,6 +144,11 @@ const doc = {
 };
 
 const outputFile = './swagger_output.json';
-const endpointsFiles = ['../routes/site.routes.ts', '../routes/user.routes.ts', '../routes/product.routes.ts'];
+const endpointsFiles = [
+    '../routes/site.routes.ts', 
+    '../routes/user.routes.ts',
+    '../routes/product.routes.ts',
+    '../routes/message.routes.ts'
+];
 
 swaggerAutogen({openapi: '3.0.0'})(outputFile, endpointsFiles, doc);

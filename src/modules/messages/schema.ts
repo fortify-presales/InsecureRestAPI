@@ -17,32 +17,25 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import {IUser} from './model';
-import users from './schema';
+import mongoose from 'mongoose';
+import {ModificationNote} from '../common/model';
 
-export default class UserService {
+const Schema = mongoose.Schema;
 
-    public filterUsers(query: any, offset: number = 0, limit: number = 50, callback: any) {
-        users.find(query, callback).skip(offset).limit(limit);
+const schema = new Schema({
+    user_id: String,
+    text: String,
+    sent_date: Date,
+    read_date: Date,
+    is_read: {
+        type: Boolean,
+        default: false
+    },
+    is_deleted: {
+        type: Boolean,
+        default: false
     }
+});
+schema.index({'$**': 'text'});
 
-    public filterUser(query: any, callback: any) {
-        users.findOne(query, callback);
-    }
-
-    public createUser(user_params: IUser, callback: any) {
-        const _session = new users(user_params);
-        _session.save(callback);
-    }
-
-    public updateUser(user_params: IUser, callback: any) {
-        const query = {user_id: user_params.user_id};
-        users.findOneAndUpdate(query, user_params, callback);
-    }
-
-    public deleteUser(user_id: String, callback: any) {
-        const query = {user_id: user_id};
-        users.deleteOne(query, callback);
-    }
-
-}
+export default mongoose.model('messages', schema);

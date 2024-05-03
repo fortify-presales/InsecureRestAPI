@@ -309,234 +309,6 @@
         }
       }
     },
-    "/api/v1/site/sign-in": {
-      "post": {
-        "tags": [
-          "Site"
-        ],
-        "summary": "Sign-in",
-        "description": "Sign in as an authorised user",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/jwtJson"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/jwtJson"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/signInUser"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/site/sign-out": {
-      "post": {
-        "tags": [
-          "Site"
-        ],
-        "summary": "Sign-out",
-        "description": "Sign out an authorised user",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/success"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/success"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/signOutUser"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/site/refresh-token": {
-      "post": {
-        "tags": [
-          "Site"
-        ],
-        "summary": "Refresh token",
-        "description": "Refresh users JwtAuthHandler access token",
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/success"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/success"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/failure"
-                }
-              }
-            }
-          }
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/refreshUser"
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/v1/site/backup-newsletter-db": {
       "post": {
         "tags": [
@@ -1697,6 +1469,519 @@
           }
         }
       }
+    },
+    "/api/v1/messages": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Find messages by keyword(s)",
+        "description": "Gets all existing messages searching by %keyword% format",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keywords",
+            "in": "query",
+            "description": "Keyword(s) search for messages to be found.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset of the starting record. 0 indicates the first record.",
+            "schema": {
+              "type": "number"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum records to return. The maximum value allowed is 50.",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Create new message",
+        "description": "Creates a new message",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/message"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/messages/{id}": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get a message",
+        "description": "Gets an existing message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id of the message to be retrieved. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Message Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Update a message",
+        "description": "Updates an existing message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id of the message to be updated. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Message Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Delete a message",
+        "description": "Deletes an existing message",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Id of the message to be deleted. Cannot be empty."
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Message Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/message": {
+      "get": {
+        "tags": [
+          "Messages"
+        ],
+        "summary": "Get a message using query",
+        "description": "Gets an existing message using a MongoDb Query",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "q",
+            "description": "MongoDb query",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/success"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Message Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/failure"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -1704,6 +1989,10 @@
       "user": {
         "type": "object",
         "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "auth0|6634fe351045dd069fb881af"
+          },
           "name": {
             "type": "object",
             "properties": {
@@ -1733,10 +2022,6 @@
           "phone_number": {
             "type": "string",
             "example": "1234567890"
-          },
-          "password": {
-            "type": "string",
-            "example": "string"
           },
           "address": {
             "type": "object",
@@ -1774,28 +2059,18 @@
             "type": "boolean",
             "example": true
           },
-          "password_reset": {
-            "type": "boolean",
-            "example": false
-          },
-          "mfa_enabled": {
-            "type": "boolean",
-            "example": false
-          },
           "is_admin": {
             "type": "boolean",
             "example": false
           }
         },
         "required": [
+          "user_id",
           "name",
           "email",
           "phone_number",
-          "password",
           "address",
           "is_enabled",
-          "password_reset",
-          "mfa_enabled",
           "is_admin"
         ],
         "xml": {
@@ -1805,6 +2080,10 @@
       "registerUser": {
         "type": "object",
         "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "auth0|6634fe351045dd069fb881af"
+          },
           "first_name": {
             "type": "string",
             "example": "User"
@@ -1820,18 +2099,14 @@
           "phone_number": {
             "type": "string",
             "example": "1234567890"
-          },
-          "password": {
-            "type": "string",
-            "example": "string"
           }
         },
         "required": [
+          "user_id",
           "first_name",
           "last_name",
           "email",
-          "phone_number",
-          "password"
+          "phone_number"
         ],
         "xml": {
           "name": "registerUser"
@@ -1982,6 +2257,46 @@
           "name": "product"
         }
       },
+      "message": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "example": "auth0|6634fe351045dd069fb881af"
+          },
+          "text": {
+            "type": "string",
+            "example": "This is an example message"
+          },
+          "sent_date": {
+            "type": "string",
+            "example": "YYYY-MM-DDTHH:mm:ssZ"
+          },
+          "read_date": {
+            "type": "string",
+            "example": "YYYY-MM-DDTHH:mm:ssZ"
+          },
+          "is_read": {
+            "type": "boolean",
+            "example": true
+          },
+          "is_deleted": {
+            "type": "boolean",
+            "example": false
+          }
+        },
+        "required": [
+          "user_id",
+          "text",
+          "sent_date",
+          "read_date",
+          "is_read",
+          "is_deleted"
+        ],
+        "xml": {
+          "name": "message"
+        }
+      },
       "success": {
         "type": "object",
         "properties": {
@@ -2040,46 +2355,6 @@
         ],
         "xml": {
           "name": "failure"
-        }
-      },
-      "jwtJson": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "string",
-            "example": "string"
-          },
-          "email": {
-            "type": "string",
-            "example": "string"
-          },
-          "accessToken": {
-            "type": "string",
-            "example": "string"
-          },
-          "refreshToken": {
-            "type": "string",
-            "example": "string"
-          },
-          "tokenExpiration": {
-            "type": "number",
-            "example": 1000000
-          },
-          "tokenType": {
-            "type": "string",
-            "example": "Bearer"
-          }
-        },
-        "required": [
-          "id",
-          "email",
-          "accessToken",
-          "refreshToken",
-          "tokenExpiration",
-          "tokenType"
-        ],
-        "xml": {
-          "name": "jwtJson"
         }
       }
     },
