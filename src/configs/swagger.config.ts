@@ -135,6 +135,10 @@ const doc = {
     ],
     servers: [
         {
+            url: "https://iwa-api.onfortify.com",
+            description: "Production server"
+        },
+        {
             url: `${apiUrl}`,
             description: `${apiDesc}`
         },
