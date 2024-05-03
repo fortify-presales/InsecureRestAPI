@@ -1,6 +1,6 @@
 services:
   mongodb:
-    image: mongo
+    image: mongo:latest
     container_name: mongodb
     restart: unless-stopped
     env_file: .env
@@ -22,10 +22,7 @@ services:
       - iwa-api
 
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: nodejs
+    image: iwa-api:latest
     container_name: iwa-api
     restart: unless-stopped
     env_file: .env

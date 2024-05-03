@@ -4,7 +4,7 @@
   "description": "IWA-API is an insecure Node/Express REST API for use in Fortify demonstrations",
   "main": "index.ys",
   "scripts": {
-    "build": "NODE_ENV=production && npx tsc && ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist",
+    "build": "NODE_ENV=production && npx tsc && ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist/configs",
     "start": "NODE_ENV=production && node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
