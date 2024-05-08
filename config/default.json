@@ -12,7 +12,7 @@
       "database": "iwa-dev"
     },
     "auth0": {
-      "domain": "dev-ahui5f878pgtbrpr.us.auth0.com",
+      "domain": "https://dev-ahui5f878pgtbrpr.us.auth0.com",
       "audience": "https://iwa-api.onfortify.com"
     },
     "apiConfig": {

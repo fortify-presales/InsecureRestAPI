@@ -57,13 +57,3 @@ npm run dev
 ```
 
 The API should then be accessible at [http://localhost:3000](http://localhost:3000)
-
-**Extra: Exposing Express API to the Internet**
-
-You can expose the local Node/Express API to the internet using [localtunnel](https://localtunnel.github.io/www/)
-using the following:
-
-```agsl
-npm install -g localtunnel
-lt --port 3000
-```

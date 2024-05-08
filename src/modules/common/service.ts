@@ -23,7 +23,13 @@ import moment from 'moment';
 import {response_status_codes} from './model';
 
 export function successResponse(message: string, data: any, res: Response) {
-    res.status(response_status_codes.success).json(data);
+    if (data == null) { data = {};}
+    res.status(response_status_codes.success).json({
+        status: 'success',
+        timestamp: moment().format(),
+        message: message,
+        data
+    });
 }
 
 export function failureResponse(message: string, data: any, res: Response) {
@@ -68,3 +74,13 @@ export function mongoError(err: any, res: Response) {
         data: err
     });
 }
+
+export function internalError(err: any, res: Response) {
+    res.status(response_status_codes.internal_server_error).json({
+        status: 'failure',
+        timestamp: moment().format(),
+        message: 'Unknown internal error',
+        data: err
+    });
+}
+

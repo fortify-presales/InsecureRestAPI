@@ -24,6 +24,7 @@ import {forbidden, unauthorised} from "../modules/common/service";
 
 const { expressjwt: jwt } = require("express-jwt");
 const jwtAuthz = require("express-jwt-authz");
+const { auth } = require('express-oauth2-jwt-bearer');
 
 import jwksRsa from "jwks-rsa";
 
@@ -41,22 +42,12 @@ export class AuthorizationHandler {
         /favicon.ico/,
         /\/site\/*/,
     ];
-
-    /*public static checkJwt = jwt({
-        secret: jwksRsa.expressJwtSecret({
-            cache: true,
-            rateLimit: true,
-            jwksRequestsPerMinute: 5,
-            jwksUri: `https://${auth0Domain}/.well-known/jwks.json`
-        }),
-
-        // Validate the audience and the issuer.
-        audience: `${auth0Audience}`,
-        issuer: `https://${auth0Domain}/`,
-        algorithms: ["RS256"]
-    }).unless({path: this.unprotected})
-    */
    
+    public static checkJWT = auth({
+        audience: auth0Audience,
+        issuerBaseURL: auth0Domain
+    });
+
     public static requirePermission(permissions: string | string[]) {
             const jwtAuth = jwtAuthz([permissions], {
                 customScopeKey: "permissions",

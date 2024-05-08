@@ -134,7 +134,7 @@ export class ProductController {
                 if (err) {
                     mongoError(err, res);
                 } else {
-                    successResponse('Successfully retrieved product', product_data, res);
+                    successResponse('Successfully created product', product_data, res);
                 }
             });
         } else {
@@ -177,7 +177,7 @@ export class ProductController {
                         if (err) {
                             mongoError(err, res);
                         } else {
-                            successResponse('Successfully updated product', null, res);
+                            successResponse('Successfully updated product', product_data, res);
                         }
                     });
                 } else {

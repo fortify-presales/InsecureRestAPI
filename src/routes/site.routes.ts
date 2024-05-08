@@ -18,7 +18,6 @@
 */
 
 import {Request, Response, Router} from 'express';
-import { requiredScopes } from 'express-oauth2-jwt-bearer';
 
 import {SiteController} from "../controllers/site.controller";
 import {AuthorizationHandler} from "../middleware/authorization.handler";
@@ -46,72 +45,7 @@ siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Re
            }
     */
 
-    res.status(200).json({health: "OK", "motd": ""});
-});
-
-
-siteRoutes.get('/api/v1/site/email-already-exists/:email', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
-    /*
-       #swagger.tags = ['Site']
-       #swagger.summary = "Check if email is taken"
-       #swagger.description = "Check if a user with the specified email already exists in the site"
-           #swagger.parameters['email'] = {
-               in: 'query',
-               description: 'Email address to check. Cannot be empty.',
-               type: 'string'
-           }
-           #swagger.responses[200] = {
-               description: "Success",
-               schema: { $ref: '#/components/schemas/success' }
-           }
-           #swagger.responses[400] = {
-               description: "Bad Request",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-           #swagger.responses[500] = {
-               description: "Internal Server Error",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-    */
-
-    res.status(200).json({});
-});
-
-
-siteRoutes.post('/api/v1/site/register-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
-    /*
-       #swagger.tags = ['Site']
-       #swagger.summary = "Register a new user"
-       #swagger.description = "Register a new user with the site"
-             #swagger.requestBody = {
-                 required: true,
-                 content: {
-                     "application/json": {
-                         schema: {
-                             $ref: "#/components/schemas/registerUser"
-                         }
-                     }
-                 }
-             }
-           #swagger.responses[200] = {
-               description: "Success",
-               schema: { $ref: '#/components/schemas/success' }
-           }
-           #swagger.responses[400] = {
-               description: "Bad Request",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-           #swagger.responses[409] = {
-               description: "User Already Exists",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-           #swagger.responses[500] = {
-               description: "Internal Server Error",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-    */
-
-    res.status(200).json({message: "Post request successfull"});
+    site_controller.site_status(req, res);
 });
 
 siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {

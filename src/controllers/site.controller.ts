@@ -36,6 +36,7 @@ import {AuthenticationHandler} from "../middleware/authentication.handler";
 import {JwtJson, SubscribingUser} from "../common/types";
 import {FileUtils} from "../utils/file.utils";
 
+const getRandomQuote = require('random-quote-generator5.0');
 const {JSDOM} = require("jsdom");
 const {window} = new JSDOM("");
 const jQuery = require("jquery")(window);
@@ -43,6 +44,22 @@ const jQuery = require("jquery")(window);
 export class SiteController {
 
     private user_service: UserService = new UserService();
+
+    private getHealth() {
+        var statusArray = ['Up', 'Offline', 'Going Down', "In Maintenance"];    
+        return statusArray[Math.floor(Math.random() * statusArray.length)];
+
+    }
+
+    public site_status(req: Request, res: Response) {
+        let retObj = jQuery.parseJSON(`
+        {
+            "health": "${this.getHealth()}",
+            "motd": "${getRandomQuote()}"
+        }
+        `);
+        successResponse('Successfully retrieved site status', retObj, res);
+    }
 
     public login_user(req: Request, res: Response) {
         Logger.debug(`Logging in user with with request body: ${JSON.stringify(req.body)}`);
@@ -92,18 +109,25 @@ export class SiteController {
             failureResponse(`Error updating newsletter database: ${err}`, null, res);
         }
 
-        successResponse('Successfully updated newsletter database', null, res);
+        successResponse('Successfully updated newsletter database', userObj, res);
     }
 
     public backup_newsletter_db(req: Request, res: Response) {
-        Logger.debug(`Backing up newsletter database with details: ${req.params}`)
+        let params = JSON.stringify(req.query)
+        Logger.debug(`Backing up newsletter database with details: ${params}`);
         try {
             FileUtils.backupNewsletterDb(<String>req.query.file_path)
         } catch (err) {
             failureResponse(`Error backing up newsletter database: ${err}`, null, res);
         }
 
-        successResponse('Successfully backed up newsletter database', null, res);
+        let retObj = jQuery.parseJSON(`
+        {
+            "input": "${FileUtils.newsletterFile}",
+            "output": "${req.query.file_path}"
+        }
+        `);
+        successResponse('Successfully backed up newsletter database', retObj, res);
     }
 
 }

@@ -17,13 +17,13 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import config from "config";
 import {Request, Response, Router} from 'express';
 
 import {ProductController} from '../controllers/product.controller';
-import {AuthenticationHandler} from "../middleware/authentication.handler";
 import {AuthorizationHandler} from "../middleware/authorization.handler";
 import {ProductPermission} from "../modules/products/permissions"
+
+const { requiredScopes } = require('express-oauth2-jwt-bearer');
 
 const product_controller: ProductController = new ProductController();
 
@@ -150,7 +150,7 @@ productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.permitAl
 });
 
 
-productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Create)], (req: Request, res: Response) => {
+productRoutes.post('/api/v1/products', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Create), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
@@ -182,7 +182,7 @@ productRoutes.post('/api/v1/products', [AuthorizationHandler.requireAccessToken,
     product_controller.create_product(req, res);
 });
 
-productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Update)], (req: Request, res: Response) => {
+productRoutes.put('/api/v1/products/:id', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Update), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
@@ -210,7 +210,7 @@ productRoutes.put('/api/v1/products/:id', [AuthorizationHandler.requireAccessTok
     product_controller.update_product(req, res);
 });
 
-productRoutes.delete('/api/v1/products/:id', [AuthorizationHandler.requireAccessToken, AuthorizationHandler.requirePermission(ProductPermission.Delete)], (req: Request, res: Response) => {
+productRoutes.delete('/api/v1/products/:id', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Delete), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"

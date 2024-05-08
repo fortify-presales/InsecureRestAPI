@@ -17,24 +17,11 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-import { NextFunction, Request, Response } from "express";
-import {forbidden, unauthorised, internalError} from "../modules/common/service";
+import Logger from "../middleware/logger";
 
-import Logger from "./logger";
-import { TextUtils } from "../utils/text.utils";
+export abstract class TextUtils {
 
-const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-    if (err.name === 'UnauthorizedError') {
-        Logger.error(err);
-        unauthorised(TextUtils.stripAnsiCodes(err.message), res);
-        return;
-    } else if (err.name ==='InsufficientScopeError') {
-        Logger.error(err);
-        forbidden(TextUtils.stripAnsiCodes(err.message), res);
-    } else {
-        internalError(TextUtils.stripAnsiCodes(err.message), res);
-    }  
-   next();
-};
-
-export default errorHandler;
+    public static stripAnsiCodes = (str: string): string =>
+        str.replace(/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g, '');
+    
+}

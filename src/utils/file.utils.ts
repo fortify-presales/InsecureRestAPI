@@ -24,7 +24,7 @@ import Logger from "../middleware/logger";
 
 export abstract class FileUtils {
 
-    private static newsletterFile = "email-db.json";
+    public static newsletterFile = "email-db.json";
 
     public static updateNewsletterDb(userObj: SubscribingUser) {
         // check if the file is writable.
@@ -35,7 +35,7 @@ export abstract class FileUtils {
                     if (err) throw err;
                     let users = []
                     if (data) {
-                        users = JSON.parse(data.toString('utf8'));
+                        users = JSON.parse(data.toString());
                     }
                     // add new user
                     users.push(userObj);
@@ -59,8 +59,19 @@ export abstract class FileUtils {
     }
 
     public static backupNewsletterDb(backupFile: String) {
+        fs.stat(this.newsletterFile, function(err, stat) {
+            if (err == null) {
+                Logger.debug(`Newsletter file ${FileUtils.newsletterFile} exists.`);
+            } else if (err.code === 'ENOENT') {
+                // file does not exist
+                Logger.debug(`Newsletter file ${FileUtils.newsletterFile} does not exist, creating it.`);
+                fs.writeFile(FileUtils.newsletterFile, '[]]', (err) => console.log(err));
+            } else {
+                Logger.error('Error checking status of newletter file: ', err.code);
+            }
+        });
         child_process.exec(
-            `gzip ${FileUtils.newsletterFile} ${backupFile} `,
+            `gzip -cvf ${FileUtils.newsletterFile} > ${backupFile} `,
             function (err, data) {
                 if (err) throw err;
                 Logger.debug(`Email database backed up to ${backupFile}.`);

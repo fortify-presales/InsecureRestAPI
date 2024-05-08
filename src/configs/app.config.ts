@@ -40,7 +40,7 @@ import {productRoutes} from "../routes/product.routes";
 import {messageRoutes} from "../routes/message.routes";
 import {commonRoutes} from "../routes/common.routes";
 
-import {AuthorizationHandler} from "../middleware/authorization.handler";
+require('dotenv').config();
 
 class AppConfig {
     public app: express.Application;
@@ -67,6 +67,8 @@ class AppConfig {
         this.app.use(productRoutes);
         this.app.use(messageRoutes);
         this.app.use(commonRoutes); // always needs to be last
+        // configure default error handler
+        this.app.use(errorHandler);
     }
 
     async mongoSetup(): Promise<void> {
@@ -110,10 +112,14 @@ class AppConfig {
         );
         // configure swagger API
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
-        // configure default error handler
-        this.app.use(errorHandler);
         // configure global authorization handler
         //this.app.use(AuthorizationHandler.checkJwt);
+        /*this.app.use(
+            auth({
+                audience: process.env.AUDIENCE_ID,
+                issuerBaseURL: process.env.ISSUER_BASE_URL,
+            })
+        );*/
     }
 }
 
