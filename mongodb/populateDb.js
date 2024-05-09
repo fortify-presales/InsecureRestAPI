@@ -4,13 +4,14 @@
 const userArgs = process.argv.slice(2);
 
 const config = require('config');
+const curEnv = config.util.getEnv('NODE_ENV');
+console.log(`[INFO]:: Running in environment: ${curEnv}`);
 const dbHost = config.get('App.dbConfig.host') || 'localhost';
 const dbPort = config.get('App.dbConfig.port') || 27017;
 const dbName = config.get('App.dbConfig.database') || 'iwa';
 const dbUser = config.get('App.dbConfig.user') || 'iwa';
 const dbPassword = config.get('App.dbConfig.password') || 'iwa';
-console.log(`[INFO]:: Running in environment: ${config.util.getEnv()}`);
-if (config.util.getEnv() == "production") {
+if (curEnv == "production") {
     mongoDB = `mongodb://${dbUser}:${dbPassword}@${dbHost}:${dbPort}/${dbName}?authSource=admin`;
 } else {
     mongoDB = `mongodb://${dbHost}:${dbPort}/${dbName}`;
