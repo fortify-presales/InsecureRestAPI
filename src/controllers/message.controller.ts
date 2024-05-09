@@ -69,7 +69,8 @@ export class MessageController {
                 user_id: req.body.user_id,
                 text: req.body.text,
                 is_read: false,
-                sent_date: new Date(Date.now())
+                sent_date: new Date(Date.now()),
+                read_date: new Date(Date.now())
             };
             this.message_service.createMessage(message_params, (err: any, message_data: IMessage) => {
                 if (err) {

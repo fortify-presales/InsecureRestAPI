@@ -52,7 +52,7 @@ class AppConfig {
     private dbName: string = config.get('App.dbConfig.database') || 'iwa';
     private dbUser: string = config.get('App.dbConfig.user') || 'iwa';
     private dbPassword: string = config.get('App.dbConfig.password') || 'iwa';
-    public mongoUrl: string = (config.util.getEnv() == "production" 
+    public mongoUrl: string = (config.util.getEnv('NODE_ENV') == "production" 
         ? `mongodb://${this.dbUser}:${this.dbPassword}@${this.dbHost}:${this.dbPort}/${this.dbName}?authSource=admin`
         : `mongodb://${this.dbHost}:${this.dbPort}/${this.dbName}`
     );
