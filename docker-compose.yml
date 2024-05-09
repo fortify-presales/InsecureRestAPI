@@ -1,8 +1,9 @@
 services:
+
   mongodb:
     image: mongo:latest
     container_name: mongodb
-    restart: unless-stopped
+    restart: always
     env_file: .env
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_ROOT_USERNAME
@@ -16,7 +17,7 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - db:/data/db
+      - mongodb:/data/db
       - ./mongodb/init.sh:/docker-entrypoint-initdb.d/init.sh:ro
     networks:
       - iwa-api
@@ -24,7 +25,7 @@ services:
   app:
     image: iwa-api:latest
     container_name: iwa-api
-    restart: unless-stopped
+    restart: always
     env_file: .env
     environment:
       - NODE_ENV=production
@@ -40,15 +41,41 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - dist:/home/node/app
+      - iwa-api:/home/node/app
     networks:
       - iwa-api
     command: sh -c "/wait && cd /home/node/app && node mongodb/populateDb.js && node index.js"
+
+  nginx:
+    image: nginx:1.15-alpine
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./data/nginx:/etc/nginx/conf.d
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - iwa-api
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+      
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: always
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    networks:
+      - iwa-api
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 networks:
   iwa-api:
     driver: bridge
 
 volumes:
-  db:
-  dist:
+  mongodb:
+  iwa-api:
