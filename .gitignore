@@ -136,3 +136,4 @@ dist
 # misc project
 .env
 logs
+email-db.json

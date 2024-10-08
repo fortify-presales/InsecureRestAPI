@@ -173,6 +173,14 @@ productRoutes.post('/api/v1/products', AuthorizationHandler.checkJWT, requiredSc
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
         #swagger.responses[500] = {
             description: "Internal Server Error",
             schema: { $ref: '#/components/schemas/failure' }
@@ -198,6 +206,14 @@ productRoutes.put('/api/v1/products/:id', AuthorizationHandler.checkJWT, require
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "Product Not Found",
             schema: { $ref: '#/components/schemas/failure' }
@@ -226,6 +242,14 @@ productRoutes.delete('/api/v1/products/:id', AuthorizationHandler.checkJWT, requ
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "Product Not Found",
             schema: { $ref: '#/components/schemas/failure' }

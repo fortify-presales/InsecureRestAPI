@@ -67,6 +67,14 @@ messageRoutes.get('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSco
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[500] = {
             description: "Internal Server Error",
             schema: { $ref: '#/components/schemas/failure' }
@@ -78,27 +86,35 @@ messageRoutes.get('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSco
 
 messageRoutes.get('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Read), (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Messages']
-       #swagger.summary = "Get a message"
-       #swagger.description = "Gets an existing message"
-       #swagger.parameters['id'] = {
-           description: 'Id of the message to be retrieved. Cannot be empty.'
-       }
-       #swagger.responses[200] = {
-           description: "Success",
-           schema: { $ref: '#/components/schemas/success' }
-       }
-       #swagger.responses[400] = {
-           description: "Bad Request",
-           schema: { $ref: '#/components/schemas/failure' }
-       }
+        #swagger.tags = ['Messages']
+        #swagger.summary = "Get a message"
+        #swagger.description = "Gets an existing message"
+        #swagger.parameters['id'] = {
+            description: 'Id of the message to be retrieved. Cannot be empty.'
+        }
+        #swagger.responses[200] = {
+            description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }           
        #swagger.responses[404] = {
-           description: "Message Not Found",
-           schema: { $ref: '#/components/schemas/failure' }
+            description: "Message Not Found",
+            schema: { $ref: '#/components/schemas/failure' }
        }
        #swagger.responses[500] = {
-           description: "Internal Server Error",
-           schema: { $ref: '#/components/schemas/failure' }
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
        }
     */
     message_controller.get_message(req, res);
@@ -106,28 +122,36 @@ messageRoutes.get('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
 
 messageRoutes.get('/api/v1/message', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Read), (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Messages']
-       #swagger.summary = "Get a message using query"
-       #swagger.description = "Gets an existing message using a MongoDb Query"
-       #swagger.parameters['q'] = {
-           description: 'MongoDb query'
-       }
-       #swagger.responses[200] = {
-           description: "Success",
-           schema: { $ref: '#/components/schemas/success' }
-       }
-       #swagger.responses[400] = {
-           description: "Bad Request",
-           schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[404] = {
-           description: "Message Not Found",
-           schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[500] = {
-           description: "Internal Server Error",
-           schema: { $ref: '#/components/schemas/failure' }
-       }
+        #swagger.tags = ['Messages']
+        #swagger.summary = "Get a message using query"
+        #swagger.description = "Gets an existing message using a MongoDb Query"
+        #swagger.parameters['q'] = {
+            description: 'MongoDb query'
+        }
+        #swagger.responses[200] = {
+              description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
+        #swagger.responses[404] = {
+            description: "Message Not Found",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[500] = {
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
     */
 
     Logger.debug(`Retrieving message using query: ${JSON.stringify(req.query)}`);
@@ -143,31 +167,39 @@ messageRoutes.get('/api/v1/message', AuthorizationHandler.checkJWT, requiredScop
 
 messageRoutes.post('/api/v1/messages', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Create), (req: Request, res: Response) => {
     /*
-          #swagger.tags = ['Messages']
-          #swagger.summary = "Create new message"
-          #swagger.description = "Creates a new message"
-          #swagger.requestBody = {
-              required: true,
-              content: {
-                  "application/json": {
-                      schema: {
-                          $ref: "#/components/schemas/message"
-                      }
-                  }
-              }
-          }
-          #swagger.responses[200] = {
-              description: "Success",
-              schema: { $ref: '#/components/schemas/success' }
-          }
-          #swagger.responses[400] = {
-              description: "Bad Request",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
-          #swagger.responses[500] = {
-              description: "Internal Server Error",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
+        #swagger.tags = ['Messages']
+        #swagger.summary = "Create new message"
+        #swagger.description = "Creates a new message"
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/message"
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
+        #swagger.responses[500] = {
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
       */
     message_controller.create_message(req, res);
 });
@@ -188,6 +220,14 @@ messageRoutes.put('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "Message Not Found",
             schema: { $ref: '#/components/schemas/failure' }
@@ -216,6 +256,14 @@ messageRoutes.delete('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requ
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "Message Not Found",
             schema: { $ref: '#/components/schemas/failure' }

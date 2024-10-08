@@ -35,7 +35,9 @@ export abstract class FileUtils {
                     if (err) throw err;
                     let users = []
                     if (data) {
-                        users = JSON.parse(data.toString());
+                        try {
+                            users = JSON.parse(data.toString());
+                        } catch {}
                     }
                     // add new user
                     users.push(userObj);
@@ -71,7 +73,7 @@ export abstract class FileUtils {
             }
         });
         child_process.exec(
-            `gzip -cvf ${FileUtils.newsletterFile} > ${backupFile} `,
+            `echo "gzip -cvf ${FileUtils.newsletterFile} > ${backupFile} `,
             function (err, data) {
                 if (err) throw err;
                 Logger.debug(`Email database backed up to ${backupFile}.`);

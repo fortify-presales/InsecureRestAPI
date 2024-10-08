@@ -68,6 +68,14 @@ userRoutes.get('/api/v1/users', AuthorizationHandler.checkJWT, requiredScopes(Us
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
         #swagger.responses[500] = {
             description: "Internal Server Error",
             schema: { $ref: '#/components/schemas/failure' }
@@ -79,25 +87,33 @@ userRoutes.get('/api/v1/users', AuthorizationHandler.checkJWT, requiredScopes(Us
 
 userRoutes.get('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredScopes(UserPermission.Read), (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Users']
-       #swagger.summary = "Get a user"
-       #swagger.description = "Gets an existing user"
-       #swagger.parameters['id'] = {
+        #swagger.tags = ['Users']
+        #swagger.summary = "Get a user"
+        #swagger.description = "Gets an existing user"
+        #swagger.parameters['id'] = {
            description: 'Id of the user to be retrieved. Cannot be empty.'
-       }
-       #swagger.responses[200] = {
+        }
+        #swagger.responses[200] = {
            description: "Success",
            schema: { $ref: '#/components/schemas/success' }
-       }
-       #swagger.responses[400] = {
+        }
+        #swagger.responses[400] = {
            description: "Bad Request",
            schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[404] = {
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }           
+        #swagger.responses[404] = {
            description: "User Not Found",
            schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[500] = {
+        }
+        #swagger.responses[500] = {
            description: "Internal Server Error",
            schema: { $ref: '#/components/schemas/failure' }
        }
@@ -107,28 +123,36 @@ userRoutes.get('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredScope
 
 userRoutes.get('/api/v1/user', AuthorizationHandler.checkJWT, requiredScopes(UserPermission.Read), (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Users']
-       #swagger.summary = "Get a user using query"
-       #swagger.description = "Gets an existing user using a MongoDb Query"
-       #swagger.parameters['q'] = {
+    #swagger.tags = ['Users']
+        #swagger.summary = "Get a user using query"
+        #swagger.description = "Gets an existing user using a MongoDb Query"
+        #swagger.parameters['q'] = {
            description: 'MongoDb query'
-       }
-       #swagger.responses[200] = {
+        }
+        #swagger.responses[200] = {
            description: "Success",
            schema: { $ref: '#/components/schemas/success' }
-       }
-       #swagger.responses[400] = {
+        }
+        #swagger.responses[400] = {
            description: "Bad Request",
            schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[404] = {
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[404] = {
            description: "User Not Found",
            schema: { $ref: '#/components/schemas/failure' }
-       }
-       #swagger.responses[500] = {
+        }
+        #swagger.responses[500] = {
            description: "Internal Server Error",
            schema: { $ref: '#/components/schemas/failure' }
-       }
+        }
     */
 
     Logger.debug(`Retrieving user using query: ${JSON.stringify(req.query)}`);
@@ -144,31 +168,39 @@ userRoutes.get('/api/v1/user', AuthorizationHandler.checkJWT, requiredScopes(Use
 
 userRoutes.post('/api/v1/users', AuthorizationHandler.checkJWT, requiredScopes(UserPermission.Create), (req: Request, res: Response) => {
     /*
-          #swagger.tags = ['Users']
-          #swagger.summary = "Create new user"
-          #swagger.description = "Creates a new user"
-          #swagger.requestBody = {
-              required: true,
-              content: {
-                  "application/json": {
-                      schema: {
-                          $ref: "#/components/schemas/user"
-                      }
-                  }
-              }
-          }
-          #swagger.responses[200] = {
-              description: "Success",
-              schema: { $ref: '#/components/schemas/success' }
-          }
-          #swagger.responses[400] = {
-              description: "Bad Request",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
-          #swagger.responses[500] = {
-              description: "Internal Server Error",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
+        #swagger.tags = ['Users']
+        #swagger.summary = "Create new user"
+        #swagger.description = "Creates a new user"
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/user"
+                    }
+                }
+            }
+        }
+        #swagger.responses[200] = {
+            description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[500] = {
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
       */
     user_controller.create_user(req, res);
 });
@@ -189,6 +221,14 @@ userRoutes.put('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredScope
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "User Not Found",
             schema: { $ref: '#/components/schemas/failure' }
@@ -217,6 +257,14 @@ userRoutes.delete('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredSc
             description: "Bad Request",
             schema: { $ref: '#/components/schemas/failure' }
         }
+        #swagger.responses[401] = {
+            description: "Unauthorized",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[403] = {
+            description: "Forbidden",
+            schema: { $ref: '#/components/schemas/failure' }
+        }            
         #swagger.responses[404] = {
             description: "User Not Found",
             schema: { $ref: '#/components/schemas/failure' }
