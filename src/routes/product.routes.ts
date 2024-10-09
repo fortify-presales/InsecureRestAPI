@@ -34,6 +34,7 @@ productRoutes.get('/api/v1/products', [AuthorizationHandler.permitAll], (req: Re
         #swagger.tags = ['Products']
         #swagger.summary = "Find products by keyword(s)"
         #swagger.description = "Gets all existing products searching by %keyword% format"
+        #swagger.operationId = "getProducts"
         #swagger.parameters['keywords'] = {
             in: 'query',
             description: 'Keyword(s) search for products to be found.',
@@ -70,6 +71,7 @@ productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.permitAll], (req
         #swagger.tags = ['Products']
         #swagger.summary = "Get a product"
         #swagger.description = "Gets an existing product"
+        #swagger.operationId = "getProductById"
         #swagger.parameters['id'] = {
             description: 'Id of the product to be retrieved. Cannot be empty.'
         }
@@ -98,6 +100,7 @@ productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.permitAll]
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by Id"
         #swagger.description = "Gets an existing product's image by its Id"
+        #swagger.operationId = "getProductImageById"
         #swagger.parameters['name'] = {
             description: 'Id of the product image to be retrieved. Cannot be empty.'
         }
@@ -126,6 +129,7 @@ productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.permitAl
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by name"
         #swagger.description = "Gets an existing product's image by its uploaded name"
+        #swagger.operationId = "getProductImageByName"
         #swagger.parameters['name'] = {
             description: 'Name of the product image to be retrieved. Cannot be empty.'
         }
@@ -155,6 +159,7 @@ productRoutes.post('/api/v1/products', AuthorizationHandler.checkJWT, requiredSc
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
         #swagger.description = "Creates a new product"
+        #swagger.operationId = "createProduct"
         #swagger.requestBody = {
             required: true,
             content: {
@@ -195,6 +200,7 @@ productRoutes.put('/api/v1/products/:id', AuthorizationHandler.checkJWT, require
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
         #swagger.description = "Updates an existing product"
+        #swagger.operationId = "updateProduct"
         #swagger.parameters['id'] = {
             description: 'Id of the product to be updated. Cannot be empty.'
         }
@@ -231,6 +237,7 @@ productRoutes.delete('/api/v1/products/:id', AuthorizationHandler.checkJWT, requ
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"
         #swagger.description = "Deletes an existing product"
+        #swagger.operationId = "deleteProduct"
         #swagger.parameters['id'] = {
             description: 'Id of the product to be deleted. Cannot be empty.'
         }

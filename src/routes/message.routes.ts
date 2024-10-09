@@ -44,6 +44,7 @@ messageRoutes.get('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSco
         #swagger.tags = ['Messages']
         #swagger.summary = "Find messages by keyword(s)"
         #swagger.description = "Gets all existing messages searching by %keyword% format"
+        #swagger.operationId = "getMessages"
         #swagger.parameters['keywords'] = {
             in: 'query',
             description: 'Keyword(s) search for messages to be found.',
@@ -89,6 +90,7 @@ messageRoutes.get('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message"
         #swagger.description = "Gets an existing message"
+        #swagger.operationId = "getMessageById"
         #swagger.parameters['id'] = {
             description: 'Id of the message to be retrieved. Cannot be empty.'
         }
@@ -125,6 +127,7 @@ messageRoutes.get('/api/v1/message', AuthorizationHandler.checkJWT, requiredScop
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message using query"
         #swagger.description = "Gets an existing message using a MongoDb Query"
+        #swagger.operationId = "getMessageByQuery"
         #swagger.parameters['q'] = {
             description: 'MongoDb query'
         }
@@ -170,6 +173,7 @@ messageRoutes.post('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSc
         #swagger.tags = ['Messages']
         #swagger.summary = "Create new message"
         #swagger.description = "Creates a new message"
+        #swagger.operationId = "createMessage"
         #swagger.requestBody = {
             required: true,
             content: {
@@ -209,6 +213,7 @@ messageRoutes.put('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
         #swagger.tags = ['Messages']
         #swagger.summary = "Update a message"
         #swagger.description = "Updates an existing message"
+        #swagger.operationId = "updateMessage"
         #swagger.parameters['id'] = {
             description: 'Id of the message to be updated. Cannot be empty.'
         }
@@ -245,6 +250,7 @@ messageRoutes.delete('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requ
         #swagger.tags = ['Messages']
         #swagger.summary = "Delete a message"
         #swagger.description = "Deletes an existing message"
+        #swagger.operationId = "deleteMessage"
         #swagger.parameters['id'] = {
             description: 'Id of the message to be deleted. Cannot be empty.'
         }

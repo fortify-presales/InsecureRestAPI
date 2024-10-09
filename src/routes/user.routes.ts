@@ -45,6 +45,7 @@ userRoutes.get('/api/v1/users', AuthorizationHandler.checkJWT, requiredScopes(Us
         #swagger.tags = ['Users']
         #swagger.summary = "Find users by keyword(s)"
         #swagger.description = "Gets all existing users searching by %keyword% format"
+        #swagger.operationId = "getUsers"
         #swagger.parameters['keywords'] = {
             in: 'query',
             description: 'Keyword(s) search for users to be found.',
@@ -90,6 +91,7 @@ userRoutes.get('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredScope
         #swagger.tags = ['Users']
         #swagger.summary = "Get a user"
         #swagger.description = "Gets an existing user"
+        #swagger.operationId = "getUserById"
         #swagger.parameters['id'] = {
            description: 'Id of the user to be retrieved. Cannot be empty.'
         }
@@ -126,6 +128,7 @@ userRoutes.get('/api/v1/user', AuthorizationHandler.checkJWT, requiredScopes(Use
     #swagger.tags = ['Users']
         #swagger.summary = "Get a user using query"
         #swagger.description = "Gets an existing user using a MongoDb Query"
+        #swagger.operationId = "getUserByQuery"
         #swagger.parameters['q'] = {
            description: 'MongoDb query'
         }
@@ -171,6 +174,7 @@ userRoutes.post('/api/v1/users', AuthorizationHandler.checkJWT, requiredScopes(U
         #swagger.tags = ['Users']
         #swagger.summary = "Create new user"
         #swagger.description = "Creates a new user"
+        #swagger.operationId = "createUser"
         #swagger.requestBody = {
             required: true,
             content: {
@@ -210,6 +214,7 @@ userRoutes.put('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredScope
         #swagger.tags = ['Users']
         #swagger.summary = "Update a user"
         #swagger.description = "Updates an existing user"
+        #swagger.operationId = "updateUser"
         #swagger.parameters['id'] = {
             description: 'Id of the user to be updated. Cannot be empty.'
         }
@@ -246,6 +251,7 @@ userRoutes.delete('/api/v1/users/:id', AuthorizationHandler.checkJWT, requiredSc
         #swagger.tags = ['Users']
         #swagger.summary = "Delete a user"
         #swagger.description = "Deletes an existing user"
+        #swagger.operationId = "deleteUser"
         #swagger.parameters['id'] = {
             description: 'Id of the user to be deleted. Cannot be empty.'
         }

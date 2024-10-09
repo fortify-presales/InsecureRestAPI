@@ -28,21 +28,22 @@ export const siteRoutes = Router();
 
 siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Site']
-       #swagger.summary = "Get the site status"
-       #swagger.description = "Get the site message of the day"
-           #swagger.responses[200] = {
-               description: "Success",
-               schema: { $ref: '#/components/schemas/success' }
-           }
-           #swagger.responses[400] = {
-               description: "Bad Request",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
-           #swagger.responses[500] = {
-               description: "Internal Server Error",
-               schema: { $ref: '#/components/schemas/failure' }
-           }
+        #swagger.tags = ['Site']
+        #swagger.summary = "Get the site status"
+        #swagger.description = "Get the site message of the day"
+        #swagger.operationId = "getSiteStatus"
+        #swagger.responses[200] = {
+            description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[500] = {
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
     */
 
     site_controller.site_status(req, res);
@@ -50,19 +51,20 @@ siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Re
 
 siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
-       #swagger.tags = ['Site']
-       #swagger.summary = "Subscribe a new user"
-       #swagger.description = "Subscribe a new user to the newsletter"
-             #swagger.requestBody = {
-                 required: true,
-                 content: {
-                     "application/json": {
-                         schema: {
-                             $ref: "#/components/schemas/subscribeUser"
-                         }
-                     }
-                 }
-             }
+        #swagger.tags = ['Site']
+        #swagger.summary = "Subscribe a new user"
+        #swagger.description = "Subscribe a new user to the newsletter"
+        #swagger.operationId = "subscribeUser"
+        #swagger.requestBody = {
+            required: true,
+            content: {
+                "application/json": {
+                    schema: {
+                        $ref: "#/components/schemas/subscribeUser"
+                    }
+                }
+            }
+        }
         #swagger.responses[200] = {
             description: "Success",
             schema: { $ref: '#/components/schemas/success' }
@@ -87,26 +89,27 @@ siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll],
 siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
 
     /*
-      #swagger.tags = ['Site']
-      #swagger.summary = "Backup the newsletter database"
-      #swagger.description = "Compress and backup the newsletter database to the specified file"
-          #swagger.parameters['file_path'] = {
-              in: 'query',
-              description: 'The file to backup the database to. Cannot be empty.',
-              type: 'string'
-          }
-          #swagger.responses[200] = {
-              description: "Success",
-              schema: { $ref: '#/components/schemas/success' }
-          }
-          #swagger.responses[400] = {
-              description: "Bad Request",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
-          #swagger.responses[500] = {
-              description: "Internal Server Error",
-              schema: { $ref: '#/components/schemas/failure' }
-          }
+        #swagger.tags = ['Site']
+        #swagger.summary = "Backup the newsletter database"
+        #swagger.description = "Compress and backup the newsletter database to the specified file"
+        #swagger.operationId = "backupNewsletterDb"
+        #swagger.parameters['file_path'] = {
+            in: 'query',
+            description: 'The file to backup the database to. Cannot be empty.',
+            type: 'string'
+        }
+        #swagger.responses[200] = {
+            description: "Success",
+            schema: { $ref: '#/components/schemas/success' }
+        }
+        #swagger.responses[400] = {
+            description: "Bad Request",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
+        #swagger.responses[500] = {
+            description: "Internal Server Error",
+            schema: { $ref: '#/components/schemas/failure' }
+        }
    */
 
     site_controller.backup_newsletter_db(req, res);

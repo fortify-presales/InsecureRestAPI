@@ -31,6 +31,7 @@
         ],
         "summary": "Get the site status",
         "description": "Get the site message of the day",
+        "operationId": "getSiteStatus",
         "responses": {
           "200": {
             "description": "Success",
@@ -87,6 +88,7 @@
         ],
         "summary": "Subscribe a new user",
         "description": "Subscribe a new user to the newsletter",
+        "operationId": "subscribeUser",
         "responses": {
           "200": {
             "description": "Success",
@@ -168,6 +170,7 @@
         ],
         "summary": "Backup the newsletter database",
         "description": "Compress and backup the newsletter database to the specified file",
+        "operationId": "backupNewsletterDb",
         "parameters": [
           {
             "name": "file_path",
@@ -234,6 +237,7 @@
         ],
         "summary": "Find users by keyword(s)",
         "description": "Gets all existing users searching by %keyword% format",
+        "operationId": "getUsers",
         "parameters": [
           {
             "name": "keywords",
@@ -344,6 +348,7 @@
         ],
         "summary": "Create new user",
         "description": "Creates a new user",
+        "operationId": "createUser",
         "responses": {
           "200": {
             "description": "Success",
@@ -440,6 +445,7 @@
         ],
         "summary": "Get a user",
         "description": "Gets an existing user",
+        "operationId": "getUserById",
         "parameters": [
           {
             "name": "id",
@@ -550,6 +556,7 @@
         ],
         "summary": "Update a user",
         "description": "Updates an existing user",
+        "operationId": "updateUser",
         "parameters": [
           {
             "name": "id",
@@ -660,6 +667,7 @@
         ],
         "summary": "Delete a user",
         "description": "Deletes an existing user",
+        "operationId": "deleteUser",
         "parameters": [
           {
             "name": "id",
@@ -772,6 +780,7 @@
         ],
         "summary": "Get a user using query",
         "description": "Gets an existing user using a MongoDb Query",
+        "operationId": "getUserByQuery",
         "parameters": [
           {
             "name": "q",
@@ -883,6 +892,7 @@
         ],
         "summary": "Find products by keyword(s)",
         "description": "Gets all existing products searching by %keyword% format",
+        "operationId": "getProducts",
         "parameters": [
           {
             "name": "keywords",
@@ -963,6 +973,7 @@
         ],
         "summary": "Create new product",
         "description": "Creates a new product",
+        "operationId": "createProduct",
         "responses": {
           "200": {
             "description": "Success",
@@ -1059,6 +1070,7 @@
         ],
         "summary": "Get a product",
         "description": "Gets an existing product",
+        "operationId": "getProductById",
         "parameters": [
           {
             "name": "id",
@@ -1139,6 +1151,7 @@
         ],
         "summary": "Update a product",
         "description": "Updates an existing product",
+        "operationId": "updateProduct",
         "parameters": [
           {
             "name": "id",
@@ -1249,6 +1262,7 @@
         ],
         "summary": "Delete a product",
         "description": "Deletes an existing product",
+        "operationId": "deleteProduct",
         "parameters": [
           {
             "name": "id",
@@ -1361,6 +1375,7 @@
         ],
         "summary": "Get product image by Id",
         "description": "Gets an existing product's image by its Id",
+        "operationId": "getProductImageById",
         "parameters": [
           {
             "name": "id",
@@ -1450,6 +1465,7 @@
         ],
         "summary": "Get product image by name",
         "description": "Gets an existing product's image by its uploaded name",
+        "operationId": "getProductImageByName",
         "parameters": [
           {
             "name": "name",
@@ -1532,6 +1548,7 @@
         ],
         "summary": "Find messages by keyword(s)",
         "description": "Gets all existing messages searching by %keyword% format",
+        "operationId": "getMessages",
         "parameters": [
           {
             "name": "keywords",
@@ -1642,6 +1659,7 @@
         ],
         "summary": "Create new message",
         "description": "Creates a new message",
+        "operationId": "createMessage",
         "responses": {
           "200": {
             "description": "Success",
@@ -1738,6 +1756,7 @@
         ],
         "summary": "Get a message",
         "description": "Gets an existing message",
+        "operationId": "getMessageById",
         "parameters": [
           {
             "name": "id",
@@ -1848,6 +1867,7 @@
         ],
         "summary": "Update a message",
         "description": "Updates an existing message",
+        "operationId": "updateMessage",
         "parameters": [
           {
             "name": "id",
@@ -1958,6 +1978,7 @@
         ],
         "summary": "Delete a message",
         "description": "Deletes an existing message",
+        "operationId": "deleteMessage",
         "parameters": [
           {
             "name": "id",
@@ -2070,6 +2091,7 @@
         ],
         "summary": "Get a message using query",
         "description": "Gets an existing message using a MongoDb Query",
+        "operationId": "getMessageByQuery",
         "parameters": [
           {
             "name": "q",
