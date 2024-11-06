@@ -1,6 +1,6 @@
-[![Fortify Security Scan](https://github.com/fortify-presales/IWA-ExpressAPI/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/IWA-ExpressAPI/actions/workflows/fod.yml)
+[![Fortify Security Scan](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml)
 
-# IWA-API
+# IWA-API-Node
 
 #### Table of Contents
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-_IWA-API_ is an insecure [NodeJS](https://nodejs.org/)/[ExpressJS](https://expressjs.com/) REST API for use in Fortify demonstrations.
+_IWA-API-Node_ is an insecure [NodeJS](https://nodejs.org/)/[ExpressJS](https://expressjs.com/) REST API for use in Fortify demonstrations.
 It includes some examples of bad  and insecure code - which can be found using static and dynamic application security testing tools such
 as those provided by [Fortify by OpenText](https://www.microfocus.com/en-us/cyberres/application-security).
 
@@ -42,12 +42,13 @@ Running the Application
 ***Install npm packages***
 
 ```agsl
-npm install
+npm i
+npm i -g ts-node-dev
 ```
 **Populate MongoDB**
 
 ```aidl
-npm run populate-db-dev
+node mongodb/populateDb.js all
 ```
 
 **Start Express API**

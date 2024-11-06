@@ -2,7 +2,7 @@
   "name": "iwa-api",
   "version": "1.0.0",
   "description": "IWA-API is an insecure Node/Express REST API for use in Fortify demonstrations",
-  "main": "index.ys",
+  "main": "index.ts",
   "scripts": {
     "build": "NODE_ENV=production && npx tsc && ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist/configs",
     "start": "NODE_ENV=production && node dist/index.js",
@@ -14,7 +14,7 @@
   },
   "keywords": [],
   "author": {
-    "name": "Kevin Lee <kevin.lee@microfocus.com>"
+    "name": "kadraman <klee2@opentext.com>"
   },
   "license": "GPLv3",
   "devDependencies": {

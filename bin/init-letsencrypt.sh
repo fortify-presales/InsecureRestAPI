@@ -1,6 +1,11 @@
 #!/bin/bash
 
-domains=(iwa-api.onfortify.com)
+#if ! [ -x "$(command -v docker-compose)" ]; then
+#  echo 'Error: docker-compose is not installed.' >&2
+#  exit 1
+#fi
+
+domains=(demoapp.onfortify.com)
 rsa_key_size=4096
 data_path="./data/certbot"
 email="" # Adding a valid address is strongly recommended
