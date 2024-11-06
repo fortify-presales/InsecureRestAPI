@@ -28,7 +28,7 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "IWA-MicroApp"
+  DEFAULT_APP_NAME: "IWA-Microservices"
   DEFAULT_MICROSERVICE_NAME: "IWA-API-Node"
   NODE_VERSION: 18
 
@@ -58,6 +58,7 @@ jobs:
         uses: fortify/github-action/setup@v1
         with:
           export-path: true
+          debricked-cli: true
           fcli: latest
       # Run debricked scan    
       - name: Run debricked scan
@@ -65,9 +66,7 @@ jobs:
         continue-on-error: true
         shell: bash
         run: |
-            curl -L https://github.com/debricked/cli/releases/latest/download/cli_linux_x86_64.tar.gz | tar -xz debricked
-            chmod +x debricked
-            ./debricked scan --callgraph --prefer-npm -r "${APP_NAME}" --access-token="${DEBRICKED_TOKEN}"  -e "*/**.lock" -e "**/build/classes/test/**" -e "**/target/classes/test-classes/**" .
+            debricked scan --callgraph --prefer-npm -r "${APP_NAME}" --access-token="${DEBRICKED_TOKEN}"  -e "*/**.lock" -e "**/build/classes/test/**" -e "**/target/classes/test-classes/**" .
         env:
           APP_NAME: ${{ format('{0}:{1}', env.DEFAULT_APP_NAME, env.DEFAULT_MICROSERVICE_NAME) }}
           DEBRICKED_TOKEN: ${{ secrets.DEBRICKED_TOKEN }}

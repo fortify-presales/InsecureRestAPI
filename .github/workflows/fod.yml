@@ -48,7 +48,7 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "IWA-MicroApp"
+  DEFAULT_APP_NAME: "IWA-Microservices"
   DEFAULT_MICROSERVICE_NAME: "IWA-API-Node"
   NODE_VERSION: 18
 
