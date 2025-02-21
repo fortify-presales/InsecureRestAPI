@@ -155,7 +155,7 @@ jobs:
           fcli fod session login --url $FOD_API_URI --client-id $FOD_CLIENT_ID --client-secret $FOD_CLIENT_SECRET --session github-actions
           rm -f $PACKAGE_FILE
           debricked resolve
-          zip $PACKAGE_FILE *.lock debricked-config.yaml     
+          zip $PACKAGE_FILE package-lock.json debricked-config.yaml     
           fcli fod oss-scan start --release "${FOD_RELEASE}" -f $PACKAGE_FILE --store curScan --session github-actions
           sleep 10
           echo "fod_scan_id=$(fcli util var contents curScan -o 'expr={scanId}')" >> $GITHUB_OUTPUT
