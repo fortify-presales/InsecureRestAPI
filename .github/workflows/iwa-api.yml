@@ -21,15 +21,6 @@ on:
   push:
     paths:
       - 'api-server/**'
-    paths-ignore:
-      - '.github/**/**'
-      - 'bin/**'
-      - 'data/**'
-      - 'etc/**'
-      - 'tests/**'
-      - 'config/**'
-      - 'README.md'
-      - 'LICENSE'
     #branches-ignore:
     #  - main
     #  - develop
