@@ -87,17 +87,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Setup Fortify tools
-        uses: fortify/github-action/setup@v1
-        with:
-          #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
-          export-path: true
-          fcli: latest
-          sc-client: latest
+      #- name: Setup Fortify tools
+      #  uses: fortify/github-action/setup@v1
+      #  with:
+      #    #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
+      #    export-path: true
+      #    fcli: latest
+      #    sc-client: latest
       - name: Perform FoD SAST Scan
-        run: fcli fod action run ci
+        run: fcli action run ci
         env:
-          SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
           FOD_URL: ${{ vars.FOD_URL }}
           #FOD_TENANT: ${{secrets.FOD_TENANT}}
           #FOD_USER: ${{secrets.FOD_USER}}
@@ -107,6 +106,7 @@ jobs:
           FOD_RELEASE: ${{ format('{0}{1}:{2}:{3}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME, github.ref_name) }}
           SETUP_EXTRA_OPTS: "--use-aviator"
           PACKAGE_EXTRA_OPTS: "-bt none"
+          SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
           DO_POLICY_CHECK: false  # we will do this later afer SCA and DAST scan
 
   FoD-OSS-Scan:
