@@ -4,8 +4,6 @@
 #   FOD_API_URL                 - FoD API URL for your tenant (e.g. https://api.ams,fortify.com)
 #   FORTIFY_APP_NAME_POSTFIX    - A postfix string to apply to the application to make it unique, set to empty to use DEFAULT_APP_NAME
 #   FOD_PARENT_RELEASE_NAME     - FoD release name corresponding to the parent branch of any newly created branch, this is typically "main" or "develop"
-#   FOD_DEFAULT_OWNER           - The user id of the Application Owner (only needed if an application does not already exist)
-#   FOD_DEFAULT_ASSESSMENT_TYPE - The default Assessment Type to use, e.g. "Static Assessment"
 # Create GitHub Action Secrets for your version of the application:
 #   FOD_CLIENT_ID should be an API Key obtained from your FoD tenant.
 #   FOD_CLIENT_SECRET should be the secret for the API Key obtained for your FoD tenant.
@@ -53,6 +51,7 @@ on:
 env:
   DEFAULT_APP_NAME: "IWA-JavaScript"
   DEFAULT_MICROSERVICE_NAME: "IWA-API-Node"
+  DEFAULT_SOURCE_DIR: "iwa-api"
   NODE_VERSION: 18
 
 jobs:
@@ -88,45 +87,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      #
-      # See: https://github.com/marketplace/actions/fortify-ast-scan
-      #
-      - name: Run Fortify on Demand SAST & SCA Scan
-        uses: fortify/github-action@v1
+      - name: Setup Fortify tools
+        uses: fortify/github-action/setup@v1
         with:
-          sast-scan: true
-          debricked-sca-scan: false # we will do this separately using fcli
+          #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
+          export-path: true
+          fcli: latest
+          sc-client: latest
+      - name: Perform FoD SAST Scan
+        run: fcli fod action run ci
         env:
+          SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
           FOD_URL: ${{ vars.FOD_URL }}
           #FOD_TENANT: ${{secrets.FOD_TENANT}}
           #FOD_USER: ${{secrets.FOD_USER}}
           #FOD_PASSWORD: ${{secrets.FOD_PAT}}
           FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
           FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
-          # FOD_LOGIN_EXTRA_OPTS: --socket-timeout=60s
           FOD_RELEASE: ${{ format('{0}{1}:{2}:{3}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME, github.ref_name) }}
-          DO_SETUP: true
-          # SETUP_ACTION: https://scm.my.org/shared-repos/fcli-actions/setup.yaml
-          # SETUP_EXTRA_OPTS: --copy-from "${{ github.repository }}:${{ github.event.repository.default_branch }}"
-          SETUP_EXTRA_OPTS: ${{ format('--copy-from "{0}{1}:{2}:{3}" --sdlc-status Development --app-owner {4} --assessment-type "{5}"', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME, vars.FORTIFY_PARENT_APPVER_NAME, vars.FOD_DEFAULT_OWNER, vars.FOD_DEFAULT_ASSESSMENT_TYPE) }}
-          # SC_CLIENT_VERSION: 24.2
-          # DO_PACKAGE_DEBUG: true
-          PACKAGE_EXTRA_OPTS: -bt none
-          # FOD_SAST_SCAN_EXTRA_OPTS:
-          DO_WAIT: true
-          # DO_POLICY_CHECK: true
-          # POLICY_CHECK_ACTION: https://scm.my.org/shared-repos/fcli-actions/check-policy.yaml
-          # POLICY_CHECK_EXTRA_OPTS: --on-unsigned=ignore
-          DO_JOB_SUMMARY: false
-          # JOB_SUMMARY_ACTION: https://scm.my.org/shared-repos/fcli-actions/job-summary.yaml
-          # JOB_SUMMARY_EXTRA_OPTS: --on-unsigned=ignore
-          DO_PR_COMMENT: true
-          # PR_COMMENT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-pr-comment.yaml
-          # PR_COMMENT_EXTRA_OPTS: --on-unsigned=ignore
-          DO_EXPORT: true
-          # EXPORT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-sast-report.yaml
-          # EXPORT_EXTRA_OPTS: --on-unsigned=ignore
-          # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
+          SETUP_EXTRA_OPTS: "--use-aviator"
+          PACKAGE_EXTRA_OPTS: "-bt none"
+          DO_POLICY_CHECK: false  # we will do this later afer SCA and DAST scan
 
   FoD-OSS-Scan:
     runs-on: ubuntu-latest
@@ -142,9 +123,9 @@ jobs:
           fcli: latest
           debricked-cli: latest
       - name: Perform FoD OSS Scan
+        working-directory: ${{ env.DEFAULT_SOURCE_DIR }}
         shell: bash
         run: |
-          fcli --version
           fcli fod session login --url $FOD_API_URI --client-id $FOD_CLIENT_ID --client-secret $FOD_CLIENT_SECRET --session github-actions
           rm -f $PACKAGE_FILE
           debricked resolve
