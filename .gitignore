@@ -129,11 +129,12 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+**/.angular/cache
 # IntelliJ
 .idea
 *.iml
 
-# misc project
+# misc projects
 .env
 logs
 email-db.json
