@@ -12,13 +12,13 @@
 #   It is recommended to create credentials with 'Security Lead' Role selected.
 #   "Automated Audit preference" should be configured for the release's Static Scan Settings.
 
-name: DevSecOps for IWA-UI App
+name: DevSecOps - Node.JS API Server
 
 on:
   # Triggers the workflow on push or pull request events but only for the main or develop branches
   push:
     paths:
-      - 'iwa-ui/**'
+      - 'node-api-server/**'
     #branches-ignore:
     #  - main
     #  - develop
@@ -49,9 +49,9 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "IWA-JavaScript"
-  DEFAULT_MICROSERVICE_NAME: "IWA-UI-Angular"
-  DEFAULT_SOURCE_DIR: "iwa-api"
+  DEFAULT_APP_NAME: "Insecure-SPA"
+  DEFAULT_MICROSERVICE_NAME: "node-api-server"
+  DEFAULT_SOURCE_DIR: "node-api-server"
   NODE_VERSION: 18
 
 jobs:
