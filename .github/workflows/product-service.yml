@@ -12,13 +12,13 @@
 #   It is recommended to create credentials with 'Security Lead' Role selected.
 #   "Automated Audit preference" should be configured for the release's Static Scan Settings.
 
-name: DevSecOps - Node.JS API Server
+name: DevSecOps - Product Service
 
 on:
   # Triggers the workflow on push or pull request events but only for the main or develop branches
   push:
     paths:
-      - 'node-api-server/**'
+      - 'src/product-service/**'
     #branches-ignore:
     #  - main
     #  - develop
@@ -49,9 +49,9 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "Insecure-SPA"
-  DEFAULT_MICROSERVICE_NAME: "node-api-server"
-  DEFAULT_SOURCE_DIR: "node-api-server"
+  DEFAULT_APP_NAME: "Insecure-Microservices"
+  DEFAULT_MICROSERVICE_NAME: "product-service"
+  DEFAULT_SOURCE_DIR: "src/product-service"
   NODE_VERSION: 18
 
 jobs:
