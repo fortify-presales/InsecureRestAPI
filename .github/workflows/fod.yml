@@ -12,13 +12,13 @@
 #   It is recommended to create credentials with 'Security Lead' Role selected.
 #   "Automated Audit preference" should be configured for the release's Static Scan Settings.
 
-name: DevSecOps - Product Service
+name: DevSecOps with Fortify on Demand
 
 on:
   # Triggers the workflow on push or pull request events but only for the main or develop branches
   push:
     paths:
-      - 'src/product-service/**'
+      - 'src/**'
     #branches-ignore:
     #  - main
     #  - develop
@@ -49,9 +49,8 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "Insecure-Microservices"
-  DEFAULT_MICROSERVICE_NAME: "product-service"
-  DEFAULT_SOURCE_DIR: "src/product-service"
+  DEFAULT_APP_NAME: "IWA-API-Node"
+  DEFAULT_SOURCE_DIR: "."
   NODE_VERSION: 18
 
 jobs:
@@ -103,7 +102,7 @@ jobs:
           #FOD_PASSWORD: ${{secrets.FOD_PAT}}
           FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
           FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
-          FOD_RELEASE: ${{ format('{0}{1}:{2}:{3}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME, github.ref_name) }}
+          FOD_RELEASE: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, github.ref_name) }}
           SETUP_EXTRA_OPTS: "--use-aviator"
           PACKAGE_EXTRA_OPTS: "-bt none"
           SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
@@ -140,7 +139,7 @@ jobs:
           FOD_CLIENT_ID: ${{ secrets.FOD_CLIENT_ID }}
           FOD_CLIENT_SECRET: ${{ secrets.FOD_CLIENT_SECRET }}
           PACKAGE_FILE: "osspackage.zip"
-          FOD_RELEASE: ${{ format('{0}{1}:{2}:{3}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME, github.ref_name) }}
+          FOD_RELEASE: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, github.ref_name) }}
         
   Deploy-App:
     runs-on: ubuntu-latest
@@ -175,7 +174,7 @@ jobs:
           fod_api_url: ${{ vars.FOD_API_URL }}
           fod_client_id: ${{ secrets.FOD_CLIENT_ID }}
           fod_client_secret: ${{ secrets.FOD_CLIENT_SECRET }}
-          fod_app_name: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME) }}
+          fod_app_name: ${{ format('{0}{1}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX) }}
           fod_release_name: ${{ github.ref_name }}
       #    fod_release_name: ${{ format('{0}#{1}', steps.fortify-app-and-rel-name.outputs.release_name, github.run_number) }}
       #    fod_parent_release_name: ${{ steps.fortify-app-and-rel-name.outputs.parent_release_name }}
@@ -194,7 +193,7 @@ jobs:
           fod_api_url: ${{ vars.FOD_API_URL }}
           fod_client_id: ${{ secrets.FOD_CLIENT_ID }}
           fod_client_secret: ${{ secrets.FOD_CLIENT_SECRET }}
-          fod_app_name: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, env.DEFAULT_MICROSERVICE_NAME) }}
+          fod_app_name: ${{ format('{0}{1}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX) }}
           fod_release_name: ${{ github.ref_name }}
 
   Release-To-Prod:

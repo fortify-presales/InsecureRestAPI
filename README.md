@@ -1,6 +1,6 @@
 [![Fortify Security Scan](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml)
 
-# IWA-JavaScript
+# IWA-API-Node
 
 #### Table of Contents
 
@@ -11,7 +11,7 @@
 
 ## Overview
 
-_IWA-JavaScript_ is an insecure JavaScript web application for use in Fortify demonstrations.
+_IWA-API-Node_ is an insecure Node/Express REST API for use in Fortify demonstrations.
 It includes some examples of bad  and insecure code - which can be found using static and dynamic application security testing tools such
 as those provided by [Fortify by OpenText](https://www.microfocus.com/en-us/cyberres/application-security).
 
