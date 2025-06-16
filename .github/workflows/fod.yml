@@ -87,14 +87,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Setup Fortify tools
-        uses: fortify/github-action/setup@v1
+        uses: fortify/github-action/@v2
         with:
           #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
-          export-path: true
-          fcli: latest
-          sc-client: latest
-      - name: Perform FoD SAST Scan
-        run: fcli action run ci
+          sast-scan: true
+          debricked-sca-scan: true
         env:
           FOD_URL: ${{ vars.FOD_URL }}
           #FOD_TENANT: ${{secrets.FOD_TENANT}}
@@ -107,11 +104,6 @@ jobs:
           PACKAGE_EXTRA_OPTS: "-bt none"
           SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
           DO_POLICY_CHECK: false  # we will do this later afer SCA and DAST scan
-          # Upload the SARIF file generated in the previous step
-      - name: Upload SARIF results file
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: ./gh-fortify-sast.sarif
           
   FoD-OSS-Scan:
     runs-on: ubuntu-latest
@@ -120,7 +112,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Fortify tools
-        uses: fortify/github-action/setup@v1
+        uses: fortify/github-action/setup@v2
         with:
           #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           export-path: true
