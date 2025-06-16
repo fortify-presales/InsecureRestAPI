@@ -111,13 +111,13 @@ jobs:
           DO_POLICY_CHECK: false # we will do this later after SCA and DAST scan
           # POLICY_CHECK_ACTION: https://scm.my.org/shared-repos/fcli-actions/check-policy.yaml
           # POLICY_CHECK_EXTRA_OPTS: --on-unsigned=ignore
-          # DO_JOB_SUMMARY: true
+          DO_JOB_SUMMARY: true
           # JOB_SUMMARY_ACTION: https://scm.my.org/shared-repos/fcli-actions/job-summary.yaml
           # JOB_SUMMARY_EXTRA_OPTS: --on-unsigned=ignore
-          # DO_PR_COMMENT: true
+          DO_PR_COMMENT: true
           # PR_COMMENT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-pr-comment.yaml
           # PR_COMMENT_EXTRA_OPTS: --on-unsigned=ignore
-          # DO_EXPORT: true
+          DO_EXPORT: true
           # EXPORT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-sast-report.yaml
           # EXPORT_EXTRA_OPTS: --on-unsigned=ignore
           # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
