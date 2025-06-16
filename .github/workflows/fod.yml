@@ -86,12 +86,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - name: Setup Fortify tools
-        uses: fortify/github-action/@v2
+      - name: Run Fortify on Demand SAST Scan
+        uses: fortify/github-action@v2
         with:
-          #tool-definitions: https://github.com/fortify/tool-definitions/releases/download/v1/tool-definitions.yaml.zip
           sast-scan: true
-          debricked-sca-scan: true
+          debricked-sca-scan: false # we will do this in a separate job
         env:
           FOD_URL: ${{ vars.FOD_URL }}
           #FOD_TENANT: ${{secrets.FOD_TENANT}}
@@ -99,11 +98,29 @@ jobs:
           #FOD_PASSWORD: ${{secrets.FOD_PAT}}
           FOD_CLIENT_ID: ${{secrets.FOD_CLIENT_ID}}
           FOD_CLIENT_SECRET: ${{secrets.FOD_CLIENT_SECRET}}
+          # FOD_LOGIN_EXTRA_OPTS: --socket-timeout=60s
           FOD_RELEASE: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, github.ref_name) }}
-          SETUP_EXTRA_OPTS: "--use-aviator"
+          # DO_SETUP: true
+          # SETUP_ACTION: https://scm.my.org/shared-repos/fcli-actions/setup.yaml
+          SETUP_EXTRA_OPTS: "--use-aviator --technology-stack=JS/TS/HTML"
+          # SC_CLIENT_VERSION: 24.4.1
+          # DO_PACKAGE_DEBUG: true
           PACKAGE_EXTRA_OPTS: "-bt none"
-          SOURCE_DIR: ${{env.DEFAULT_SOURCE_DIR}}
-          DO_POLICY_CHECK: false  # we will do this later afer SCA and DAST scan
+          # FOD_SAST_SCAN_EXTRA_OPTS:
+          # DO_WAIT: true
+          DO_POLICY_CHECK: false # we will do this later after SCA and DAST scan
+          # POLICY_CHECK_ACTION: https://scm.my.org/shared-repos/fcli-actions/check-policy.yaml
+          # POLICY_CHECK_EXTRA_OPTS: --on-unsigned=ignore
+          # DO_JOB_SUMMARY: true
+          # JOB_SUMMARY_ACTION: https://scm.my.org/shared-repos/fcli-actions/job-summary.yaml
+          # JOB_SUMMARY_EXTRA_OPTS: --on-unsigned=ignore
+          # DO_PR_COMMENT: true
+          # PR_COMMENT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-pr-comment.yaml
+          # PR_COMMENT_EXTRA_OPTS: --on-unsigned=ignore
+          # DO_EXPORT: true
+          # EXPORT_ACTION: https://scm.my.org/shared-repos/fcli-actions/github-sast-report.yaml
+          # EXPORT_EXTRA_OPTS: --on-unsigned=ignore
+          # TOOL_DEFINITIONS: https://ftfy.mycompany.com/tool-definitions/v1/tool-definitions.yaml.zip
           
   FoD-OSS-Scan:
     runs-on: ubuntu-latest
