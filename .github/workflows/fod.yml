@@ -148,7 +148,7 @@ jobs:
           #SETUP_EXTRA_OPTS: "--use-aviator --technology-stack=JS/TS/HTML"
           # SC_CLIENT_VERSION: 24.4.1
           # DO_PACKAGE_DEBUG: true
-          PACKAGE_EXTRA_OPTS: "-bt none"
+          PACKAGE_EXTRA_OPTS: "-bt none -oss"
           # FOD_SAST_SCAN_EXTRA_OPTS:
           # DO_WAIT: true
           DO_POLICY_CHECK: false # we will do this later after SCA and DAST scan
