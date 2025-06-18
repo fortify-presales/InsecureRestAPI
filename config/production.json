@@ -1,14 +1,14 @@
 {
   "App": {
     "dbConfig": {
-      "host": "mongodb",
+      "host": "127.0.0.1",
       "port": 27017,
       "user": "iwa",
       "password": "iwa",
       "database": "iwa"
     },
     "apiConfig": {
-      "url": "https://iwa-api.onfortify.com",
+      "url": "https://insecureapi.azurewebsites.net",
       "version": "v1",
       "description": "Production server"
     },

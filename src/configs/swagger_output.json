@@ -1,9 +1,9 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "IWA-API",
+    "title": "InsecureRestAPI",
     "version": "1.0",
-    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.",
+    "description": "InsecureRestAPI - An insecure NodeJS/Express/MongoDB REST API.",
     "license": {
       "name": "GPLv3",
       "url": "https://www.gnu.org/licenses/gpl-3.0.en.html"
@@ -15,12 +15,8 @@
   },
   "servers": [
     {
-      "url": "https://iwa-api.onfortify.com",
-      "description": "Production server"
-    },
-    {
-      "url": "http://localhost:3000",
-      "description": "Development server"
+      "url": "https://insecureapi.azurewebsites.net",
+      "description": "InsecureRestAPI - production "
     }
   ],
   "paths": {

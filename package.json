@@ -4,13 +4,11 @@
   "description": "IWA-API-Node is an insecure Node/Express REST API for use in Fortify demonstrations",
   "main": "index.ts",
   "scripts": {
-    "build": "NODE_ENV=production && npx tsc && ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist/configs",
-    "start": "NODE_ENV=production && node dist/index.js",
+    "build": "cross-env NODE_ENV=production npx tsc && cross-env NODE_ENV=production ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist/configs",
+    "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger": "ts-node src/configs/swagger.config.ts",
-    "populate-db": "NODE_ENV=production && node mongodb/populateDb.js all",
-    "populate-db-dev": "node mongodb/populateDb.js all"
+    "swagger": "ts-node src/configs/swagger.config.ts"
   },
   "keywords": [],
   "author": {
@@ -27,6 +25,7 @@
     "@types/jsonwebtoken": "^9.0.4",
     "@types/node": "^20.12.8",
     "@types/sqlite3": "^5.1.0",
+    "cross-env": "^7.0.3",
     "ts-node-dev": "^2.0.0",
     "tslib": "^2.6.2",
     "typescript": "^4.9.5"
@@ -54,6 +53,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^3.1.0",
     "moment": "^2.29.2",
+    "mongodb-memory-server-core": "^10.1.4",
     "mongoose": "^5.9.7",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",

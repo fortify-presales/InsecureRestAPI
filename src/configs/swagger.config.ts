@@ -1,7 +1,7 @@
 /*
-        IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.
+        InsecureRestAPI - an insecure NodeJS/Expres/MongoDB REST API for educational purposes.
 
-        Copyright 2024 Open Text or one of its affiliates.
+        Copyright (C) 2024-2025  Kevin A. Lee (kadraman)
 
         This program is free software: you can redistribute it and/or modify
         it under the terms of the GNU General Public License as published by
@@ -20,11 +20,12 @@
 import swaggerAutogen from 'swagger-autogen';
 import config from 'config';
 
-const appName: string = config.get('App.name') || "IWA-API";
-const appVersion: string = config.get('App.version') || "1.0.0";
-const appDescription: string = config.get('App.description') || "";
-const apiUrl: string = config.get('App.apiConfig.url') || "http://localhost:3000/api-docs/";
-const apiDesc: string = config.get('App.apiConfig.description') || "Development server"
+const appName: string = config.has('App.name') ? config.get('App.name') : "InsecureRestAPI";
+const appUrl: string = config.has('App.apiConfig.url') ? config.get('App.apiConfig.url') : "http://localhost:5000/api-docs/";
+const appVersion: string = config.has('App.version') ? config.get('App.version') : "v1";
+const appDescription: string = config.has('App.description') ? config.get('App.description') : "An insecure NodeJS/Express/MongoDB REST API for educational purposes.";
+const appEnv: string = process.env.NODE_ENV || 'development';
+const appPort: number = process.env.PORT ? parseInt(process.env.PORT, 10) : 5000;
 
 const doc = {
     info: {
@@ -133,12 +134,8 @@ const doc = {
     ],
     servers: [
         {
-            url: "https://iwa-api.onfortify.com",
-            description: "Production server"
-        },
-        {
-            url: `${apiUrl}`,
-            description: `${apiDesc}`
+            url: `${appUrl}`,
+            description: `${appName} - ${appEnv} `,
         },
     ]
 };

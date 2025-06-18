@@ -62,8 +62,8 @@ class AppConfig {
         this.app = express();
         this.config();
         Logger.debug(`Running in environment: ${this.curEnv}`)
-        this.mongoSetup().then(r => Logger.debug(`Connected to ${this.mongoUrl}`));
-
+        // configure routes
+        Logger.debug(`Configuring routes for API version: ${this.apiVersion}`);
         this.app.use(siteRoutes);
         //this.app.use(userRoutes); // done by Auth0
         this.app.use(productRoutes);

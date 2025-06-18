@@ -131,8 +131,8 @@ jobs:
       - name: Run Fortify on Demand SAST and SCA Scan
         uses: fortify/github-action@v2
         with:
-          sast-scan: ${{ github.event.inputs.runFoDSASTScan }}
-          debricked-sca-scan: ${{ github.event.inputs.runFoDOSSScan }}
+          sast-scan: true
+          debricked-sca-scan: false
         env:
           FOD_URL: ${{ vars.FOD_URL }}
           #FOD_TENANT: ${{secrets.FOD_TENANT}}
@@ -189,7 +189,7 @@ jobs:
           fcli fod session login --url $FOD_API_URI --client-id $FOD_CLIENT_ID --client-secret $FOD_CLIENT_SECRET --fod-session github-actions
           rm -f $PACKAGE_FILE
           debricked resolve
-          zip $PACKAGE_FILE requirements.txt.pip.debricked.lock debricked-config.yaml     
+          zip $PACKAGE_FILE package-lock.json debricked-config.yaml     
           fcli fod oss-scan start --release "${FOD_RELEASE}" -f $PACKAGE_FILE --store curScan --fod-session github-actions
           sleep 10
           echo "fod_scan_id=$(fcli util var contents curScan -o 'expr={scanId}')" >> $GITHUB_OUTPUT

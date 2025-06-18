@@ -1,9 +1,9 @@
 {
   "App": {
-    "name": "IWA-API",
+    "name": "InsecureRestAPI",
     "version": "1.0",
-    "description": "IWA-API - An insecure Node/Express REST API for use in Fortify demonstrations.",
-    "port":  3000,
+    "description": "InsecureRestAPI - An insecure NodeJS/Express/MongoDB REST API.",
+    "port":  5000,
     "dbConfig": {
       "host": "127.0.0.1",
       "port": 27017,
@@ -16,7 +16,7 @@
       "audience": "https://iwa-api.onfortify.com"
     },
     "apiConfig": {
-      "url": "http://localhost:3000",
+      "url": "http://localhost:5000",
       "version": "v1",
       "description": "Development server"
     },
