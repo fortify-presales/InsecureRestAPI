@@ -28,6 +28,7 @@ export interface IUser {
         last_name: String;
     };
     email: String;
+    password: String;
     phone_number: String;
     address: {
         street: String;
@@ -36,7 +37,10 @@ export interface IUser {
         zip: String;
         country: String;
     }
+    verify_code?: String;
     is_enabled: Boolean;
+    password_reset?: Boolean;
+    mfa_enabled: Boolean;
     is_admin: Boolean;
     is_deleted?: Boolean;
     modification_notes: ModificationNote[]

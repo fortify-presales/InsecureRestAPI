@@ -18,18 +18,29 @@
 */
 
 import {Request, Response, Router} from 'express';
+import { expressjwt as jwt } from 'express-jwt';
+const guard = require('express-jwt-permissions')();
 
 import {ProductController} from '../controllers/product.controller';
-import {AuthorizationHandler} from "../middleware/authorization.handler";
-import {ProductPermission} from "../modules/products/permissions"
+import Logger from "../middleware/logger";
+import { IProduct } from '../modules/products/model';
+import {mongoError, successResponse} from "../modules/common/service";
+import {EncryptUtils} from "../utils/encrypt.utils";
 
-const { requiredScopes } = require('express-oauth2-jwt-bearer');
 
 const product_controller: ProductController = new ProductController();
 
 export const productRoutes = Router();
 
-productRoutes.get('/api/v1/products', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.use(
+    jwt({
+        secret: EncryptUtils.jwtSecret,
+        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
+        requestProperty: 'user'
+    })
+);
+
+productRoutes.get('/api/v1/products', guard.check(['read:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Find products by keyword(s)"
@@ -66,7 +77,7 @@ productRoutes.get('/api/v1/products', [AuthorizationHandler.permitAll], (req: Re
     product_controller.get_products(req, res);
 });
 
-productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id', guard.check(['read:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get a product"
@@ -95,7 +106,7 @@ productRoutes.get('/api/v1/products/:id', [AuthorizationHandler.permitAll], (req
     product_controller.get_product(req, res);
 });
 
-productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id/image', guard.check(['read:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by Id"
@@ -124,7 +135,7 @@ productRoutes.get('/api/v1/products/:id/image', [AuthorizationHandler.permitAll]
     product_controller.get_product_image_by_id(req, res);
 });
 
-productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:name/image', guard.check(['read:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by name"
@@ -154,7 +165,7 @@ productRoutes.get('/api/v1/products/:name/image', [AuthorizationHandler.permitAl
 });
 
 
-productRoutes.post('/api/v1/products', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Create), (req: Request, res: Response) => {
+productRoutes.post('/api/v1/products', guard.check(['create:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
@@ -195,7 +206,7 @@ productRoutes.post('/api/v1/products', AuthorizationHandler.checkJWT, requiredSc
     product_controller.create_product(req, res);
 });
 
-productRoutes.put('/api/v1/products/:id', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Update), (req: Request, res: Response) => {
+productRoutes.put('/api/v1/products/:id', guard.check(['update:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
@@ -232,7 +243,7 @@ productRoutes.put('/api/v1/products/:id', AuthorizationHandler.checkJWT, require
     product_controller.update_product(req, res);
 });
 
-productRoutes.delete('/api/v1/products/:id', AuthorizationHandler.checkJWT, requiredScopes(ProductPermission.Delete), (req: Request, res: Response) => {
+productRoutes.delete('/api/v1/products/:id', guard.check(['delete:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"

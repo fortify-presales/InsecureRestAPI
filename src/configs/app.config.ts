@@ -65,7 +65,7 @@ class AppConfig {
         // configure routes
         Logger.debug(`Configuring routes for API version: ${this.apiVersion}`);
         this.app.use(siteRoutes);
-        //this.app.use(userRoutes); // done by Auth0
+        this.app.use(userRoutes);
         this.app.use(productRoutes);
         this.app.use(messageRoutes);
         this.app.use(commonRoutes); // always needs to be last
@@ -115,7 +115,6 @@ class AppConfig {
         // configure swagger API
         this.app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOutput));
         // configure global authorization handler
-        //this.app.use(AuthorizationHandler.checkJwt);
         /*this.app.use(
             auth({
                 audience: process.env.AUDIENCE_ID,

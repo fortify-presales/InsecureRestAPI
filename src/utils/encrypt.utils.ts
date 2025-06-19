@@ -23,6 +23,12 @@ import Logger from "../middleware/logger";
 
 export abstract class EncryptUtils {
 
+    static jwtSecret = process.env.JWT_SECRET || "your-very-long-and-random-secret-key";
+    static jwtExpiration = '1h'; // 1 hour
+    static jwtRefreshExpiration = '7d'; // 7 days
+    static jwtIssuer = 'InsecureRestAPI';
+    static jwtAudience = 'InsecureRestAPIUsers';
+    static jwtAlgorithm = 'HS256';
     static encryptionKey = "";
     static algorithm = 'aes-256-ctr';
 

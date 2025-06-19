@@ -21,7 +21,7 @@
       "description": "Development server"
     },
     "staticAccessToken": "demo-access-token",
-    "jwtSecret": "changeme",
+    "jwtSecret": "SECRET",
     "jwtExpiration": 36000,
     "encryptionKey": "lakdsljkalkjlksdfkl"
   }

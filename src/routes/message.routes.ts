@@ -18,28 +18,34 @@
 */
 
 import {Request, Response, Router} from 'express';
+import { expressjwt as jwt } from 'express-jwt';
+const guard = require('express-jwt-permissions')();
 
 import {MessageController} from '../controllers/message.controller';
-import {AuthorizationHandler} from "../middleware/authorization.handler";
 import Logger from "../middleware/logger";
 import {IMessage} from "../modules/messages/model";
 import {mongoError, successResponse} from "../modules/common/service";
-import {MessagePermission} from "../modules/messages/permissions"
-
-const { requiredScopes } = require('express-oauth2-jwt-bearer');
-
+import {EncryptUtils} from "../utils/encrypt.utils";
 import messages from '../modules/messages/schema';
 
 const message_controller: MessageController = new MessageController();
 
 export const messageRoutes = Router();
 
+messageRoutes.use(
+    jwt({
+        secret: EncryptUtils.jwtSecret,
+        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
+        requestProperty: 'user'
+    })
+);
+
 messageRoutes.param('id', function (req, res, next, id, name) {
     Logger.debug('Message id parameter is: ' + id); //specified _id_ value comes from URL
     next();
 });
 
-messageRoutes.get('/api/v1/messages', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Read), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/messages', guard.check(['read:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Find messages by keyword(s)"
@@ -85,7 +91,7 @@ messageRoutes.get('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSco
     message_controller.get_messages(req, res);
 });
 
-messageRoutes.get('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Read), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/messages/:id', guard.check(['read:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message"
@@ -122,7 +128,7 @@ messageRoutes.get('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
     message_controller.get_message(req, res);
 });
 
-messageRoutes.get('/api/v1/message', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Read), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/message', guard.check(['read:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message using query"
@@ -168,7 +174,7 @@ messageRoutes.get('/api/v1/message', AuthorizationHandler.checkJWT, requiredScop
     });
 });
 
-messageRoutes.post('/api/v1/messages', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Create), (req: Request, res: Response) => {
+messageRoutes.post('/api/v1/messages', guard.check(['create:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Create new message"
@@ -208,7 +214,7 @@ messageRoutes.post('/api/v1/messages', AuthorizationHandler.checkJWT, requiredSc
     message_controller.create_message(req, res);
 });
 
-messageRoutes.put('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Update), (req: Request, res: Response) => {
+messageRoutes.put('/api/v1/messages/:id', guard.check(['update:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Update a message"
@@ -245,7 +251,7 @@ messageRoutes.put('/api/v1/messages/:id', AuthorizationHandler.checkJWT, require
     message_controller.update_message(req, res);
 });
 
-messageRoutes.delete('/api/v1/messages/:id', AuthorizationHandler.checkJWT, requiredScopes(MessagePermission.Delete), (req: Request, res: Response) => {
+messageRoutes.delete('/api/v1/messages/:id', guard.check(['delete:messages']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Delete a message"

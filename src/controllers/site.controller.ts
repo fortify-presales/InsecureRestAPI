@@ -66,6 +66,7 @@ export class SiteController {
         // this checks whether all the fields were sent through the request or not
         if (req.body.email && req.body.password) {
             const hashPassword = EncryptUtils.cryptPassword(req.body.password);
+            Logger.debug(`Hashed password for user ${req.body.email} is: ${hashPassword}`);
             const user_filter = {email: req.body.email, password: hashPassword};
             this.user_service.filterUser(user_filter, (err: any, user_data: IUser) => {
                 if (err) {

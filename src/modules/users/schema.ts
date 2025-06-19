@@ -32,6 +32,7 @@ const schema = new Schema({
         }
     },
     email: String,
+    password: String,
     phone_number: String,
     address: {
         type: {
@@ -42,7 +43,16 @@ const schema = new Schema({
             country: String
         }
     },
+    verify_code: String,
     is_enabled: {
+        type: Boolean,
+        default: false
+    },
+    password_reset: {
+        type: Boolean,
+        default: false
+    },
+    mfa_enabled: {
         type: Boolean,
         default: false
     },

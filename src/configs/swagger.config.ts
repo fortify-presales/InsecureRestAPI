@@ -144,8 +144,8 @@ const outputFile = './swagger_output.json';
 const endpointsFiles = [
     '../routes/site.routes.ts', 
     '../routes/product.routes.ts',
-    '../routes/message.routes.ts'
-    //'../routes/user.routes.ts',
+    '../routes/message.routes.ts',
+    '../routes/user.routes.ts'
 ];
 
 swaggerAutogen({openapi: '3.0.0'})(outputFile, endpointsFiles, doc);

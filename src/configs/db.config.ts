@@ -33,6 +33,7 @@ dotenv.config();
 
 
 import MongoMemoryServer from 'mongodb-memory-server-core';
+import { EncryptUtils } from '../utils/encrypt.utils';
 
 class DbConfig {
   private curEnv: string = config.util.getEnv('NODE_ENV');
@@ -167,6 +168,7 @@ class DbConfig {
               },
               email: email,
               phone_number: phone_number,
+              password: EncryptUtils.cryptPassword("password"), // Default password, should be changed on first login
               address: {
                   street: "1 Somewhere Street",
                   city: "London",

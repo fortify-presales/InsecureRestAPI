@@ -29,7 +29,8 @@ version: ## display the version of the service
 .PHONY: build
 build:  ## build the project
 	@echo "Building $(PROJECT)..."
-	npm build
+	npm run swagger
+	npm run build
 
 .PHONY: build-docker
 build-docker: ## build the project as a docker image
@@ -38,6 +39,7 @@ build-docker: ## build the project as a docker image
 .PHONY: run
 run: ## run the project
 	@echo "Running $(PROJECT)..."
+	npm run swagger
 	npm run dev
 
 .PHONY: run-production

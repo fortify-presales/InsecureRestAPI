@@ -17,6 +17,10 @@
         along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+import { MessagePermission } from "../modules/messages/permissions";
+import { ProductPermission } from "../modules/products/permissions";
+import { UserPermission } from "../modules/users/permissions";
+
 export interface JwtJson {
     id: String | undefined,
     email: String | undefined,
@@ -32,3 +36,6 @@ export interface SubscribingUser {
     email: String,
     role: String | undefined // not used
 }
+
+export type Permission = UserPermission | ProductPermission | MessagePermission;
+

@@ -20,43 +20,32 @@
 import Logger from "./logger";
 import config from "config";
 import {NextFunction, Request, Response} from "express";
-import {forbidden, unauthorised} from "../modules/common/service";
+import {forbidden} from "../modules/common/service";
 
 const { expressjwt: jwt } = require("express-jwt");
-const jwtAuthz = require("express-jwt-authz");
 const { auth } = require('express-oauth2-jwt-bearer');
 
-import jwksRsa from "jwks-rsa";
-import { claimIncludes } from "express-oauth2-jwt-bearer";
-
-const staticAccessToken: string = config.get('App.staticAccessToken') || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-const auth0Domain: string = config.get('App.auth0.domain');
-const auth0Audience: string = config.get('App.auth0.audience');
+//const auth0Domain: string = config.get('App.auth0.domain');
+//const auth0Audience: string = config.get('App.auth0.audience');
+//const jwtSecret: string = config.get('App.jwtSecret') || "changeme";
+//const jwtExpiration: number = config.get('App.jwtExpiration') || 36000;
+//const jwtAudience: string = config.has("App.jwtAudience") ? config.get('App.jwtAudience') : "https://insecureapi.azurewebsites.net/api";
 
 export class AuthorizationHandler {
-
-    // routes open to all
-    private static unprotected = [
-        /\//,
-        /\/api-docs/,
-        /\/api-docs\/*/,
-        /favicon.ico/,
-        /\/site\/*/,
-    ];
    
-    public static checkJWT = auth({
-        audience: auth0Audience,
-        issuerBaseURL: auth0Domain
-    });
+    //public static checkJWT = auth({
+    //    audience: auth0Audience,
+    //    issuerBaseURL: auth0Domain
+    //});
 
-    public static authRequiredPermissions = (permission: string | string[]) => {
-        if (typeof permission === 'string') {
-          permission = [permission]
-        }
-        return claimIncludes('permissions', ...permission)
-    }
+    //public static authRequiredPermissions = (permission: string | string[]) => {
+    //    if (typeof permission === 'string') {
+    //      permission = [permission]
+    //    }
+    //    return claimIncludes('permissions', ...permission)
+    //}
       
-    public static requirePermission(permissions: string | string[]) {
+    /*public static requirePermission(permissions: string | string[]) {
             const jwtAuth = jwtAuthz([permissions], {
                 customScopeKey: "permissions",
                 customUserKey: "auth",
@@ -64,9 +53,26 @@ export class AuthorizationHandler {
                 failWithError: false // should be true and catch with custom error handler
             });
             return jwtAuth;
-    };
+    };*/
 
-    public static requireAccessToken(req: Request, res: Response, next: NextFunction) {
+    /*public static requirePermission(role: string | undefined) {
+        Logger.debug(`AuthorizationHandler::requirePermission`);
+        return (req: Request, res: Response, next: NextFunction) => {
+            Logger.debug(req);
+            Logger.debug(`Checking if user has permission: ${role}`);
+            guard.check(role)(req, res, (err: any) => {
+                if (err) {
+                    Logger.debug(`User does not have permission: ${role}`);
+                    forbidden(`User does not have permission: ${role}`, res);
+                } else {
+                    Logger.debug(`User has permission: ${role}`);
+                    next();
+                }
+            });
+        };
+    }*/
+
+    /*public static requireAccessToken(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::requireAccessToken`);
         let accessToken: string | undefined;
 
@@ -77,18 +83,14 @@ export class AuthorizationHandler {
             } else {
 
                 console.log(`accessToken = ${accessToken}`);
-                const jwtAccess = jwt({
-                 secret: jwksRsa.expressJwtSecret({
-                   cache: true,
-                   rateLimit: true,
-                   jwksRequestsPerMinute: 5,
-                   jwksUri: `https://${auth0Domain}/.well-known/jwks.json`
-                 }),
-
+                jwt({
+                 secret: jwtSecret,
+                 //audience: jwtAudience,
                  // Validate the audience and the issuer.
-                 audience: 'https://iwa-api.onfortify.com',
-                 issuer: `https://${auth0Domain}/`,
-                 algorithms: ["RS256"]
+                 audience: 'http://localhost:5000/.well-known/jwks.json',
+                 algorithms: ['RS256'],
+                 requestProperty: 'auth',
+                 //issuer: `https://${auth0Domain}/`,
                }).unless({path: this.unprotected});
 
             }
@@ -97,19 +99,18 @@ export class AuthorizationHandler {
         } catch (error: any) {
             unauthorised(error.message, res);
         }
-    };
+    };*/
 
     public static permitAll(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitAll`);
         next();
     }
 
-    // TODO: update for Auth0
+    // updated to use express-jwt-permissions
     public static permitSelf(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitSelf`);
         Logger.debug(`Verifying if user has authorization to self endpoint: '${req.url}`);
         const userId = req.session.userId;
-        const email = req.session.email;
         const role = req.session.role;
         if (role == 'admin' || (userId && req.url.includes(userId.toString()))) {
             Logger.debug(`UserId: '${userId}' has permission to access the endpoint: '${req.url}'`);
@@ -120,12 +121,11 @@ export class AuthorizationHandler {
         }
     }
 
-    // NOTE: no longer required - delegated to Auth0 permissions
+    // NOTE: no longer required - delegated to JWT permissions
     public static permitAdmin(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitAdmin`);
         Logger.debug(`Verifying if user has authorization to admin endpoint: '${req.url}`);
         Logger.debug(`Session is: ${JSON.stringify(req.session)}`)
-        const userId = req.session.userId;
         const email = req.session.email;
         const role = req.session.role;
         if (role == 'admin') {

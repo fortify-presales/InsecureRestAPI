@@ -18,31 +18,35 @@
 */
 
 import {Request, Response, Router} from 'express';
+import { expressjwt as jwt } from 'express-jwt';
+const guard = require('express-jwt-permissions')();
 
 import {UserController} from '../controllers/user.controller';
-import {AuthorizationHandler} from "../middleware/authorization.handler";
 import Logger from "../middleware/logger";
 import {IUser} from "../modules/users/model";
 import {mongoError, successResponse} from "../modules/common/service";
 import {EncryptUtils} from "../utils/encrypt.utils";
-import {UserPermission} from "../modules/users/permissions"
-
-const { requiredScopes } = require('express-oauth2-jwt-bearer');
-
 import users from '../modules/users/schema';
-import { claimIncludes } from 'express-oauth2-jwt-bearer';
+
 
 const user_controller: UserController = new UserController();
 
 export const userRoutes = Router();
+
+userRoutes.use(
+    jwt({
+        secret: EncryptUtils.jwtSecret,
+        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
+        requestProperty: 'user'
+    })
+);
 
 userRoutes.param('id', function (req, res, next, id, name) {
     Logger.debug('User id parameter is: ' + id); //specified _id_ value comes from URL
     next();
 });
 
-userRoutes.get('/api/v1/users', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Read), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users', guard.check(['read:users']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Find users by keyword(s)"
@@ -88,8 +92,7 @@ userRoutes.get('/api/v1/users', AuthorizationHandler.checkJWT,
     user_controller.get_users(req, res);
 });
 
-userRoutes.get('/api/v1/users/:id', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Read), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users/:id', guard.check(['read:users']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Get a user"
@@ -126,8 +129,7 @@ userRoutes.get('/api/v1/users/:id', AuthorizationHandler.checkJWT,
     user_controller.get_user(req, res);
 });
 
-userRoutes.get('/api/v1/user', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Read), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/user', guard.check(['read:users']), (req: Request, res: Response) => {
     /*
     #swagger.tags = ['Users']
         #swagger.summary = "Get a user using query"
@@ -173,8 +175,7 @@ userRoutes.get('/api/v1/user', AuthorizationHandler.checkJWT,
     });
 });
 
-userRoutes.post('/api/v1/users', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Create), (req: Request, res: Response) => {
+userRoutes.post('/api/v1/users', guard.check(['create:users']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Create new user"
@@ -214,8 +215,7 @@ userRoutes.post('/api/v1/users', AuthorizationHandler.checkJWT,
     user_controller.create_user(req, res);
 });
 
-userRoutes.put('/api/v1/users/:id', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Update), (req: Request, res: Response) => {
+userRoutes.put('/api/v1/users/:id', guard.check(['update:users']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Update a user"
@@ -252,8 +252,7 @@ userRoutes.put('/api/v1/users/:id', AuthorizationHandler.checkJWT,
     user_controller.update_user(req, res);
 });
 
-userRoutes.delete('/api/v1/users/:id', AuthorizationHandler.checkJWT, 
-    claimIncludes('permissions', UserPermission.Delete), (req: Request, res: Response) => {
+userRoutes.delete('/api/v1/users/:id', guard.check(['delete:users']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Delete a user"

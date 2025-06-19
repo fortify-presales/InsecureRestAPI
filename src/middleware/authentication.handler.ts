@@ -18,28 +18,29 @@
 */
 
 import Logger from "./logger";
-import {IUser} from "../modules/users/model";
 import jwt from "jsonwebtoken";
-import config from "config";
-import {NextFunction, Request, Response} from "express";
+import { NextFunction, Request, Response } from "express";
+import moment from "moment";
 
-import {forbidden, unauthorised} from "../modules/common/service";
-import {JwtJson} from "../common/types";
+import { IUser } from "../modules/users/model";
+import { forbidden, unauthorised } from "../modules/common/service";
+import { JwtJson, Permission } from "../common/types";
+import { EncryptUtils } from "../utils/encrypt.utils";
+import { UserPermission } from "../modules/users/permissions";
+import { ProductPermission } from "../modules/products/permissions";
+import { MessagePermission } from "../modules/messages/permissions";
 
-const jwtSecret: string = config.get('App.jwtSecret') || "changeme";
-const jwtExpiration: number = config.get('App.jwtExpiration') || 36000;
-
-// NOTE: no longer used as delegated to Auth0
 
 export class AuthenticationHandler {
 
     public static createJWT(user_data: IUser): JwtJson {
-        console.log(`Creating JWT authentication token using secret: ${jwtSecret}`);
-        const accessToken = jwt.sign({id: user_data._id, email: user_data.email}, jwtSecret, {
-            expiresIn: '1h',
+        console.log(`Creating JWT authentication token using secret: ${EncryptUtils.jwtSecret}`);
+        var permissions = this.getUserPermissions(user_data);
+        const accessToken = jwt.sign({ id: user_data._id, permissions: permissions, email: user_data.email }, EncryptUtils.jwtSecret, {
+            expiresIn: EncryptUtils.jwtExpiration,
         })
-        const refreshToken = jwt.sign({id: user_data._id, email: user_data.email}, jwtSecret, {
-            expiresIn: '1d',
+        const refreshToken = jwt.sign({ id: user_data._id, permissions: permissions, email: user_data.email }, EncryptUtils.jwtSecret, {
+            expiresIn: EncryptUtils.jwtRefreshExpiration,
         })
         console.log(`Created accessToken: ${accessToken}`);
         console.log(`Created refreshToken: ${refreshToken}`);
@@ -48,18 +49,18 @@ export class AuthenticationHandler {
             email: user_data.email,
             accessToken: accessToken,
             refreshToken: refreshToken,
-            tokenExpiration: jwtExpiration,
+            tokenExpiration: moment.duration(EncryptUtils.jwtExpiration).asSeconds(),
             tokenType: 'Bearer'
         }
     }
 
     public static verifyJWT(req: Request, res: Response, next: NextFunction) {
-        console.log(`Verifying JWT authentication token using secret ${jwtSecret}`);
+        console.log(`Verifying JWT authentication token using secret ${EncryptUtils.jwtSecret}`);
         const authHeader = req.headers.authorization;
         if (authHeader) {
             const token = authHeader.split(' ')[1]
             console.log(`JWT authentication token is: ${token}`);
-            jwt.verify(token, jwtSecret, (err: any, data: any) => {
+            jwt.verify(token, EncryptUtils.jwtSecret, (err: any, data: any) => {
                 if (err) {
                     Logger.error(err);
                     forbidden(`The JWT authentication token has expired`, res);
@@ -73,6 +74,22 @@ export class AuthenticationHandler {
         } else {
             unauthorised("Missing or invalid authentication token", res);
         }
+    }
+
+    private static getUserPermissions(user_data: IUser): Permission[] {
+        if (user_data && user_data.is_admin) {
+            Logger.debug(`User ${user_data.email} is an admin, granting all permissions.`);
+            return [
+                UserPermission.Create, UserPermission.Read, UserPermission.Update, UserPermission.Delete,
+                ProductPermission.Create, ProductPermission.Read, ProductPermission.Update, ProductPermission.Delete,
+                MessagePermission.Create, MessagePermission.Read, MessagePermission.Update, MessagePermission.Delete
+            ];
+        } else {
+            // For non-admin users, return a limited set of permissions
+            Logger.debug(`User ${user_data.email} is not an admin, granting limited permissions.`);
+            return [ProductPermission.Read, MessagePermission.Read];
+        }
+        return [];
     }
 
 }

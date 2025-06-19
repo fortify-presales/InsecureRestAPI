@@ -12,7 +12,7 @@
       "version": "v1",
       "description": "Production server"
     },
-    "jwtSecret": "changeme",
+    "jwtSecret": "SECRET",
     "jwtExpiration": 36000,
     "encryptionKey": "lakdsljkalkjlksdfkl"
   }
