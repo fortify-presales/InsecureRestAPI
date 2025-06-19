@@ -1,60 +1,86 @@
-[![Fortify Security Scan](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/IWA-API-Node/actions/workflows/fod.yml)
+[![Fortify Security Scan](https://github.com/fortify-presales/InsecureRestAPI/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/InsecureRestAPI/actions/workflows/fod.yml) [![Debricked](https://github.com/kadraman/InsecureRestAPI/actions/workflows/debricked.yml/badge.svg)](https://github.com/kadraman/InsecureRestAPI/actions/workflows/debricked.yml)
 
-# IWA-API-Node
+# InsecureRestAPI
 
-#### Table of Contents
+_InsecureRestAPI_ is a simple NodeJS/Express/MongoFB REST API fthat can be used for the demonstration of Application Security testing tools - such as [OpenText Application Security](https://www.opentext.com/products/application-security).
 
-* [Overview](#overview)
-* [Forking the Repository](#forking-the-repository)
-* [Setting up the Development Environment](#setting-up-the-development-environment)
-* [Running the Application](#running-the-application)
+Pre-requisities
+---------------
 
-## Overview
+ - Windows or Linux machine with Node 20 or later
+ - [node package manager](https://docs.npmjs.com/about-npm)
+ - [GNU Make](https://www.gnu.org/software/make/)
+ - [MongoDB](https://www.mongodb.com/) Community Edition (optional)
+ - Docker installation (optional)
 
-_IWA-API-Node_ is an insecure Node/Express REST API for use in Fortify demonstrations.
-It includes some examples of bad  and insecure code - which can be found using static and dynamic application security testing tools such
-as those provided by [Fortify by OpenText](https://www.microfocus.com/en-us/cyberres/application-security).
+Run Application (locally)
+-------------------------
 
-The application is intended to provide the functionality of a typical "online pharmacy", including purchasing Products (medication)
-and requesting Services (prescriptions, health checks etc).
-
-*Please note: the application should not be used in a production environment!*
-
-## Forking the Repository
-
-In order to execute example scenarios for yourself, it is recommended that you "fork" a copy of this repository into
-your own GitHub account. The process of "forking" is described in detail in the [GitHub documentation](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo)
-- you can start the process by clicking on the "Fork" button at the top right.
+You can the run the application locally using the following:
 
 
-## Setting up the Development Environment
-
-For this application to run you will require the following to be installed:
-
-- [MongoDB](https://www.mongodb.com/) Community Edition
-- [NodeJS](https://nodejs.org/) LTS version
-
-Clone the repository (preferably your fork from above) and then install all the required third-party packages using:
-
-Running the Application
------------------------
-
-***Install npm packages***
-
-```agsl
+```
 npm i
 npm i -g ts-node-dev
-```
-**Populate MongoDB**
-
-```aidl
-node mongodb/populateDb.js all
-```
-
-**Start Express API**
-
-```aidl
 npm run dev
 ```
 
-The API should then be accessible at [http://localhost:3000](http://localhost:3000)
+The API should then be available at the URL `http://localhost:5000`. If it fails to start,
+make sure you have no other applications running on port 5000. 
+
+Run Application (as Docker container)
+-------------------------------------
+
+You also can build a Docker image for the application using the following:
+
+```
+npm run build
+docker build -t demoapi:latest .
+```
+
+Then run the container using a command similar to the following:
+
+```
+docker run -dp 8080:5000 demoapi:latest
+```
+
+The API should then be available at the URL `http://localhost:8080`. If it fails to start,
+make sure you have no other applications running on port 8080.
+
+Using the API
+-------------
+
+Most of the API operations do not require authentication.
+
+Scan Application (with OpenText Application Security)
+-----------------------------------------------------
+
+To carry out a Fortify Static Code Analyzer local scan, run the following:
+
+```
+make sast-scan
+```
+
+To carry out a Fortify ScanCentral SAST scan, run the following:
+
+```
+fcli ssc session login
+scancentral package -o package.zip -bt none
+fcli sast-scan start --release "_YOURAPP_:_YOURREL_" -f package.zip --store curScan
+fcli sast-scan wait-for ::curScan::
+fcli ssc action run appversion-summary --av "_YOURAPP_:_YOURREL_" -fs "Security Auditor View" -f summary.md
+```
+
+To carry out a Fortify on Demand scan, run the following:
+
+```
+fcli fod session login
+scancentral package -o package.zip -bt none -oss
+fcli fod sast-scan start --release "_YOURAPP_:_YOURREL_" -f package.zip --store curScan
+fcli fod sast-scan wait-for ::curScan::
+fcli fod action run release-summary --rel "_YOURAPP_:_YOURREL_" -f summary.md
+```
+
+---
+
+Kevin A. Lee (kadraman) - klee2@opentext.com

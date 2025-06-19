@@ -27,8 +27,17 @@ permissions:
 on:
   # Triggers the workflow on push or pull request events but only for the main or develop branches
   push:
-    paths:
-      - 'src/**'
+    paths-ignore:
+      - '.github/**/**'
+      - 'Jenkinsfile'
+      - '.gitlab-ci.yml'
+      - 'azure-pipelines.yml'
+      - 'bin/**'
+      - 'data/**'
+      - 'etc/**'
+      - 'tests/**'
+      - '*.md'
+      - 'LICENSE'
     #branches-ignore:
     #  - main
     #  - develop
@@ -59,10 +68,10 @@ on:
 
 # Global environment variables
 env:
-  DEFAULT_APP_NAME: "IWA-API-Node"
+  DEFAULT_APP_NAME: "InsecureRestAPI"
   DEFAULT_SOURCE_DIR: "."
   AZURE_WEBAPP_NAME: insecureapi
-  NODE_VERSION: 18
+  NODE_VERSION: 20
 
 jobs:
 
@@ -144,11 +153,10 @@ jobs:
           FOD_RELEASE: ${{ format('{0}{1}:{2}', env.DEFAULT_APP_NAME, vars.FORTIFY_APP_NAME_POSTFIX, github.ref_name) }}
           # DO_SETUP: true
           # SETUP_ACTION: https://scm.my.org/shared-repos/fcli-actions/setup.yaml
-          SETUP_EXTRA_OPTS: ${{ format('--copy-from "{0}" --sdlc-status Development --app-owner {1} --assessment-type "{2}"', env.FOD_PARENT_RELEASE, vars.FOD_DEFAULT_OWNER, vars.FOD_DEFAULT_ASSESSMENT_TYPE) }} 
-          #SETUP_EXTRA_OPTS: "--use-aviator --technology-stack=JS/TS/HTML"
+          SETUP_EXTRA_OPTS: ${{ format('--copy-from "{0}" --sdlc-status Development --app-owner {1} --assessment-type "{2}" --user-aviator --technology-stack=JS/TS/HTML', env.FOD_PARENT_RELEASE, vars.FOD_DEFAULT_OWNER, vars.FOD_DEFAULT_ASSESSMENT_TYPE) }} 
           # SC_CLIENT_VERSION: 24.4.1
           # DO_PACKAGE_DEBUG: true
-          PACKAGE_EXTRA_OPTS: "-bt none -oss"
+          PACKAGE_EXTRA_OPTS: "-bt none"
           # FOD_SAST_SCAN_EXTRA_OPTS:
           # DO_WAIT: true
           DO_POLICY_CHECK: false # we will do this later after SCA and DAST scan

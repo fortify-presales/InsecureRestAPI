@@ -38,7 +38,7 @@ const doc = {
         },
         contact: {
             name: "Fortify by Opentext",
-            url: "https://www.microfocus.com/en-us/cyberres/application-security",
+            url: "https://www.opentext.com/en-gb/products/application-security",
         }
     },
     components: {
