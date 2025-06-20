@@ -81,8 +81,6 @@ class DbConfig {
         }).catch((err) => {
           reject(err);
         });
-        //this.connection.('open', () => resolve());
-        //this.connection.on('error', (err: any) => reject(err));
       } else {
         reject(new Error('Database connection is not initialized.'));
       }
@@ -106,13 +104,11 @@ class DbConfig {
 
   public async populate(): Promise<void> {
     // This method can be used to populate the database with initial data.
-    // For now, it does nothing, but you can implement your logic here.
     Logger.info('Populating in-memory MongoDB with initial data...');
-    // Example: await this.connection.collection('users').insertMany([...]);
     await Promise.all([
-        this.userCreate(0, "auth0|6634fd934e983e7a58732728", "Admin", "", "User", "admin@localhost.com", "0123456789", true),
-        this.userCreate(1, "auth0|6634fe351045dd069fb881af", "Sam", "A", "Shopper", "user1@localhost.com", "0123456789", false),
-        this.userCreate(2, "auth0|6634fe661045dd069fb881f8", "Sarah", "A", "Shopper", "user2@localhost.com", "0123456789", false),
+        this.userCreate(0, "4202afd7-7cd1-40b0-ba50-b58eb73b92be", "Admin", "", "User", "admin@localhost.com", "0123456789", true),
+        this.userCreate(1, "6a5d1f06-68c4-4edf-a2f3-3727f29d19a5", "Sam", "A", "Shopper", "user1@localhost.com", "0123456789", false),
+        this.userCreate(2, "8365e972-ac18-4497-95e6-2780271505f2", "Sarah", "A", "Shopper", "user2@localhost.com", "0123456789", false),
     ]);
     await Promise.all([
         this.productCreate(0, "SWA234-A568-00010", "Solodox 750", "generic-product-4.jpg",
@@ -147,10 +143,10 @@ class DbConfig {
         ),
     ]);
       await Promise.all([
-        this.messageCreate(0, "auth0|6634fe351045dd069fb881af", "Welcome to IWA-API. This is an example message that you can read"),
-        this.messageCreate(1, "auth0|6634fe351045dd069fb881af", "Test message - please ignore!"),
-        this.messageCreate(2, "auth0|6634fe661045dd069fb881f8", "Welcome to IWA-API. This is an example message that you can read"),
-        this.messageCreate(3, "auth0|6634fe661045dd069fb881f8", "Test message - please ignore!"),
+        this.messageCreate(0, "6a5d1f06-68c4-4edf-a2f3-3727f29d19a5", "Welcome to InsecureRestAPI. This is an example message that you can read"),
+        this.messageCreate(1, "6a5d1f06-68c4-4edf-a2f3-3727f29d19a5", "Test message - please ignore!"),
+        this.messageCreate(2, "8365e972-ac18-4497-95e6-2780271505f2", "Welcome to InsecureRestAPI. This is an example message that you can read"),
+        this.messageCreate(3, "8365e972-ac18-4497-95e6-2780271505f2", "Test message - please ignore!"),
     ]);
   }
 
@@ -168,7 +164,7 @@ class DbConfig {
               },
               email: email,
               phone_number: phone_number,
-              password: EncryptUtils.cryptPassword("password"), // Default password, should be changed on first login
+              password: EncryptUtils.cryptPassword("password"), // Default "password" for demo purposes
               address: {
                   street: "1 Somewhere Street",
                   city: "London",
@@ -177,7 +173,9 @@ class DbConfig {
                   country: "United Kingdom"
               },
               is_enabled: true,
-              is_admin: is_admin
+              is_admin: is_admin,
+              mfa_enabled: false,
+              is_deleted: false
           };
 
       const user = new users(userdetail);

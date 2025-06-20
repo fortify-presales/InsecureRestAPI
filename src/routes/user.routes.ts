@@ -33,14 +33,6 @@ const user_controller: UserController = new UserController();
 
 export const userRoutes = Router();
 
-userRoutes.use(
-    jwt({
-        secret: EncryptUtils.jwtSecret,
-        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
-        requestProperty: 'user'
-    })
-);
-
 userRoutes.param('id', function (req, res, next, id, name) {
     Logger.debug('User id parameter is: ' + id); //specified _id_ value comes from URL
     next();

@@ -32,14 +32,6 @@ const product_controller: ProductController = new ProductController();
 
 export const productRoutes = Router();
 
-productRoutes.use(
-    jwt({
-        secret: EncryptUtils.jwtSecret,
-        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
-        requestProperty: 'user'
-    })
-);
-
 productRoutes.get('/api/v1/products', guard.check(['read:products']), (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Products']

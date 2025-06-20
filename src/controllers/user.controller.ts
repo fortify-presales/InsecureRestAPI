@@ -90,7 +90,10 @@ export class UserController {
                     modified_on: new Date(Date.now()),
                     modified_by: "",
                     modification_note: 'New user created'
-                }]
+                }],
+                password: req.body.password ? EncryptUtils.cryptPassword(req.body.password) : "",
+                mfa_enabled: req.body.mfa_enabled ? req.body.mfa_enabled : false,
+                is_deleted: false
             };
             this.user_service.createUser(user_params, (err: any, user_data: IUser) => {
                 if (err) {
@@ -137,7 +140,9 @@ export class UserController {
                         is_enabled: req.body.is_enabled ? req.body.is_enabled : user_data.is_enabled,
                         is_admin: req.body.is_admin ? req.body.is_admin : user_data.is_admin,
                         is_deleted: req.body.is_deleted ? req.body.is_deleted : user_data.is_deleted,
-                        modification_notes: user_data.modification_notes
+                        modification_notes: user_data.modification_notes,
+                        password: req.body.password ? EncryptUtils.cryptPassword(req.body.password) : user_data.password,
+                        mfa_enabled: req.body.mfa_enabled ? req.body.mfa_enabled : user_data.mfa_enabled
                     };
                     this.user_service.updateUser(user_params, (err: any) => {
                         if (err) {

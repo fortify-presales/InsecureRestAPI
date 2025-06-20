@@ -26,26 +26,6 @@ const site_controller: SiteController = new SiteController();
 
 export const siteRoutes = Router();
 
-siteRoutes.get('/.well-known/jwks.json', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
-    return res.status(200).json({
-        "keys": [
-            {
-                "kty": "RSA",
-                "use": "sig",
-                "kid": "1234567890",
-                "n": "0vx7agoebGcQSuuPiLJXZptN9n8Q6z4v5b",
-                "e": "AQAB",
-                "alg": "RS256",
-                "x5c": [
-                    "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA"
-                ],
-                "x5t": "1234567890abcdef1234567890abcdef12345678",
-                "x5t#S256": "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
-            }
-        ]
-    });
-});
-
 siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
     /*
         #swagger.tags = ['Site']

@@ -18,95 +18,30 @@
 */
 
 import Logger from "./logger";
-import config from "config";
 import {NextFunction, Request, Response} from "express";
 import {forbidden} from "../modules/common/service";
-
+import { EncryptUtils } from "../utils/encrypt.utils";
 const { expressjwt: jwt } = require("express-jwt");
-const { auth } = require('express-oauth2-jwt-bearer');
 
-//const auth0Domain: string = config.get('App.auth0.domain');
-//const auth0Audience: string = config.get('App.auth0.audience');
-//const jwtSecret: string = config.get('App.jwtSecret') || "changeme";
-//const jwtExpiration: number = config.get('App.jwtExpiration') || 36000;
-//const jwtAudience: string = config.has("App.jwtAudience") ? config.get('App.jwtAudience') : "https://insecureapi.azurewebsites.net/api";
 
 export class AuthorizationHandler {
    
-    //public static checkJWT = auth({
-    //    audience: auth0Audience,
-    //    issuerBaseURL: auth0Domain
-    //});
-
-    //public static authRequiredPermissions = (permission: string | string[]) => {
-    //    if (typeof permission === 'string') {
-    //      permission = [permission]
-    //    }
-    //    return claimIncludes('permissions', ...permission)
-    //}
-      
-    /*public static requirePermission(permissions: string | string[]) {
-            const jwtAuth = jwtAuthz([permissions], {
-                customScopeKey: "permissions",
-                customUserKey: "auth",
-                checkAllScopes: true,
-                failWithError: false // should be true and catch with custom error handler
-            });
-            return jwtAuth;
-    };*/
-
-    /*public static requirePermission(role: string | undefined) {
-        Logger.debug(`AuthorizationHandler::requirePermission`);
-        return (req: Request, res: Response, next: NextFunction) => {
-            Logger.debug(req);
-            Logger.debug(`Checking if user has permission: ${role}`);
-            guard.check(role)(req, res, (err: any) => {
-                if (err) {
-                    Logger.debug(`User does not have permission: ${role}`);
-                    forbidden(`User does not have permission: ${role}`, res);
-                } else {
-                    Logger.debug(`User has permission: ${role}`);
-                    next();
-                }
-            });
-        };
-    }*/
-
-    /*public static requireAccessToken(req: Request, res: Response, next: NextFunction) {
-        Logger.debug(`AuthorizationHandler::requireAccessToken`);
-        let accessToken: string | undefined;
-
-        try {
-            accessToken = req.header('Authorization')?.replace('Bearer ', '');
-            if (accessToken === undefined) {
-                throw new Error(`No Bearer token found in Authorization header`);
-            } else {
-
-                console.log(`accessToken = ${accessToken}`);
-                jwt({
-                 secret: jwtSecret,
-                 //audience: jwtAudience,
-                 // Validate the audience and the issuer.
-                 audience: 'http://localhost:5000/.well-known/jwks.json',
-                 algorithms: ['RS256'],
-                 requestProperty: 'auth',
-                 //issuer: `https://${auth0Domain}/`,
-               }).unless({path: this.unprotected});
-
-            }
-
-            next();
-        } catch (error: any) {
-            unauthorised(error.message, res);
+    /*public static jwtAuth = jwt({
+        secret: EncryptUtils.jwtSecret,
+        algorithms: ['HS256'],
+        credentialsRequired: true,
+        getToken: (req: Request) => {
+            const token = req.headers.authorization?.split(' ')[1];
+            return token || null;
         }
-    };*/
+    });*/
 
     public static permitAll(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitAll`);
         next();
     }
 
-    // updated to use express-jwt-permissions
+    // NOTE: updated to use express-jwt-permissions
     public static permitSelf(req: Request, res: Response, next: NextFunction) {
         Logger.debug(`AuthorizationHandler::permitSelf`);
         Logger.debug(`Verifying if user has authorization to self endpoint: '${req.url}`);

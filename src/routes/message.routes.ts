@@ -32,14 +32,6 @@ const message_controller: MessageController = new MessageController();
 
 export const messageRoutes = Router();
 
-messageRoutes.use(
-    jwt({
-        secret: EncryptUtils.jwtSecret,
-        algorithms: [EncryptUtils.jwtAlgorithm as import('jsonwebtoken').Algorithm],
-        requestProperty: 'user'
-    })
-);
-
 messageRoutes.param('id', function (req, res, next, id, name) {
     Logger.debug('Message id parameter is: ' + id); //specified _id_ value comes from URL
     next();

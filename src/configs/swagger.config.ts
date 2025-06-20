@@ -44,7 +44,7 @@ const doc = {
     components: {
         schemas: {
             user: {
-                $user_id: "auth0|6634fe351045dd069fb881af",
+                $user_id: "87cd9f67-d160-4487-ba95-cb889a47cf2d",
                 $name: {
                     $first_name: "User",
                     $middle_name: "",
@@ -52,6 +52,7 @@ const doc = {
                 },
                 $email: "user1@localhost.com",
                 $phone_number: "1234567890",
+                $password: "string",
                 $address: {
                     $street: "string",
                     $city: "string",
@@ -61,13 +62,15 @@ const doc = {
                 },
                 $is_enabled: true,
                 $is_admin: false,
+                $mfa_enabled: false
             },
             registerUser: {
-                $user_id: "auth0|6634fe351045dd069fb881af",
+                $user_id: "87cd9f67-d160-4487-ba95-cb889a47cf2d",
                 $first_name: "User",
                 $last_name: "One",
                 $email: "user1@localhost.com",
                 $phone_number: "1234567890",
+                $password: "string"
             },
             subscribeUser: {
                 $first_name: "User",
@@ -99,7 +102,7 @@ const doc = {
                 $available: true
             },
             message: {
-                $user_id: "auth0|6634fe351045dd069fb881af",
+                $user_id: "87cd9f67-d160-4487-ba95-cb889a47cf2d",
                 $text: "This is an example message",
                 $sent_date: "YYYY-MM-DDTHH:mm:ssZ",
                 $read_date: "YYYY-MM-DDTHH:mm:ssZ",

@@ -1,14 +1,14 @@
 {
   "name": "iwa-api",
   "version": "1.0.0",
-  "description": "IWA-API-Node is an insecure Node/Express REST API for use in Fortify demonstrations",
+  "description": "An insecure NodeJS/Express/MongoDB REST API for educational purposes.",
   "main": "index.ts",
   "scripts": {
     "build": "cross-env NODE_ENV=production npx tsc && cross-env NODE_ENV=production ts-node src/configs/swagger.config.ts && cp src/configs/swagger_output.json ./dist/configs",
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger": "ts-node src/configs/swagger.config.ts"
+    "swagger": "cross-env ts-node src/configs/swagger.config.ts && cross-env cp src/configs/swagger_output.json ./public/docs/openapi.json"
   },
   "keywords": [],
   "author": {

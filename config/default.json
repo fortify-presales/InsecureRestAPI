@@ -2,7 +2,7 @@
   "App": {
     "name": "InsecureRestAPI",
     "version": "1.0",
-    "description": "InsecureRestAPI - An insecure NodeJS/Express/MongoDB REST API.",
+    "description": "InsecureRestAPI - An insecure NodeJS/Express/MongoDB REST API for educational purposes. [View API Schema (openapi.json)](/docs/openapi.json)",
     "port":  5000,
     "dbConfig": {
       "host": "127.0.0.1",
