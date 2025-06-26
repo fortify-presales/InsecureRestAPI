@@ -131,6 +131,7 @@ class AppConfig {
             jwtMiddleware.unless({
                 path: [
                     '/',
+                    /^\/favicon.ico/,
                     /^\/docs\/.*/,
                     /^\/api-docs\/.*/,
                     /^\/images\/.*/,

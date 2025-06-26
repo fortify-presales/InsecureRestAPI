@@ -37,7 +37,11 @@ messageRoutes.param('id', function (req, res, next, id, name) {
     next();
 });
 
-messageRoutes.get('/api/v1/messages', guard.check(['read:messages']), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/messages', 
+    [
+        guard.check(['read:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Find messages by keyword(s)"
@@ -83,7 +87,11 @@ messageRoutes.get('/api/v1/messages', guard.check(['read:messages']), (req: Requ
     message_controller.get_messages(req, res);
 });
 
-messageRoutes.get('/api/v1/messages/:id', guard.check(['read:messages']), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/messages/:id', 
+    [
+        guard.check(['read:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message"
@@ -117,10 +125,15 @@ messageRoutes.get('/api/v1/messages/:id', guard.check(['read:messages']), (req: 
             schema: { $ref: '#/components/schemas/failure' }
        }
     */
+
     message_controller.get_message(req, res);
 });
 
-messageRoutes.get('/api/v1/message', guard.check(['read:messages']), (req: Request, res: Response) => {
+messageRoutes.get('/api/v1/message', 
+    [
+        guard.check(['read:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Get a message using query"
@@ -166,7 +179,11 @@ messageRoutes.get('/api/v1/message', guard.check(['read:messages']), (req: Reque
     });
 });
 
-messageRoutes.post('/api/v1/messages', guard.check(['create:messages']), (req: Request, res: Response) => {
+messageRoutes.post('/api/v1/messages', 
+    [
+        guard.check(['create:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Create new message"
@@ -203,10 +220,15 @@ messageRoutes.post('/api/v1/messages', guard.check(['create:messages']), (req: R
             schema: { $ref: '#/components/schemas/failure' }
         }
       */
+
     message_controller.create_message(req, res);
 });
 
-messageRoutes.put('/api/v1/messages/:id', guard.check(['update:messages']), (req: Request, res: Response) => {
+messageRoutes.put('/api/v1/messages/:id', 
+    [
+        guard.check(['update:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Update a message"
@@ -240,10 +262,15 @@ messageRoutes.put('/api/v1/messages/:id', guard.check(['update:messages']), (req
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
+
     message_controller.update_message(req, res);
 });
 
-messageRoutes.delete('/api/v1/messages/:id', guard.check(['delete:messages']), (req: Request, res: Response) => {
+messageRoutes.delete('/api/v1/messages/:id', 
+    [
+        guard.check(['delete:messages'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Messages']
         #swagger.summary = "Delete a message"
@@ -277,6 +304,7 @@ messageRoutes.delete('/api/v1/messages/:id', guard.check(['delete:messages']), (
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
+    
     message_controller.delete_message(req, res);
 });
 

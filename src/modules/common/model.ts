@@ -34,6 +34,7 @@ export enum response_status_codes {
     bad_request = 400,
     unauthorized = 401,
     forbidden = 403,
+    not_found = 404,
     already_exists = 409,
     internal_server_error = 500
 }

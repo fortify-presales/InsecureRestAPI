@@ -24,15 +24,20 @@ const guard = require('express-jwt-permissions')();
 import {ProductController} from '../controllers/product.controller';
 import Logger from "../middleware/logger";
 import { IProduct } from '../modules/products/model';
-import {mongoError, successResponse} from "../modules/common/service";
+import {badRequest, mongoError, successResponse} from "../modules/common/service";
 import {EncryptUtils} from "../utils/encrypt.utils";
+import { body, param, validationResult } from 'express-validator';
 
 
 const product_controller: ProductController = new ProductController();
 
 export const productRoutes = Router();
 
-productRoutes.get('/api/v1/products', guard.check(['read:products']), (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products', 
+    [
+        guard.check(['read:products'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Find products by keyword(s)"
@@ -66,10 +71,16 @@ productRoutes.get('/api/v1/products', guard.check(['read:products']), (req: Requ
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
+
     product_controller.get_products(req, res);
 });
 
-productRoutes.get('/api/v1/products/:id', guard.check(['read:products']), (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id', 
+    [
+        guard.check(['read:products']),
+        param('id').isString().withMessage('A product Id is required'),
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get a product"
@@ -95,10 +106,21 @@ productRoutes.get('/api/v1/products/:id', guard.check(['read:products']), (req: 
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
-    product_controller.get_product(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        product_controller.get_product(req, res);
+    }
 });
 
-productRoutes.get('/api/v1/products/:id/image', guard.check(['read:products']), (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:id/image', 
+    [
+        guard.check(['read:products']),
+        param('id').isString().withMessage('A product Id is required'),
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by Id"
@@ -124,10 +146,21 @@ productRoutes.get('/api/v1/products/:id/image', guard.check(['read:products']), 
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
-    product_controller.get_product_image_by_id(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        product_controller.get_product_image_by_id(req, res);
+    }
 });
 
-productRoutes.get('/api/v1/products/:name/image', guard.check(['read:products']), (req: Request, res: Response) => {
+productRoutes.get('/api/v1/products/:name/image-by-name', 
+    [
+        guard.check(['read:products']),
+        param('name').isString().withMessage('A product name is required'),
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Get product image by name"
@@ -153,11 +186,24 @@ productRoutes.get('/api/v1/products/:name/image', guard.check(['read:products'])
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
-    product_controller.get_product_image_by_name(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        product_controller.get_product_image_by_name(req, res);
+    }
 });
 
 
-productRoutes.post('/api/v1/products', guard.check(['create:products']), (req: Request, res: Response) => {
+productRoutes.post('/api/v1/products', 
+    [
+        guard.check(['create:products']),
+        body('code').isString().withMessage('A product code is required'),
+        body('name').isString().withMessage('A product name is required'),
+        body('summary').isString().withMessage('A product summary is required')
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Create new product"
@@ -194,11 +240,22 @@ productRoutes.post('/api/v1/products', guard.check(['create:products']), (req: R
             schema: { $ref: '#/components/schemas/failure' }
         }
     */
-    res.setHeader('Content-Type', 'application/json');
-    product_controller.create_product(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        res.setHeader('Content-Type', 'application/json');
+        product_controller.create_product(req, res);
+    }
 });
 
-productRoutes.put('/api/v1/products/:id', guard.check(['update:products']), (req: Request, res: Response) => {
+productRoutes.put('/api/v1/products/:id', 
+    [
+        guard.check(['update:products']),
+        param('id').isString().withMessage('A product Id is required'),
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Update a product"
@@ -232,10 +289,21 @@ productRoutes.put('/api/v1/products/:id', guard.check(['update:products']), (req
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
-    product_controller.update_product(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        product_controller.update_product(req, res);
+    }
 });
 
-productRoutes.delete('/api/v1/products/:id', guard.check(['delete:products']), (req: Request, res: Response) => {
+productRoutes.delete('/api/v1/products/:id', 
+    [
+        guard.check(['delete:products']),
+        param('id').isString().withMessage('A product Id is required'),
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Products']
         #swagger.summary = "Delete a product"
@@ -269,7 +337,13 @@ productRoutes.delete('/api/v1/products/:id', guard.check(['delete:products']), (
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
-    product_controller.delete_product(req, res);
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        product_controller.delete_product(req, res);
+    }
 });
 
 

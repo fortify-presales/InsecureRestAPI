@@ -50,6 +50,15 @@ export function badRequest(res: Response, data?: any, message?: string) {
     });
 }
 
+export function notFound(res: Response, data?: any, message?: string) {
+    res.status(response_status_codes.bad_request).json({
+        status: 'failure',
+        timestamp: moment().format(),
+        message: message ?? "Not Foundt",
+        data: data ?? {}
+    });
+}
+
 export function unauthorised(message: string, res: Response) {
     res.status(response_status_codes.unauthorized).json({
         status: 'failure',

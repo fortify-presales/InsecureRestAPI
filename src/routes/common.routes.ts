@@ -20,6 +20,8 @@
 import config from "config";
 import {Request, Response, Router} from 'express';
 import {AuthorizationHandler} from "../middleware/authorization.handler";
+import { nextTick } from "process";
+import path from "path";
 
 const apiVersion: string = config.get('App.apiConfig.version') || "v1";
 
@@ -28,6 +30,11 @@ export const commonRoutes = Router();
 // redirect root to api-docs
 commonRoutes.get('/', [AuthorizationHandler.permitAll], function (req: Request, res: Response) {
     res.redirect('/api-docs');
+});
+
+// serve up OpenApi schema
+commonRoutes.get('/docs/openapi.json', [AuthorizationHandler.permitAll], function (req: Request, res: Response) {
+    res.sendFile(path.join(global.__basedir, 'public', 'docs', 'openapi.json'));
 });
 
 // URL not found

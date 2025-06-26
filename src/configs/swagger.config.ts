@@ -31,14 +31,14 @@ const doc = {
     info: {
         title: `${appName}`,
         version: `${appVersion}`,
-        description: `${appDescription}`,
+        description: `<b>${appDescription}</b>\n\nYou can select a development or production server to test the API. Most operations require authentication via a user specific JWT token. To retrieve a JWT token for a user you can use the Site <code>'/api/v1/site/sign-in'</code> operation below and then copy the value of the <b>accessToken</b> field. This value can then be entered when you click on the <b>Authorize</b> button or lock icons.\n\n[View Schema](/docs/openapi.json)`,
         license: {
             name: "GPLv3",
             url: "https://www.gnu.org/licenses/gpl-3.0.en.html",
         },
         contact: {
-            name: "Fortify by Opentext",
-            url: "https://www.opentext.com/en-gb/products/application-security",
+            name: "Kevin A. Lee (kadraman)",
+            url: "https://github.com/kadraman",
         }
     },
     components: {

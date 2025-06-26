@@ -20,7 +20,6 @@
 import {Request, Response} from 'express';
 import {
     failureResponse,
-    badRequest,
     mongoError,
     successResponse,
     unauthorised
@@ -35,7 +34,6 @@ import UserService from '../modules/users/service';
 import {AuthenticationHandler} from "../middleware/authentication.handler";
 import {JwtJson, SubscribingUser} from "../common/types";
 import {FileUtils} from "../utils/file.utils";
-import { validationResult } from 'express-validator';
 
 const getRandomQuote = require('random-quote-generator5.0');
 const {JSDOM} = require("jsdom");

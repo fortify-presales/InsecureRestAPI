@@ -38,7 +38,11 @@ userRoutes.param('id', function (req, res, next, id, name) {
     next();
 });
 
-userRoutes.get('/api/v1/users', guard.check(['read:users']), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users', 
+    [
+        guard.check(['read:users'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Find users by keyword(s)"
@@ -84,7 +88,11 @@ userRoutes.get('/api/v1/users', guard.check(['read:users']), (req: Request, res:
     user_controller.get_users(req, res);
 });
 
-userRoutes.get('/api/v1/users/:id', guard.check(['read:users']), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/users/:id', 
+    [
+        guard.check(['read:users'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Get a user"
@@ -118,10 +126,15 @@ userRoutes.get('/api/v1/users/:id', guard.check(['read:users']), (req: Request, 
            schema: { $ref: '#/components/schemas/failure' }
        }
     */
+
     user_controller.get_user(req, res);
 });
 
-userRoutes.get('/api/v1/user', guard.check(['read:users']), (req: Request, res: Response) => {
+userRoutes.get('/api/v1/user', 
+    [
+        guard.check(['read:users'])
+    ], (req: Request, res: Response) => {
+
     /*
     #swagger.tags = ['Users']
         #swagger.summary = "Get a user using query"
@@ -167,7 +180,11 @@ userRoutes.get('/api/v1/user', guard.check(['read:users']), (req: Request, res: 
     });
 });
 
-userRoutes.post('/api/v1/users', guard.check(['create:users']), (req: Request, res: Response) => {
+userRoutes.post('/api/v1/users', 
+    [
+        guard.check(['create:users'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Create new user"
@@ -204,10 +221,15 @@ userRoutes.post('/api/v1/users', guard.check(['create:users']), (req: Request, r
             schema: { $ref: '#/components/schemas/failure' }
         }
       */
+
     user_controller.create_user(req, res);
 });
 
-userRoutes.put('/api/v1/users/:id', guard.check(['update:users']), (req: Request, res: Response) => {
+userRoutes.put('/api/v1/users/:id', 
+    [
+        guard.check(['update:users'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Update a user"
@@ -241,10 +263,15 @@ userRoutes.put('/api/v1/users/:id', guard.check(['update:users']), (req: Request
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
+
     user_controller.update_user(req, res);
 });
 
-userRoutes.delete('/api/v1/users/:id', guard.check(['delete:users']), (req: Request, res: Response) => {
+userRoutes.delete('/api/v1/users/:id', 
+    [
+        guard.check(['delete:users'])
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Users']
         #swagger.summary = "Delete a user"
@@ -278,6 +305,7 @@ userRoutes.delete('/api/v1/users/:id', guard.check(['delete:users']), (req: Requ
             schema: { $ref: '#/components/schemas/failure' }
         }
      */
+    
     user_controller.delete_user(req, res);
 });
 
