@@ -23,13 +23,13 @@ export interface IUser {
     _id?: String;
     user_id: String;
     name: {
-        first_name: String;
+        firstName: String;
         middle_name: String;
-        last_name: String;
+        lastName: String;
     };
     email: String;
     password: String;
-    phone_number: String;
+    phoneNumber: String;
     address: {
         street: String;
         city: String;

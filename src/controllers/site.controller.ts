@@ -20,7 +20,7 @@
 import {Request, Response} from 'express';
 import {
     failureResponse,
-    insufficientParameters,
+    badRequest,
     mongoError,
     successResponse,
     unauthorised
@@ -35,6 +35,7 @@ import UserService from '../modules/users/service';
 import {AuthenticationHandler} from "../middleware/authentication.handler";
 import {JwtJson, SubscribingUser} from "../common/types";
 import {FileUtils} from "../utils/file.utils";
+import { validationResult } from 'express-validator';
 
 const getRandomQuote = require('random-quote-generator5.0');
 const {JSDOM} = require("jsdom");
@@ -63,30 +64,25 @@ export class SiteController {
 
     public login_user(req: Request, res: Response) {
         Logger.debug(`Logging in user with with request body: ${JSON.stringify(req.body)}`);
-        // this checks whether all the fields were sent through the request or not
-        if (req.body.email && req.body.password) {
-            const hashPassword = EncryptUtils.cryptPassword(req.body.password);
-            Logger.debug(`Hashed password for user ${req.body.email} is: ${hashPassword}`);
-            const user_filter = {email: req.body.email, password: hashPassword};
-            this.user_service.filterUser(user_filter, (err: any, user_data: IUser) => {
-                if (err) {
-                    mongoError(err, res);
+        const hashPassword = EncryptUtils.cryptPassword(req.body.password);
+        Logger.debug(`Hashed password for user ${req.body.email} is: ${hashPassword}`);
+        const user_filter = {email: req.body.email, password: hashPassword};
+        this.user_service.filterUser(user_filter, (err: any, user_data: IUser) => {
+            if (err) {
+                mongoError(err, res);
+            } else {
+                if (user_data) {
+                    const jwtJson: JwtJson = AuthenticationHandler.createJWT(user_data);
+                    // set cookie for refreshToken
+                    res.cookie('refreshToken', jwtJson.refreshToken,
+                        {httpOnly: true, sameSite: 'strict'}
+                    );
+                    successResponse('Successfully logged in user', jwtJson, res);
                 } else {
-                    if (user_data) {
-                        const jwtJson: JwtJson = AuthenticationHandler.createJWT(user_data);
-                        // set cookie for refreshToken
-                        res.cookie('refreshToken', jwtJson.refreshToken,
-                            {httpOnly: true, sameSite: 'strict'}
-                        );
-                        successResponse('Successfully logged in user', jwtJson, res);
-                    } else {
-                        unauthorised('Invalid credentials', res);
-                    }
+                    unauthorised('Invalid credentials', res);
                 }
-            });
-        } else {
-            insufficientParameters(res);
-        }
+            }
+        });
     }
 
     public subscribe_user(req: Request, res: Response) {
@@ -96,8 +92,8 @@ export class SiteController {
         if (req.body.email !== null) {
             userObj = jQuery.parseJSON(`
                 {
-                    "firstName": "${req.body.first_name}",
-                    "lastname": "${req.body.last_name}",
+                    "firstName": "${req.body.firstName}",
+                    "lastname": "${req.body.lastName}",
                     "email": "${req.body.email}",
                     "role": "user" 
                 }
@@ -117,7 +113,7 @@ export class SiteController {
         let params = JSON.stringify(req.query)
         Logger.debug(`Backing up newsletter database with details: ${params}`);
         try {
-            FileUtils.backupNewsletterDb(<String>req.query.file_path)
+            FileUtils.backupNewsletterDb(<String>req.query.filePath)
         } catch (err) {
             failureResponse(`Error backing up newsletter database: ${err}`, null, res);
         }
@@ -125,7 +121,7 @@ export class SiteController {
         let retObj = jQuery.parseJSON(`
         {
             "input": "${FileUtils.newsletterFile}",
-            "output": "${req.query.file_path}"
+            "output": "${req.query.filePath}"
         }
         `);
         successResponse('Successfully backed up newsletter database', retObj, res);

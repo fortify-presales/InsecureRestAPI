@@ -19,7 +19,7 @@
 
 import {Request, Response} from 'express';
 
-import {failureResponse, insufficientParameters, mongoError, successResponse} from '../modules/common/service';
+import {failureResponse, badRequest, mongoError, successResponse} from '../modules/common/service';
 import {IMessage} from '../modules/messages/model';
 import {EncryptUtils} from "../utils/encrypt.utils";
 import Logger from "../middleware/logger";
@@ -56,7 +56,7 @@ export class MessageController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -81,7 +81,7 @@ export class MessageController {
             });
         } else {
             // error response if some fields are missing in request body
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -113,7 +113,7 @@ export class MessageController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -130,7 +130,7 @@ export class MessageController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 }

@@ -46,12 +46,12 @@ const doc = {
             user: {
                 $user_id: "87cd9f67-d160-4487-ba95-cb889a47cf2d",
                 $name: {
-                    $first_name: "User",
+                    $firstName: "User",
                     $middle_name: "",
-                    $last_name: "One"
+                    $lastName: "One"
                 },
                 $email: "user1@localhost.com",
-                $phone_number: "1234567890",
+                $phoneNumber: "1234567890",
                 $password: "string",
                 $address: {
                     $street: "string",
@@ -65,16 +65,16 @@ const doc = {
                 $mfa_enabled: false
             },
             registerUser: {
-                $user_id: "87cd9f67-d160-4487-ba95-cb889a47cf2d",
-                $first_name: "User",
-                $last_name: "One",
+                $firstName: "User",
+                $middle_name: "A",
+                $lastName: "One",
                 $email: "user1@localhost.com",
-                $phone_number: "1234567890",
+                $phoneNumber: "1234567890",
                 $password: "string"
             },
             subscribeUser: {
-                $first_name: "User",
-                $last_name: "One",
+                $firstName: "User",
+                $lastName: "One",
                 $email: "user1@localhost.com"
             },
             signInUser: {

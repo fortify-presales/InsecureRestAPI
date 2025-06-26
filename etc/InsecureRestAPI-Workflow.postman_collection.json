@@ -1,18 +1,18 @@
 {
 	"info": {
-		"_postman_id": "fae436b0-fb02-43f0-8e64-6a32cac736a4",
-		"name": "IWA-API (Production)",
-		"description": "- An example Postman collection for testing [IWA-API](https://github.com/fortify-presales/IWA-API) - an insecure Node/Express REST API for use in Fortify demonstrations. This collection is self-contained and requires no separate Authentication collection or Environment.\n    \n\nThis is for testing of a the production environment, e.g. [https://iwa-api.onfortify.com](http://localhost:3000)",
+		"_postman_id": "3fe1086c-833d-4658-aabe-a41a0feca2f5",
+		"name": "InsecureRestAPI-Workflow",
+		"description": "An example collection for security testing of IWA (Insecure Web Application) REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13859659",
-		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-fae436b0-fb02-43f0-8e64-6a32cac736a4?action=share&source=collection_link&creator=13859659"
+		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-3fe1086c-833d-4658-aabe-a41a0feca2f5?action=share&source=collection_link&creator=13859659"
 	},
 	"item": [
 		{
-			"name": "Authentication",
+			"name": "Site",
 			"item": [
 				{
-					"name": "Retrieve Access Token",
+					"name": "Sign In",
 					"event": [
 						{
 							"listen": "test",
@@ -23,9 +23,9 @@
 									"});\r",
 									"pm.test(\"Access token returned\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.access_token).exist;\r",
-									"    console.log('Saving access token in collection: ' + jsonData.access_token)\r",
-									"    pm.collectionVariables.set('access_token', jsonData.access_token)\r",
+									"    pm.expect(jsonData.accessToken).exist;\r",
+									"    console.log('Saving JWT access token in environment: ' + jsonData.accessToken)\r",
+									"    pm.environmentVariables.set('jwt_token', jsonData.accessToken)\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -34,25 +34,11 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "POST",
-						"header": [
-							{
-								"key": "Cache-Control",
-								"value": "no-cache",
-								"type": "text"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
+						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"client_id\":\"{{auth0ClientId}}\",\r\n    \"client_secret\":\"{{auth0ClientSecret}}\",\r\n    \"audience\":\"{{auth0Audience}}\",\r\n    \"grant_type\":\"client_credentials\"\r\n}",
+							"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -60,26 +46,22 @@
 							}
 						},
 						"url": {
-							"raw": "https://{{auth0Domain}}/oauth/token",
-							"protocol": "https",
+							"raw": "{{base_url}}/api/v1/site/sign-in",
 							"host": [
-								"{{auth0Domain}}"
+								"{{base_url}}"
 							],
 							"path": [
-								"oauth",
-								"token"
+								"api",
+								"v1",
+								"site",
+								"sign-in"
 							]
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Site",
-			"item": [
+				},
 				{
-					"name": "Get Site Status",
+					"name": "Email Available",
 					"event": [
 						{
 							"listen": "test",
@@ -95,13 +77,10 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/v1/site/status",
+							"raw": "{{base_url}}/api/v1/site/email-already-exists/{{new-email}}",
 							"host": [
 								"{{base_url}}"
 							],
@@ -109,7 +88,51 @@
 								"api",
 								"v1",
 								"site",
-								"status"
+								"email-already-exists",
+								"{{new-email}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"firstName\": \"Test\",\r\n    \"lastName\":  \"User1\",\r\n    \"email\": \"test1@localhost.com\",\r\n    \"phoneNumber\": \"07700 123456\",\r\n    \"password\": \"password\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/site/register-user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site",
+								"register-user"
 							]
 						}
 					},
@@ -136,7 +159,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n  \"firstName\": \"Steve\",\r\n  \"lastName\": \"Shopper\",\r\n  \"email\": \"user3@localhost.com\"\r\n}",
+							"raw": "{\r\n    \"firstName\": \"Test\",\r\n    \"lastName\":  \"User1\",\r\n    \"email\": \"test1@localhost.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -177,8 +200,17 @@
 					"request": {
 						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"filePath\": \"/tmp/test_file\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/api/v1/site/backup-newsletter-db?filePath=backup.gz",
+							"raw": "{{base_url}}/api/v1/site/backup-newsletter-db",
 							"host": [
 								"{{base_url}}"
 							],
@@ -187,12 +219,92 @@
 								"v1",
 								"site",
 								"backup-newsletter-db"
-							],
-							"query": [
-								{
-									"key": "filePath",
-									"value": "backup.gz"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Refresh Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NWNmNzIzYWJkNTgyMTE1N2Q5MGEzYSIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTp1c2VycyIsInJlYWQ6dXNlcnMiLCJ1cGRhdGU6dXNlcnMiLCJkZWxldGU6dXNlcnMiLCJjcmVhdGU6cHJvZHVjdHMiLCJyZWFkOnByb2R1Y3RzIiwidXBkYXRlOnByb2R1Y3RzIiwiZGVsZXRlOnByb2R1Y3RzIiwiY3JlYXRlOm1lc3NhZ2VzIiwicmVhZDptZXNzYWdlcyIsInVwZGF0ZTptZXNzYWdlcyIsImRlbGV0ZTptZXNzYWdlcyJdLCJlbWFpbCI6ImFkbWluQGxvY2FsaG9zdC5jb20iLCJpYXQiOjE3NTA5MjMyMzMsImV4cCI6MTc1MDkyNjgzM30.1w_J6soI2kkwPwusQCYsZ6rP28JQDvWKDpTBfvz_T5I\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
 								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/site/refresh-token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Sign Out",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/site/sign-out",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"site",
+								"sign-out"
 							]
 						}
 					},
@@ -214,8 +326,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -224,23 +335,22 @@
 						"header": [
 							{
 								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"value": "application/json"
 							},
 							{
 								"key": "",
 								"value": "",
-								"type": "text"
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/products",
+							"raw": "{{base_url}}/api/v3/products",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products"
 							]
 						}
@@ -259,13 +369,12 @@
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data._id).exist;\r",
-									"    console.log('Saving product id in collection variable: ' + jsonData.data._id)\r",
-									"    pm.collectionVariables.set('product_id', jsonData.data._id)\r",
+									"    pm.expect(jsonData.id).exist;\r",
+									"    console.log('Saving product id in collection variable: ' + jsonData.id)\r",
+									"    pm.collectionVariables.set('product_id', jsonData.id)\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -286,13 +395,13 @@
 							"raw": "{\r\n  \"code\": \"SWA000-A000-00000\",\r\n  \"name\": \"Test Product\",\r\n  \"summary\": \"Its summary of at least 10 characters xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\r\n  \"description\": \"Its detailed description of at least 40 characters xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\r\n  \"available\": true,\r\n  \"price\": 10.50,\r\n  \"inStock\": true,\r\n  \"timeToStock\": 10,\r\n  \"rating\": 3,\r\n  \"onSale\": true,\r\n  \"salePrice\": 20.0\r\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/v1/products",
+							"raw": "{{base_url}}/api/v3/products",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products"
 							]
 						}
@@ -310,8 +419,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -324,17 +432,18 @@
 							},
 							{
 								"key": "",
-								"value": ""
+								"value": "",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/products/{{product_id}}",
+							"raw": "{{base_url}}/api/v3/products/{{product_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products",
 								"{{product_id}}"
 							]
@@ -354,12 +463,11 @@
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data._id).exist;\r",
-									"    pm.expect(jsonData.data._id).equals(pm.collectionVariables.get(\"product_id\"))\r",
+									"    pm.expect(jsonData.id).exist;\r",
+									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						},
 						{
@@ -368,8 +476,7 @@
 								"exec": [
 									""
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -390,13 +497,13 @@
 							"raw": "{\r\n  \"code\": \"SWA000-A000-00002\",\r\n  \"name\": \"Updated Product\",\r\n  \"summary\": \"Its summary of at least 10 characters xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\r\n  \"description\": \"Its updated description of at least 40 characters xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\r\n  \"available\": true,\r\n  \"onSale\": true,\r\n  \"price\": 11.50,\r\n  \"inStock\": false,\r\n  \"timeToStock\": 10,\r\n  \"rating\": 3,\r\n  \"salePrice\": 8.50\r\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/api/v1/products/{{product_id}}",
+							"raw": "{{base_url}}/api/v3/products/{{product_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products",
 								"{{product_id}}"
 							]
@@ -416,12 +523,11 @@
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
 									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data._id).exist;\r",
-									"    pm.expect(jsonData.data._id).equals(pm.collectionVariables.get(\"product_id\"))\r",
+									"    pm.expect(jsonData.id).exist;\r",
+									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -434,17 +540,18 @@
 							},
 							{
 								"key": "",
-								"value": ""
+								"value": "",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/products/{{product_id}}",
+							"raw": "{{base_url}}/api/v3/products/{{product_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products",
 								"{{product_id}}"
 							]
@@ -463,8 +570,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -477,107 +583,20 @@
 							},
 							{
 								"key": "",
-								"value": ""
+								"value": "",
+								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/products/{{product_id}}",
+							"raw": "{{base_url}}/api/v3/products/{{product_id}}",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"products",
 								"{{product_id}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Users",
-			"item": [
-				{
-					"name": "Get All Users",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"pm.test(\"User ids returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data[1]._id).exist;\r",
-									"    console.log('Saving user id in collection variable: ' + jsonData.data[1]._id)\r",
-									"    pm.collectionVariables.set('user_id', jsonData.data[1]._id)\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/users",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get User",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Status code is 200\", function () {\r",
-									"    pm.response.to.have.status(200);\r",
-									"});"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{base_url}}/api/v1/users/{{user_id}}",
-							"host": [
-								"{{base_url}}"
-							],
-							"path": [
-								"api",
-								"v1",
-								"users",
-								"{{user_id}}"
 							]
 						}
 					},
@@ -597,16 +616,9 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"pm.test(\"Message ids returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data[1]._id).exist;\r",
-									"    console.log('Saving message id in collection variable: ' + jsonData.data[1]._id)\r",
-									"    pm.collectionVariables.set('message_id', jsonData.data[1]._id)\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -619,21 +631,26 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/messages",
+							"raw": "{{base_url}}/api/v3/messages",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
+								"v3",
 								"messages"
 							]
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
 				{
-					"name": "Get Message",
+					"name": "Get All Users",
 					"event": [
 						{
 							"listen": "test",
@@ -643,12 +660,21 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript",
-								"packages": {}
+								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{jwt_token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [
 							{
@@ -657,15 +683,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{base_url}}/api/v1/messages/{{message_id}}",
+							"raw": "{{base_url}}/api/v3/users",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
-								"v1",
-								"messages",
-								"{{message_id}}"
+								"v3",
+								"users"
 							]
 						}
 					},
@@ -679,7 +704,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "{{access_token}}",
+				"value": "{{jwt_token}}",
 				"type": "string"
 			}
 		]
@@ -698,60 +723,11 @@
 			"listen": "test",
 			"script": {
 				"type": "text/javascript",
+				"packages": {},
 				"exec": [
 					""
 				]
 			}
-		}
-	],
-	"variable": [
-		{
-			"key": "auth0Domain",
-			"value": "dev-ahui5f878pgtbrpr.us.auth0.com",
-			"type": "string"
-		},
-		{
-			"key": "auth0AuthServer",
-			"value": "default",
-			"type": "string"
-		},
-		{
-			"key": "auth0Audience",
-			"value": "https://iwa-api.onfortify.com",
-			"type": "string"
-		},
-		{
-			"key": "auth0ClientId",
-			"value": "LFnn96WxZpZeMD99DSTRZJF8fI5wibLU",
-			"type": "string"
-		},
-		{
-			"key": "auth0ClientSecret",
-			"value": "GL0w2SMBJfgiTCTw1pAYf3bldmKhlHGkxeJSKu5zWe5o1uuEMksQ-Ks-TLb3nlLT",
-			"type": "string"
-		},
-		{
-			"key": "product_id",
-			"value": ""
-		},
-		{
-			"key": "base_url",
-			"value": "https://iwa-api.onfortify.com"
-		},
-		{
-			"key": "access_token",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "user_id",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "message_id",
-			"value": "",
-			"type": "string"
 		}
 	]
 }

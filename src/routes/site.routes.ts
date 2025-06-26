@@ -21,12 +21,18 @@ import {Request, Response, Router} from 'express';
 
 import {SiteController} from "../controllers/site.controller";
 import {AuthorizationHandler} from "../middleware/authorization.handler";
+import { body, param, query, validationResult } from 'express-validator';
+import { badRequest, failureResponse, successResponse } from '../modules/common/service';
 
 const site_controller: SiteController = new SiteController();
 
 export const siteRoutes = Router();
 
-siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.get('/api/v1/site/status', 
+    [
+        AuthorizationHandler.permitAll
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Site']
         #swagger.summary = "Get the site status"
@@ -49,7 +55,12 @@ siteRoutes.get('/api/v1/site/status', [AuthorizationHandler.permitAll], (req: Re
     site_controller.site_status(req, res);
 });
 
-siteRoutes.get('/api/v1/site/email-already-exists/:email', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.get('/api/v1/site/email-already-exists/:email', 
+    [
+        AuthorizationHandler.permitAll,
+        param('email').isEmail().withMessage('A valid email parameter is required'),
+    ], (req: Request, res: Response) => {
+
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Check if email is taken"
@@ -73,10 +84,24 @@ siteRoutes.get('/api/v1/site/email-already-exists/:email', [AuthorizationHandler
            }
     */
 
-    res.status(200).json({});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        successResponse("The email address is available.", null, res)
+    }
 });
 
-siteRoutes.post('/api/v1/site/register-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/register-user', 
+    [
+        AuthorizationHandler.permitAll,
+        body('firstName').isString().withMessage('A first name is required'),
+        body('lastName').isString().withMessage('A last name is required'),
+        body('email').isEmail().withMessage('A valid email is required'),
+        body('phoneNumber').isString().withMessage('A valid mobile phone number is required'),
+        body('password').isLength({ min: 6 }).withMessage('A password is required with length of at least 6 characters'),
+
+    ], (req: Request, res: Response) => {
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Register a new user"
@@ -109,10 +134,22 @@ siteRoutes.post('/api/v1/site/register-user', [AuthorizationHandler.permitAll], 
            }
     */
 
-    res.status(200).json({message: "Post request successfull"});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        successResponse("User registered successfully.", null, res)
+    }
 });
 
-siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/subscribe-user', 
+    [
+        AuthorizationHandler.permitAll,
+        body('firstName').isString().withMessage('A first name is required'),
+        body('lastName').isString().withMessage('A last name is required'),
+        body('email').isEmail().withMessage('A valid email is required')
+    ], (req: Request, res: Response) => {
+
     /*
         #swagger.tags = ['Site']
         #swagger.summary = "Subscribe a new user"
@@ -146,10 +183,22 @@ siteRoutes.post('/api/v1/site/subscribe-user', [AuthorizationHandler.permitAll],
         }
     */
 
-    site_controller.subscribe_user(req, res);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        site_controller.subscribe_user(req, res);
+    }
 });
 
-siteRoutes.post('/api/v1/site/sign-in', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/sign-in', 
+    [
+        AuthorizationHandler.permitAll,
+        body('email').isEmail().withMessage('A valid email is required'),
+        body('password').isLength({ min: 6 }).withMessage('A password is required with length of at least 6 characters'),
+    ], 
+    (req: Request, res: Response) => {
+
     /*
        #swagger.tags = ['Site']
        #swagger.summary = "Sign-in"
@@ -182,12 +231,20 @@ siteRoutes.post('/api/v1/site/sign-in', [AuthorizationHandler.permitAll], (req: 
         }
     */
 
-    site_controller.login_user(req, res);
-    res.cookie("user", req.url, {httpOnly: true, expires: new Date(Date.now() + 900000)});
-
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        site_controller.login_user(req, res);
+        res.cookie("user", req.url, {httpOnly: true, expires: new Date(Date.now() + 900000)});
+    }
 });
 
-siteRoutes.post('/api/v1/site/sign-out', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/sign-out', 
+    [
+        AuthorizationHandler.permitAll,
+        body('accessToken').isJWT().withMessage('A valid accessToken is required'),
+    ], (req: Request, res: Response) => {
 
     /*
        #swagger.tags = ['Site']
@@ -217,10 +274,19 @@ siteRoutes.post('/api/v1/site/sign-out', [AuthorizationHandler.permitAll], (req:
         }
     */
 
-    res.status(200).json({message: "Post request successfull"});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        successResponse("User signed out successfully.", null, res)
+    }
 });
 
-siteRoutes.post('/api/v1/site/refresh-token', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/refresh-token', 
+    [
+        AuthorizationHandler.permitAll,
+        body('refreshToken').isJWT().withMessage('A valid accessToken is required'),
+    ], (req: Request, res: Response) => {
 
     /*
        #swagger.tags = ['Site']
@@ -254,17 +320,26 @@ siteRoutes.post('/api/v1/site/refresh-token', [AuthorizationHandler.permitAll], 
         }
     */
 
-    res.status(200).json({message: "Post request successfull"});
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        successResponse("User accessToken refreshed successfully.", null, res)
+    }
 });
 
-siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.permitAll], (req: Request, res: Response) => {
+siteRoutes.post('/api/v1/site/backup-newsletter-db', 
+    [
+        AuthorizationHandler.permitAll,
+        query('filePath').isString().withMessage("A valid filePath is required")
+    ], (req: Request, res: Response) => {
 
     /*
         #swagger.tags = ['Site']
         #swagger.summary = "Backup the newsletter database"
         #swagger.description = "Compress and backup the newsletter database to the specified file"
         #swagger.operationId = "backupNewsletterDb"
-        #swagger.parameters['file_path'] = {
+        #swagger.parameters['filePath'] = {
             in: 'query',
             description: 'The file to backup the database to. Cannot be empty.',
             type: 'string'
@@ -283,7 +358,12 @@ siteRoutes.post('/api/v1/site/backup-newsletter-db', [AuthorizationHandler.permi
         }
    */
 
-    site_controller.backup_newsletter_db(req, res);
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        badRequest(res, errors.array(), "Invalid parameters");
+    } else {
+        site_controller.backup_newsletter_db(req, res);
+    }
 });
 
 /*siteRoutes.post('/api/site/upload-image', function(request, response) {

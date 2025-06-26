@@ -32,9 +32,10 @@ const errorHandler = (err: Error, req: Request, res: Response, next: NextFunctio
         Logger.error(err);
         forbidden(TextUtils.stripAnsiCodes(err.message), res);
     } else {
+        Logger.info("How do i get here");
         internalError(TextUtils.stripAnsiCodes(err.message), res);
     }  
-   next();
+    next();
 };
 
 export default errorHandler;

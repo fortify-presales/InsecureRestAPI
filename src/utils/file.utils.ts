@@ -73,7 +73,7 @@ export abstract class FileUtils {
             }
         });
         child_process.exec(
-            `echo "gzip -cvf ${FileUtils.newsletterFile} > ${backupFile} `,
+            `echo "gzip -cvf ${FileUtils.newsletterFile} > ${backupFile}" `,
             function (err, data) {
                 if (err) throw err;
                 Logger.debug(`Email database backed up to ${backupFile}.`);

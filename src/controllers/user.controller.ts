@@ -19,7 +19,7 @@
 
 import {Request, Response} from 'express';
 
-import {failureResponse, insufficientParameters, mongoError, successResponse} from '../modules/common/service';
+import {failureResponse, badRequest, mongoError, successResponse} from '../modules/common/service';
 import {IUser} from '../modules/users/model';
 import {EncryptUtils} from "../utils/encrypt.utils";
 import Logger from "../middleware/logger";
@@ -56,7 +56,7 @@ export class UserController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -64,19 +64,19 @@ export class UserController {
         Logger.debug(`Creating user with request body: ${JSON.stringify(req.body)}`);
         // this checks whether all the fields were sent through with the request or not
         if (req.body.user_id &&
-            req.body.name && req.body.name.first_name && req.body.name.last_name &&
+            req.body.name && req.body.name.firstName && req.body.name.lastName &&
             req.body.email &&
-            req.body.phone_number) {
+            req.body.phoneNumber) {
 
             const user_params: IUser = {
                 user_id: req.body.user_id,
                 name: {
-                    first_name: req.body.name.first_name,
+                    firstName: req.body.name.firstName,
                     middle_name: req.body.name.middle_name ? req.body.name.middle_name : "",
-                    last_name: req.body.name.last_name
+                    lastName: req.body.name.lastName
                 },
                 email: req.body.email,
-                phone_number: req.body.phone_number,
+                phoneNumber: req.body.phoneNumber,
                 address: {
                     street: req.body.address.street ? req.body.address.street : "",
                     city: req.body.address.city ? req.body.address.city : "",
@@ -104,7 +104,7 @@ export class UserController {
             });
         } else {
             // error response if some fields are missing in request body
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -124,12 +124,12 @@ export class UserController {
                     const user_params: IUser = {
                         user_id: req.params.id,
                         name: req.body.name ? {
-                            first_name: req.body.name.first_name ? req.body.name.first_name : user_data.name.first_name,
-                            middle_name: req.body.name.first_name ? req.body.name.middle_name : user_data.name.middle_name,
-                            last_name: req.body.name.first_name ? req.body.name.last_name : user_data.name.last_name
+                            firstName: req.body.name.firstName ? req.body.name.firstName : user_data.name.firstName,
+                            middle_name: req.body.name.firstName ? req.body.name.middle_name : user_data.name.middle_name,
+                            lastName: req.body.name.firstName ? req.body.name.lastName : user_data.name.lastName
                         } : user_data.name,
                         email: req.body.email ? req.body.email : user_data.email,
-                        phone_number: req.body.phone_number ? req.body.phone_number : user_data.phone_number,
+                        phoneNumber: req.body.phoneNumber ? req.body.phoneNumber : user_data.phoneNumber,
                         address: req.body.address ? {
                             street: req.body.address.street ? req.body.address.street : user_data.address.street,
                             city: req.body.address.city ? req.body.address.city : user_data.address.city,
@@ -156,7 +156,7 @@ export class UserController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -173,7 +173,7 @@ export class UserController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 }

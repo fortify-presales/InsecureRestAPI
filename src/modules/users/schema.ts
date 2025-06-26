@@ -26,14 +26,14 @@ const schema = new Schema({
     user_id: String,
     name: {
         type: {
-            first_name: String,
+            firstName: String,
             middle_name: String,
-            last_name: String
+            lastName: String
         }
     },
     email: String,
     password: String,
-    phone_number: String,
+    phoneNumber: String,
     address: {
         type: {
             street: String,

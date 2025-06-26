@@ -545,7 +545,7 @@
         "operationId": "backupNewsletterDb",
         "parameters": [
           {
-            "name": "file_path",
+            "name": "filePath",
             "in": "query",
             "description": "The file to backup the database to. Cannot be empty.",
             "schema": {
@@ -2581,7 +2581,7 @@
           "name": {
             "type": "object",
             "properties": {
-              "first_name": {
+              "firstName": {
                 "type": "string",
                 "example": "User"
               },
@@ -2589,22 +2589,22 @@
                 "type": "string",
                 "example": ""
               },
-              "last_name": {
+              "lastName": {
                 "type": "string",
                 "example": "One"
               }
             },
             "required": [
-              "first_name",
+              "firstName",
               "middle_name",
-              "last_name"
+              "lastName"
             ]
           },
           "email": {
             "type": "string",
             "example": "user1@localhost.com"
           },
-          "phone_number": {
+          "phoneNumber": {
             "type": "string",
             "example": "1234567890"
           },
@@ -2661,7 +2661,7 @@
           "user_id",
           "name",
           "email",
-          "phone_number",
+          "phoneNumber",
           "password",
           "address",
           "is_enabled",
@@ -2679,11 +2679,11 @@
             "type": "string",
             "example": "87cd9f67-d160-4487-ba95-cb889a47cf2d"
           },
-          "first_name": {
+          "firstName": {
             "type": "string",
             "example": "User"
           },
-          "last_name": {
+          "lastName": {
             "type": "string",
             "example": "One"
           },
@@ -2691,7 +2691,7 @@
             "type": "string",
             "example": "user1@localhost.com"
           },
-          "phone_number": {
+          "phoneNumber": {
             "type": "string",
             "example": "1234567890"
           },
@@ -2702,10 +2702,10 @@
         },
         "required": [
           "user_id",
-          "first_name",
-          "last_name",
+          "firstName",
+          "lastName",
           "email",
-          "phone_number",
+          "phoneNumber",
           "password"
         ],
         "xml": {
@@ -2715,11 +2715,11 @@
       "subscribeUser": {
         "type": "object",
         "properties": {
-          "first_name": {
+          "firstName": {
             "type": "string",
             "example": "User"
           },
-          "last_name": {
+          "lastName": {
             "type": "string",
             "example": "One"
           },
@@ -2729,8 +2729,8 @@
           }
         },
         "required": [
-          "first_name",
-          "last_name",
+          "firstName",
+          "lastName",
           "email"
         ],
         "xml": {

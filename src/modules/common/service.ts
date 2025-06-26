@@ -41,12 +41,12 @@ export function failureResponse(message: string, data: any, res: Response) {
     });
 }
 
-export function insufficientParameters(res: Response) {
+export function badRequest(res: Response, data?: any, message?: string) {
     res.status(response_status_codes.bad_request).json({
         status: 'failure',
         timestamp: moment().format(),
-        message: 'Insufficient parameters',
-        data: {}
+        message: message ?? "Bad Request",
+        data: data ?? {}
     });
 }
 

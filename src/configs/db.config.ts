@@ -152,18 +152,18 @@ class DbConfig {
 
   //
 
-  private async userCreate(index: number, user_id: string, first_name: string, middle_name: string, last_name:string, 
-      email:string, phone_number:string, is_admin: boolean): Promise<void> {
+  private async userCreate(index: number, user_id: string, firstName: string, middle_name: string, lastName:string, 
+      email:string, phoneNumber:string, is_admin: boolean): Promise<void> {
       const userdetail =
           {
               user_id: user_id,
               name: {
-                  first_name: first_name,
+                  firstName: firstName,
                   middle_name: middle_name,
-                  last_name: last_name,
+                  lastName: lastName,
               },
               email: email,
-              phone_number: phone_number,
+              phoneNumber: phoneNumber,
               password: EncryptUtils.cryptPassword("password"), // Default "password" for demo purposes
               address: {
                   street: "1 Somewhere Street",
@@ -180,7 +180,7 @@ class DbConfig {
 
       const user = new users(userdetail);
       await user.save();
-      Logger.debug(`Added user: ${first_name} ${last_name}`);
+      Logger.debug(`Added user: ${firstName} ${lastName}`);
   }
 
   private async productCreate(index: number, code: string, name: string, image: string, price: number, on_sale: boolean, 

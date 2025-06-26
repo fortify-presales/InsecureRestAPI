@@ -19,7 +19,7 @@
 
 import {Request, Response} from 'express';
 
-import {failureResponse, insufficientParameters, mongoError, successResponse} from '../modules/common/service';
+import {failureResponse, badRequest, mongoError, successResponse} from '../modules/common/service';
 import {IProduct} from '../modules/products/model';
 import Logger from "../middleware/logger";
 
@@ -56,7 +56,7 @@ export class ProductController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -84,7 +84,7 @@ export class ProductController {
             });
 
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -102,7 +102,7 @@ export class ProductController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -139,7 +139,7 @@ export class ProductController {
             });
         } else {
             // error response if some fields are missing in request body
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -185,7 +185,7 @@ export class ProductController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 
@@ -202,7 +202,7 @@ export class ProductController {
                 }
             });
         } else {
-            insufficientParameters(res);
+            badRequest(res);
         }
     }
 }
