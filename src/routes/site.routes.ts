@@ -215,7 +215,7 @@ siteRoutes.post('/api/v1/site/sign-in',
              }
         #swagger.responses[200] = {
             description: "Success",
-            schema: { $ref: '#/components/schemas/jwtJson' }
+            schema: { $ref: '#/components/schemas/success' }
         }
         #swagger.responses[400] = {
             description: "Bad Request",

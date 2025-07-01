@@ -320,12 +320,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/jwtJson"
+                  "$ref": "#/components/schemas/success"
                 }
               },
               "application/xml": {
                 "schema": {
-                  "$ref": "#/components/schemas/jwtJson"
+                  "$ref": "#/components/schemas/success"
                 }
               }
             }
