@@ -2,15 +2,14 @@
 
 # InsecureRestAPI
 
-_InsecureRestAPI_ is a simple NodeJS/Express/MongoFB REST API fthat can be used for the demonstration of Application Security testing tools - such as [OpenText Application Security](https://www.opentext.com/products/application-security).
+_InsecureRestAPI_ is a simple NodeJS/Express/MongoFB REST API that can be used for the demonstration of Application Security testing tools - such as [OpenText Application Security](https://www.opentext.com/products/application-security).
 
 Pre-requisities
 ---------------
 
- - Windows or Linux machine with Node 20 or later
- - [node package manager](https://docs.npmjs.com/about-npm)
- - [GNU Make](https://www.gnu.org/software/make/)
- - [MongoDB](https://www.mongodb.com/) Community Edition (optional)
+ - [Node.js 20 or later](https://nodejs.org/en/download)
+ - [CygWin](https://www.cygwin.com/) - if running on Windows
+ - [MongoDB](https://www.mongodb.com/) Community Edition (optional as a version is embedded for testing)
  - Docker installation (optional)
 
 Run Application (locally)
@@ -20,9 +19,8 @@ You can the run the application locally using the following:
 
 
 ```
-npm i
-npm i -g ts-node-dev
-npm run dev
+npm install -g ts-node-dev
+make run
 ```
 
 The API should then be available at the URL `http://localhost:5000`. If it fails to start,
@@ -34,7 +32,7 @@ Run Application (as Docker container)
 You also can build a Docker image for the application using the following:
 
 ```
-npm run build
+make build
 docker build -t demoapi:latest .
 ```
 
@@ -50,7 +48,18 @@ make sure you have no other applications running on port 8080.
 Using the API
 -------------
 
-Most of the API operations do not require authentication.
+You can use the Swagger Documentation to test the API endpoints.
+First login as a user using the endpoint "/api/v1/site/sign-in" and either of the following credentials
+
+    - email: user1@localhost.com
+      password: password
+    - email: admin@localhost.com
+      password: password
+
+Then copy the value of the `accessToken` returned. Go back to the top of the page. Click on **Authorize**
+and enter this value.
+
+There are also some example [Postman](https://www.postman.com/downloads/) collections in the `etc` directory.
 
 Scan Application (with OpenText Application Security)
 -----------------------------------------------------
