@@ -1,0 +1,4 @@
+iq-for-vscode:
+  applicationId: insecurerestapi
+  includeDev: false
+  type: ['npm']

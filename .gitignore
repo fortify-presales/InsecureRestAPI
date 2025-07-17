@@ -140,3 +140,6 @@ logs
 email-db.json
 iwa.db
 *.fpr
+junit.xml
+aviator_*
+.fortify

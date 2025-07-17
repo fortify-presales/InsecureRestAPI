@@ -5,7 +5,7 @@
 		"description": "An example collection for security testing of IWA (Insecure Web Application) REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13859659",
-		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-3fe1086c-833d-4658-aabe-a41a0feca2f5?source=collection_link"
+		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-3fe1086c-833d-4658-aabe-a41a0feca2f5?action=share&source=collection_link&creator=13859659"
 	},
 	"item": [
 		{
@@ -22,17 +22,27 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"pm.test(\"Access token returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data.accessToken).exist;\r",
-									"    console.log('Saving JWT access token in environment: ' + jsonData.data.accessToken)\r",
-									"    pm.collectionVariables.set('accessToken', jsonData.data.accessToken)\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data.accessToken).exist;\r",
+									"    console.log('Saving JWT access token in Globals: ' + json.data.accessToken)\r",
+									"    pm.globals.set(\"ACCESS_TOKEN\", json.data.accessToken)\r",
 									"});\r",
 									"pm.test(\"Refresh token returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data.refreshToken).exist;\r",
-									"    console.log('Saving JWT refresh token in environment: ' + jsonData.data.refreshToken)\r",
-									"    pm.collectionVariables.set('refreshToken', jsonData.data.refreshToken)\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data.refreshToken).exist;\r",
+									"    console.log('Saving JWT refresh token in Globals: ' + json.data.refreshToken)\r",
+									"    pm.globals.set(\"REFRESH_TOKEN\", json.data.refreshToken)\r",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -257,7 +267,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"refreshToken\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4NWNmNzIzYWJkNTgyMTE1N2Q5MGEzYSIsInBlcm1pc3Npb25zIjpbImNyZWF0ZTp1c2VycyIsInJlYWQ6dXNlcnMiLCJ1cGRhdGU6dXNlcnMiLCJkZWxldGU6dXNlcnMiLCJjcmVhdGU6cHJvZHVjdHMiLCJyZWFkOnByb2R1Y3RzIiwidXBkYXRlOnByb2R1Y3RzIiwiZGVsZXRlOnByb2R1Y3RzIiwiY3JlYXRlOm1lc3NhZ2VzIiwicmVhZDptZXNzYWdlcyIsInVwZGF0ZTptZXNzYWdlcyIsImRlbGV0ZTptZXNzYWdlcyJdLCJlbWFpbCI6ImFkbWluQGxvY2FsaG9zdC5jb20iLCJpYXQiOjE3NTA5MjMyMzMsImV4cCI6MTc1MDkyNjgzM30.1w_J6soI2kkwPwusQCYsZ6rP28JQDvWKDpTBfvz_T5I\"\r\n}",
+							"raw": "{\r\n    \"refreshToken\": \"{{REFRESH_TOKEN}}\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -381,11 +391,21 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.data._id).exist;\r",
-									"    console.log('Saving product id in collection variable: ' + jsonData.data._id)\r",
-									"    pm.collectionVariables.set('newProductId', jsonData.data._id)\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data._id).exist;\r",
+									"    console.log('Saving product id in collection: ' + json.data._id)\r",
+									"    pm.collectionVariables.set('newProductId', json.data._id)\r",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -436,6 +456,13 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -477,9 +504,9 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).exist;\r",
-									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data._id).exist;\r",
+									"    pm.expect(json.data._id).equals(pm.collectionVariables.get(\"newProductId\"))\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -539,10 +566,20 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"pm.test(\"Product id returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).exist;\r",
-									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data._id).exist;\r",
+									"    pm.expect(json.data._id).equals(pm.collectionVariables.get(\"newProductId\"))\r",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -586,11 +623,6 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"pm.test(\"Product id returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).exist;\r",
-									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -646,11 +678,6 @@
 								"exec": [
 									"pm.test(\"Status code is 200\", function () {\r",
 									"    pm.response.to.have.status(200);\r",
-									"});\r",
-									"pm.test(\"Product id returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.id).exist;\r",
-									"    pm.expect(jsonData.id).equals(pm.collectionVariables.get(\"product_id\"))\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -711,6 +738,13 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -760,6 +794,13 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -803,6 +844,16 @@
 								"type": "text/javascript",
 								"packages": {}
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
 					],
 					"request": {
@@ -835,7 +886,7 @@
 		"bearer": [
 			{
 				"key": "token",
-				"value": "{{accessToken}}",
+				"value": "{{ACCESS_TOKEN}}",
 				"type": "string"
 			}
 		]
@@ -862,21 +913,6 @@
 		}
 	],
 	"variable": [
-		{
-			"key": "baseUrl",
-			"value": "http://localhost:5000",
-			"type": "string"
-		},
-		{
-			"key": "accessToken",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "refreshToken",
-			"value": "",
-			"type": "string"
-		},
 		{
 			"key": "email",
 			"value": "admin@localhost.com",

@@ -98,5 +98,5 @@ sca-scan: ## run OpenText software composition analysis
 
 .PHONY: nexus-iq-scan
 nexus-iq-scan: ## run Sonatype Nexus IQ software composition analysis
-	@echo "Running Sonatype Nexusi IQ software composition analysis..."
+	@echo "Running Sonatype Nexus IQ software composition analysis..."
 	nexus-iq-cli -i $(PROJECT_LOWER) -s $(NEXUS_IQ_URL) -a "$(NEXUS_IQ_USERNAME):$(NEXUS_IQ_PASSWORD)" package-lock.json

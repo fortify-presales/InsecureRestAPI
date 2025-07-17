@@ -1,5 +1,3 @@
-[![Fortify Security Scan](https://github.com/fortify-presales/InsecureRestAPI/actions/workflows/fod.yml/badge.svg)](https://github.com/fortify-presales/InsecureRestAPI/actions/workflows/fod.yml) [![Debricked](https://github.com/kadraman/InsecureRestAPI/actions/workflows/debricked.yml/badge.svg)](https://github.com/kadraman/InsecureRestAPI/actions/workflows/debricked.yml)
-
 # InsecureRestAPI
 
 _InsecureRestAPI_ is a simple NodeJS/Express/MongoFB REST API that can be used for the demonstration of Application Security testing tools - such as [OpenText Application Security](https://www.opentext.com/products/application-security).
@@ -8,8 +6,7 @@ Pre-requisities
 ---------------
 
  - [Node.js 20 or later](https://nodejs.org/en/download)
- - [CygWin](https://www.cygwin.com/) - if running on Windows
- - [MongoDB](https://www.mongodb.com/) Community Edition (optional as a version is embedded for testing)
+ - [MongoDB](https://www.mongodb.com/) Community Edition (optional as an embedded version will be downloaded for testing)
  - Docker installation (optional)
 
 Run Application (locally)
@@ -19,8 +16,9 @@ You can the run the application locally using the following:
 
 
 ```
+npm install
 npm install -g ts-node-dev
-make run
+npm run dev
 ```
 
 The API should then be available at the URL `http://localhost:5000`. If it fails to start,
@@ -32,7 +30,7 @@ Run Application (as Docker container)
 You also can build a Docker image for the application using the following:
 
 ```
-make build
+npm run build
 docker build -t demoapi:latest .
 ```
 

@@ -5,7 +5,7 @@
 		"description": "An example collection for authenticating against IWA (Insecure Web Application) REST API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "13859659",
-		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-3a2cadbd-426c-46f4-bfa7-41c25a12c383?source=collection_link"
+		"_collection_link": "https://mfdemouk.postman.co/workspace/My-Workspace~c71e9c5c-d86a-44e4-8a78-9b4f1d507064/collection/13859659-3a2cadbd-426c-46f4-bfa7-41c25a12c383?action=share&source=collection_link&creator=13859659"
 	},
 	"item": [
 		{
@@ -22,11 +22,27 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"pm.test(\"Access token returned\", function () {\r",
-									"    var jsonData = pm.response.json();\r",
-									"    pm.expect(jsonData.accessToken).exist;\r",
-									"    console.log('Saving JWT access token in environment: ' + jsonData.accessToken)\r",
-									"    pm.environmentVariables.set('jwt_token', jsonData.accessToken)\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data.accessToken).exist;\r",
+									"    console.log('Saving JWT access token in Globals: ' + json.data.accessToken)\r",
+									"    pm.globals.set(\"ACCESS_TOKEN\", json.data.accessToken)\r",
+									"});\r",
+									"pm.test(\"Refresh token returned\", function () {\r",
+									"    var json = pm.response.json();\r",
+									"    pm.expect(json.data.refreshToken).exist;\r",
+									"    console.log('Saving JWT refresh token in Globals: ' + json.data.refreshToken)\r",
+									"    pm.globals.set(\"REFRESH_TOKEN\", json.data.refreshToken)\r",
 									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript",
 								"packages": {}
@@ -46,9 +62,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/v1/site/sign-in",
+							"raw": "{{baseUrl}}/api/v1/site/sign-in",
 							"host": [
-								"{{base_url}}"
+								"{{baseUrl}}"
 							],
 							"path": [
 								"api",
@@ -64,16 +80,6 @@
 			]
 		}
 	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{jwt_token}}",
-				"type": "string"
-			}
-		]
-	},
 	"event": [
 		{
 			"listen": "prerequest",

@@ -15,8 +15,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:5000",
-      "description": "InsecureRestAPI - development "
+      "url": "https://insecureapi.azurewebsites.net",
+      "description": "InsecureRestAPI - production "
     }
   ],
   "paths": {
